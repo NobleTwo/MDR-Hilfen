@@ -1,9 +1,12 @@
 package Wettbewerbsrechner;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.*;
-import javax.swing.event.*;
 
 /**
   *
@@ -14,7 +17,11 @@ import javax.swing.event.*;
   */
 
 public class PopUpWettbewerbschancen extends JFrame {
-  // Anfang Attribute
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+// Anfang Attribute
   private JLabel jlabel1 = new JLabel();
   private JLabel jlabel2 = new JLabel();
   private JLabel jlabel3 = new JLabel();
@@ -25,7 +32,6 @@ public class PopUpWettbewerbschancen extends JFrame {
   private JLabel jlabel8 = new JLabel();
   public JLabel[] klassen= new JLabel[5];
   public JTextField[][] chancen;
-  
   
   private JButton jButton1 = new JButton();
   // Ende Attribute
@@ -106,7 +112,7 @@ public class PopUpWettbewerbschancen extends JFrame {
     klassen[4].setText("S");    
     
     double maximum = 0;
-    
+    DecimalFormat form = new DecimalFormat("#0.0000", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
     for(int i=0; i<chancen.length; i++){
       for (int j=0; j<chancen[0].length; j++) {
         chancen[i][j]=new JTextField();
@@ -118,7 +124,8 @@ public class PopUpWettbewerbschancen extends JFrame {
           chancen[i][j].setHorizontalAlignment(SwingConstants.CENTER);
         }
         else{
-          chancen[i][j].setText(String.valueOf(verkuerze(w.wettbewerbschancen[i][j], 4)));
+          chancen[i][j].setText(String.valueOf(form.format(w.wettbewerbschancen[i][j])));
+        	//chancen[i][j].setText(String.valueOf(verkuerze(w.wettbewerbschancen[i][j], 4)));
           if(Double.parseDouble(chancen[i][j].getText())>maximum){
             maximum=Double.parseDouble(chancen[i][j].getText());
           }
