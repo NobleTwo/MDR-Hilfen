@@ -1,0 +1,12 @@
+Gesamtpotential hinzufügen
+"?" in Namen beheben
+Favoriten-Bug
+Wettbewerbsrechner-Ergebnisse in xls speichern
+mehrere Favoritenlisten
+in "Pferd auswählen" nach Gesamtpotential sortieren
+
+
+(Wettbewerbsrechner immer gleiche Anzahl Stellen)
+(Favoriten alphabetisch sortieren)
+(Einstellungen bei "Pferd hinzufügen" merken)
+(Hengst-Hengst bzw. Stute-Stute Farbmarkierung)

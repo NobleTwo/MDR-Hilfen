@@ -1,0 +1,4 @@
+
+DerErste%%%null%%%null%%%Englisches Vollblut%%%true%%%true
+3%%%null%%%null%%%Englisches Vollblut%%%false%%%false
+4%%%null%%%null%%%Englisches Vollblut%%%false%%%true
