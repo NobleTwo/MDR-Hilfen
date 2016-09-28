@@ -2,6 +2,7 @@ package verwandschaftscheck;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.Collator;
 
 import javax.swing.*;
 import javax.swing.event.*;
@@ -16,8 +17,11 @@ import java.util.*;
  * @author
  */
 
-@SuppressWarnings("serial")
 public class HorseChoice extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String[] racesUpdate;
 	DocumentManager dm;
 	// Anfang Attribute
@@ -190,28 +194,30 @@ public class HorseChoice extends JFrame {
 				i--;
 			}
 		}
-
-		Vector<String> horseNamesAll = new Vector<String>();
+		
+		//for all horses
+		Collection<String> horseNamesAll = new TreeSet<String>(Collator.getInstance());
 		for (int i = 0; i < horses.size(); i++) {
 			horseNamesAll.add(horses.get(i).name);
 		}
-		horseNamesAll = (new RadixSort()).sort(horseNamesAll);
 		horseListModel.removeAllElements();
-		for (int i = 0; i < horseNamesAll.size(); i++) {
-			horseListModel.addElement(horseNamesAll.get(i));
+		Iterator<String> iterator = horseNamesAll.iterator();
+		while(iterator.hasNext()) {
+			horseListModel.addElement(iterator.next());
 		}
 
-		Vector<String> horseNamesFavs = new Vector<String>();
+		//for favourites
+		Collection<String> horseNamesFavs = new TreeSet<String>(Collator.getInstance());
 		for (int i = 0; i < horseNamesAll.size(); i++) {
 			RelativeHorse current = horses.get(i);
 			if (!current.name.equals("Unbekannt") && current.isFavourite) {
 				horseNamesFavs.add(current.name);
 			}
 		}
-		horseNamesFavs = (new RadixSort()).sort(horseNamesFavs);
 		horseListfavsModel.removeAllElements();
+		iterator = horseNamesFavs.iterator();
 		for (int i = 0; i < horseNamesFavs.size(); i++) {
-			horseListfavsModel.addElement(horseNamesFavs.get(i));
+			horseListfavsModel.addElement(iterator.next());
 		}
 	}
 

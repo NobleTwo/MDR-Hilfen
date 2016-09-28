@@ -1,4 +1,7 @@
 
-DerErste%%%null%%%null%%%Englisches Vollblut%%%true%%%true
-3%%%null%%%null%%%Englisches Vollblut%%%false%%%false
-4%%%null%%%null%%%Englisches Vollblut%%%false%%%true
+DerErste%%%null%%%null%%%Englisches Vollblut%%%true%%%false
+3%%%null%%%null%%%Englisches Vollblut%%%true%%%false
+4%%%null%%%null%%%Englisches Vollblut%%%true%%%true
+B%%%null%%%null%%% Unbekannt%%%false%%%true
+A%%%null%%%null%%% Unbekannt%%%false%%%true
+DerAbrste%%%null%%%null%%% Unbekannt%%%true%%%true
