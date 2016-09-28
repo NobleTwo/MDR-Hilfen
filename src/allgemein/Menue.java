@@ -1,12 +1,12 @@
-package Allgemein;
+package allgemein;
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
-import Verwandschaftscheck.RCGUIdatabase;
-import Verwandschaftscheck.RelativeCheckGUI;
-import Wettbewerbsrechner.Rechnerfenster;
+import verwandschaftscheck.RCGUIdatabase;
+import verwandschaftscheck.RelativeCheckGUI;
+import wettbewerbsrechner.Rechnerfenster;
 /**
   *
   * Beschreibung
@@ -15,9 +15,12 @@ import Wettbewerbsrechner.Rechnerfenster;
   * @author 
   */
 
-@SuppressWarnings("serial")
 public class Menue extends JFrame {
-  // Anfang Attribute
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+// Anfang Attribute
   private JButton ButtonWettbewerbsrechner = new JButton();
   private JButton ButtonVerwandtschaftscheck = new JButton();
   private JButton ButtonBeenden = new JButton();

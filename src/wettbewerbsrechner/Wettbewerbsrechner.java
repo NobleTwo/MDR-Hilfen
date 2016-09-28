@@ -1,4 +1,4 @@
-package Wettbewerbsrechner;
+package wettbewerbsrechner;
 public class Wettbewerbsrechner{
   public Wettbewerbspferd p;                                                                      // Pferd, das betrachtet wird
   public double[] interieurzahlen;                                              //für die Zahlenentsprechungen des Interieurs

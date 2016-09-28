@@ -1,4 +1,4 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 
 import java.awt.*;
 import java.awt.event.*;

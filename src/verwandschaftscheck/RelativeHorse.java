@@ -1,4 +1,4 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 public class RelativeHorse {
   RelativeHorse father;
   RelativeHorse mother;

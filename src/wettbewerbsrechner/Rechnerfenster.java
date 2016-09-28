@@ -1,10 +1,11 @@
-package Wettbewerbsrechner;
+package wettbewerbsrechner;
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
-import Allgemein.Menue;
+import allgemein.JNumberField;
+import allgemein.Menue;
 
 
 /**
@@ -52,16 +53,16 @@ public class Rechnerfenster extends JFrame {
   private JLabel jLabel35 = new JLabel();
   private JLabel jLabel36 = new JLabel();
   private JLabel jLabel37 = new JLabel();
-  private JTextField wertDressur = new JTextField();
-  private JTextField wertKondition = new JTextField();
-  private JTextField wertTempo = new JTextField();
-  private JTextField wertGelassenheit = new JTextField();
-  private JTextField wertWendigkeit = new JTextField();
-  private JTextField wertGrundgangarten = new JTextField();
-  private JTextField wertFahren = new JTextField();
-  private JTextField wertRennen = new JTextField();
-  private JTextField wertWestern = new JTextField();
-  private JTextField wertSpringen = new JTextField();
+  private JNumberField wertDressur = new JNumberField();
+  private JNumberField wertKondition = new JNumberField();
+  private JNumberField wertTempo = new JNumberField();
+  private JNumberField wertGelassenheit = new JNumberField();
+  private JNumberField wertWendigkeit = new JNumberField();
+  private JNumberField wertGrundgangarten = new JNumberField();
+  private JNumberField wertFahren = new JNumberField();
+  private JNumberField wertRennen = new JNumberField();
+  private JNumberField wertWestern = new JNumberField();
+  private JNumberField wertSpringen = new JNumberField();
   private JComboBox wertTemperament = new JComboBox();
   private JComboBox wertGelehrigkeit = new JComboBox();
   private JComboBox wertSiegeswille = new JComboBox();
@@ -85,7 +86,7 @@ public class Rechnerfenster extends JFrame {
   private JButton ButtonBeenden = new JButton();
   public PopUpWettbewerbschancen chancen;
   private JLabel jlabelName = new JLabel();
-  public JTextField nameDesPferds = new JTextField();
+  public JNumberField nameDesPferds = new JNumberField();
   private JButton ButtonTextLoeschen = new JButton();
   // Ende Attribute
   

@@ -1,8 +1,8 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 
 import javax.swing.JFrame;
 
-import Allgemein.Warndialog;
+import allgemein.Warndialog;
 
 @SuppressWarnings("serial")
 public class IllegalFileException extends Exception{

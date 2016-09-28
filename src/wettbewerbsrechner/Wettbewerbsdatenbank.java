@@ -1,4 +1,4 @@
-package Wettbewerbsrechner;
+package wettbewerbsrechner;
 public class Wettbewerbsdatenbank{
   public boolean[][] disziplinen;
   public int anzahlWettbewerbsdisziplinen;

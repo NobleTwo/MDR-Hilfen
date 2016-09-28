@@ -1,11 +1,11 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 
 import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.*;
 
-import Allgemein.Menue;
+import allgemein.Menue;
 
 /**
  *

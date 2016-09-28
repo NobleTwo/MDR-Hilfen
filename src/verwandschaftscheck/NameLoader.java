@@ -1,4 +1,4 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 import javax.swing.*;
 
 class NameLoader{

@@ -1,4 +1,4 @@
-package Verwandschaftscheck;
+package verwandschaftscheck;
 import java.lang.*;
 import java.util.*;
 

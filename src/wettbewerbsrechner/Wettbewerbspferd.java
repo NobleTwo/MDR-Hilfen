@@ -1,4 +1,4 @@
-package Wettbewerbsrechner;
+package wettbewerbsrechner;
 public class Wettbewerbspferd{
   public double[] disziplinenwerte;                                                // in %
   // Dressur, Springen, Western, Rennen, Fahren

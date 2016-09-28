@@ -1,4 +1,4 @@
-package Allgemein;
+package allgemein;
 import java.awt.*;
 import java.awt.event.*;
 
