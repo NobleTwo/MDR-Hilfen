@@ -1,7 +1,7 @@
 package verwandschaftscheck;
 import javax.swing.*;
 
-class NameLoader{
+public class NameLoader{
   private JTextField[] nameArray;
   private JComboBox<String>[] raceArray;
   private DocumentManager dm;

@@ -7,5 +7,4 @@ in "Pferd auswählen" nach Gesamtpotential sortieren
 
 HorseChoice auf Doppelklick reagieren
 
-(Einstellungen bei "Pferd hinzufügen" merken)
 (Hengst-Hengst bzw. Stute-Stute Farbmarkierung)

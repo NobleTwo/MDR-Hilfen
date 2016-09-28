@@ -15,8 +15,11 @@ import allgemein.Menue;
  * @author
  */
 
-@SuppressWarnings("serial")
 public class RCGUIdatabase extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private DocumentManager dm;
 	boolean newHorseMode;
 	// Anfang Attribute

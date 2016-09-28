@@ -7,6 +7,8 @@ import java.text.Collator;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import allgemein.ShortTimeMemory;
+
 import java.util.*;
 
 /**
@@ -47,6 +49,8 @@ public class HorseChoice extends JFrame {
 	private JLabel jLabel5 = new JLabel();
 	private JLabel jLabel6 = new JLabel();
 
+	private boolean showMale = ShortTimeMemory.isSelectedMale();
+	private boolean showFemale = ShortTimeMemory.isSelectedFemale();
 	// Ende Attribute
 
 	public HorseChoice(DocumentManager doMa) {
@@ -123,6 +127,7 @@ public class HorseChoice extends JFrame {
 			racesUpdate[i] = dm.races[i - 2];
 		}
 		raceFilter.setModel(new DefaultComboBoxModel<String>(racesUpdate));
+		raceFilter.setSelectedItem(ShortTimeMemory.getSelectedRace());
 		raceFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
 				raceFilter_ItemStateChanged(evt);
@@ -137,6 +142,7 @@ public class HorseChoice extends JFrame {
 		jLabel3.setFont(new Font("Dialog", Font.BOLD, 20));
 		cp.add(jLabel3);
 		search.setBounds(240, 136, 193, 25);
+		search.setText(ShortTimeMemory.getSearchedString());
 		search.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent evt) {
 				search_KeyReleased(evt);
@@ -149,7 +155,7 @@ public class HorseChoice extends JFrame {
 		checkBoxMale.setBounds(240, 96, 17, 17);
 		checkBoxMale.setText("");
 		checkBoxMale.setOpaque(false);
-		checkBoxMale.setSelected(true);
+		checkBoxMale.setSelected(showMale);
 		checkBoxMale.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
 				checkBoxMale_ItemStateChanged(evt);
@@ -159,7 +165,7 @@ public class HorseChoice extends JFrame {
 		checkBoxFemale.setBounds(370, 96, 17, 17);
 		checkBoxFemale.setText("");
 		checkBoxFemale.setOpaque(false);
-		checkBoxFemale.setSelected(true);
+		checkBoxFemale.setSelected(showFemale);
 		checkBoxFemale.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
 				checkBoxFemale_ItemStateChanged(evt);
@@ -174,7 +180,7 @@ public class HorseChoice extends JFrame {
 		cp.add(jLabel6);
 		// Ende Komponenten
 
-		filterVisible("", "", true, true);
+		getFilterSettings();
 		setVisible(true);
 	} // end of public HorseChoice
 
@@ -222,6 +228,13 @@ public class HorseChoice extends JFrame {
 	}
 
 	public void accept_ActionPerformed(ActionEvent evt) {
+		//save options
+		ShortTimeMemory.setSelectedRace(raceFilter.getSelectedItem().toString());
+		ShortTimeMemory.setSelectedMale(checkBoxMale.isSelected());
+		ShortTimeMemory.setSelectedFemale(checkBoxFemale.isSelected());
+		ShortTimeMemory.setSearchedString(search.getText());
+		
+		//insert into other frame
 		String name;
 		if (getFavs)
 			name = (String) horseListfavs.getSelectedValue();
@@ -257,7 +270,7 @@ public class HorseChoice extends JFrame {
 		if (selectedRace.equals("----------") || selectedRace.equals(" Alle")) {
 			selectedRace = "";
 		}
-		filterVisible(selectedRace, search.getText(), checkBoxMale.isSelected(), checkBoxFemale.isSelected());
+		filterVisible(selectedRace, search.getText(), showMale, showFemale);
 	}
 
 	public void search_KeyReleased(KeyEvent evt) {
@@ -265,10 +278,12 @@ public class HorseChoice extends JFrame {
 	}
 
 	public void checkBoxMale_ItemStateChanged(ItemEvent evt) {
+		showMale = checkBoxMale.isSelected();
 		getFilterSettings();
 	}
 
 	public void checkBoxFemale_ItemStateChanged(ItemEvent evt) {
+		showFemale = checkBoxFemale.isSelected();
 		getFilterSettings();
 	}
 

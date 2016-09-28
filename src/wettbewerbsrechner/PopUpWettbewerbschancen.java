@@ -123,7 +123,6 @@ public class PopUpWettbewerbschancen extends JFrame {
         }
         else{
           chancen[i][j].setText(w.wettbewerbschancen[i][j]);
-        	//chancen[i][j].setText(String.valueOf(verkuerze(w.wettbewerbschancen[i][j], 4)));
           if(Double.parseDouble(chancen[i][j].getText())>maximum){
             maximum=Double.parseDouble(chancen[i][j].getText());
           }
