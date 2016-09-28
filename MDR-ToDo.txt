@@ -5,7 +5,6 @@ Wettbewerbsrechner-Ergebnisse in xls speichern
 mehrere Favoritenlisten
 in "Pferd auswählen" nach Gesamtpotential sortieren
 
-JNumberField
 (Favoriten alphabetisch sortieren)
 (Einstellungen bei "Pferd hinzufügen" merken)
 (Hengst-Hengst bzw. Stute-Stute Farbmarkierung)

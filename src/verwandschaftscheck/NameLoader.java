@@ -3,10 +3,10 @@ import javax.swing.*;
 
 class NameLoader{
   private JTextField[] nameArray;
-  private JComboBox[] raceArray;
+  private JComboBox<String>[] raceArray;
   private DocumentManager dm;
 
-  public NameLoader(String name, DocumentManager doMa, JTextField[] naAr, JComboBox[] raAr, JCheckBox isFavourite, JRadioButton isMale, JRadioButton isFemale){
+  public NameLoader(String name, DocumentManager doMa, JTextField[] naAr, JComboBox<String>[] raAr, JCheckBox isFavourite, JRadioButton isMale, JRadioButton isFemale){
     nameArray = naAr;
     raceArray = raAr;
     dm = doMa;

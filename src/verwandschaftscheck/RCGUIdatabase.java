@@ -45,21 +45,21 @@ public class RCGUIdatabase extends JFrame {
 	private JButton ButtonAnalyzeText = new JButton();
 	private JTextArea TextInput = new JTextArea("");
 	private JScrollPane TextInputScrollPane = new JScrollPane(TextInput);
-	private JComboBox jComboBox0 = new JComboBox();
-	private JComboBox jComboBox1 = new JComboBox();
-	private JComboBox jComboBox2 = new JComboBox();
-	private JComboBox jComboBox3 = new JComboBox();
-	private JComboBox jComboBox4 = new JComboBox();
-	private JComboBox jComboBox5 = new JComboBox();
-	private JComboBox jComboBox6 = new JComboBox();
-	private JComboBox jComboBox7 = new JComboBox();
-	private JComboBox jComboBox8 = new JComboBox();
-	private JComboBox jComboBox9 = new JComboBox();
-	private JComboBox jComboBox10 = new JComboBox();
-	private JComboBox jComboBox11 = new JComboBox();
-	private JComboBox jComboBox12 = new JComboBox();
-	private JComboBox jComboBox13 = new JComboBox();
-	private JComboBox jComboBox14 = new JComboBox();
+	private JComboBox<String> jComboBox0 = new JComboBox<String>();
+	private JComboBox<String> jComboBox1 = new JComboBox<String>();
+	private JComboBox<String> jComboBox2 = new JComboBox<String>();
+	private JComboBox<String> jComboBox3 = new JComboBox<String>();
+	private JComboBox<String> jComboBox4 = new JComboBox<String>();
+	private JComboBox<String> jComboBox5 = new JComboBox<String>();
+	private JComboBox<String> jComboBox6 = new JComboBox<String>();
+	private JComboBox<String> jComboBox7 = new JComboBox<String>();
+	private JComboBox<String> jComboBox8 = new JComboBox<String>();
+	private JComboBox<String> jComboBox9 = new JComboBox<String>();
+	private JComboBox<String> jComboBox10 = new JComboBox<String>();
+	private JComboBox<String> jComboBox11 = new JComboBox<String>();
+	private JComboBox<String> jComboBox12 = new JComboBox<String>();
+	private JComboBox<String> jComboBox13 = new JComboBox<String>();
+	private JComboBox<String> jComboBox14 = new JComboBox<String>();
 	private JButton buttonGoToRC = new JButton();
 	private JButton ButtonExit = new JButton();
 	private JButton ButtonGoToMenu = new JButton();
@@ -71,7 +71,7 @@ public class RCGUIdatabase extends JFrame {
 	private JLabel jLabel4 = new JLabel();
 	// Ende Attribute
 	private JTextField[] horseNames;
-	private JComboBox[] horseRaces;
+	private JComboBox<String>[] horseRaces;
 	String[] races;
 	private RelativeHorse subject;
 
@@ -92,6 +92,7 @@ public class RCGUIdatabase extends JFrame {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void start(boolean mode) {
 
 		// Frame-Initialisierung

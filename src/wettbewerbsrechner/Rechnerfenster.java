@@ -63,19 +63,18 @@ public class Rechnerfenster extends JFrame {
   private JNumberField wertRennen = new JNumberField();
   private JNumberField wertWestern = new JNumberField();
   private JNumberField wertSpringen = new JNumberField();
-  private JComboBox wertTemperament = new JComboBox();
-  private JComboBox wertGelehrigkeit = new JComboBox();
-  private JComboBox wertSiegeswille = new JComboBox();
-  private JComboBox wertIntelligenz = new JComboBox();
-  private JComboBox wertNervenstaerke = new JComboBox();
-  private JComboBox wertGutmuetigkeit = new JComboBox();
-  private JComboBox wertAufmerksamkeit = new JComboBox();
-  private JComboBox wertLeistungsbereitschaft = new JComboBox();
-  private JComboBox wertSozialverhalten = new JComboBox();
-  private JComboBox wertFurchtlosigkeit = new JComboBox();
+  private JComboBox<String> wertTemperament = new JComboBox<String>();
+  private JComboBox<String> wertGelehrigkeit = new JComboBox<String>();
+  private JComboBox<String> wertSiegeswille = new JComboBox<String>();
+  private JComboBox<String> wertIntelligenz = new JComboBox<String>();
+  private JComboBox<String> wertNervenstaerke = new JComboBox<String>();
+  private JComboBox<String> wertGutmuetigkeit = new JComboBox<String>();
+  private JComboBox<String> wertAufmerksamkeit = new JComboBox<String>();
+  private JComboBox<String> wertLeistungsbereitschaft = new JComboBox<String>();
+  private JComboBox<String> wertSozialverhalten = new JComboBox<String>();
+  private JComboBox<String> wertFurchtlosigkeit = new JComboBox<String>();
   private JButton ButtonChancenBerechnen = new JButton();
   private JButton ButtonTextAnalysieren = new JButton();
-  private JTextArea ereignislogText = new JTextArea();
   
   private JTextArea textInput = new JTextArea("");
   private JScrollPane textInputScrollPane = new JScrollPane(textInput);
@@ -311,42 +310,42 @@ public class Rechnerfenster extends JFrame {
     });
     cp.add(wertSpringen);
     wertTemperament.setBounds(168, 280, 89, 25);
-    wertTemperament.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertTemperament.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     cp.add(wertTemperament);
     wertGelehrigkeit.setBounds(168, 304, 89, 25);
-    wertGelehrigkeit.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertGelehrigkeit.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertGelehrigkeit.setSelectedIndex(0);
     cp.add(wertGelehrigkeit);
     wertSiegeswille.setBounds(400, 328, 89, 25);
-    wertSiegeswille.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertSiegeswille.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertSiegeswille.setSelectedIndex(0);
     cp.add(wertSiegeswille);
     wertIntelligenz.setBounds(400, 304, 89, 25);
-    wertIntelligenz.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertIntelligenz.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertIntelligenz.setSelectedIndex(0);
     cp.add(wertIntelligenz);
     wertNervenstaerke.setBounds(400, 280, 89, 25);
-    wertNervenstaerke.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertNervenstaerke.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertNervenstaerke.setSelectedIndex(0);
     cp.add(wertNervenstaerke);
     wertGutmuetigkeit.setBounds(168, 376, 89, 25);
-    wertGutmuetigkeit.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertGutmuetigkeit.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertGutmuetigkeit.setSelectedIndex(0);
     cp.add(wertGutmuetigkeit);
     wertAufmerksamkeit.setBounds(168, 352, 89, 25);
-    wertAufmerksamkeit.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertAufmerksamkeit.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertAufmerksamkeit.setSelectedIndex(0);
     cp.add(wertAufmerksamkeit);
     wertLeistungsbereitschaft.setBounds(168, 328, 89, 25);
-    wertLeistungsbereitschaft.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertLeistungsbereitschaft.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertLeistungsbereitschaft.setSelectedIndex(0);
     cp.add(wertLeistungsbereitschaft);
     wertSozialverhalten.setBounds(400, 376, 89, 25);
-    wertSozialverhalten.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertSozialverhalten.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertSozialverhalten.setSelectedIndex(0);
     cp.add(wertSozialverhalten);
     wertFurchtlosigkeit.setBounds(400, 352, 89, 25);
-    wertFurchtlosigkeit.setModel(new DefaultComboBoxModel(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
+    wertFurchtlosigkeit.setModel(new DefaultComboBoxModel<String>(new String[] {"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"}));
     wertFurchtlosigkeit.setSelectedIndex(0);
     cp.add(wertFurchtlosigkeit);
     ButtonChancenBerechnen.setBounds(16, 416, 201, 25);
@@ -552,7 +551,6 @@ public class Rechnerfenster extends JFrame {
   
   
   public String findeWert(String gesuchterWert){
-    int start = 0;
     for(int i=0; i<splitResult.length; i++){
       if(splitResult[i].contains(gesuchterWert)){
         return splitResult[i+2].substring(0, splitResult[i+2].length()-1);

@@ -29,7 +29,7 @@ public class HorseChoice extends JFrame {
 	private JList<String> horseList = new JList<String>();
 	private DefaultListModel<String> horseListModel = new DefaultListModel<String>();
 	private JScrollPane horseListScrollPane = new JScrollPane(horseList);
-	private JComboBox raceFilter = new JComboBox();
+	private JComboBox<String> raceFilter = new JComboBox<String>();
 	private JLabel jLabel2 = new JLabel();
 
 	boolean getFavs;
@@ -118,7 +118,7 @@ public class HorseChoice extends JFrame {
 		for (int i = 3; i < racesUpdate.length; i++) {
 			racesUpdate[i] = dm.races[i - 2];
 		}
-		raceFilter.setModel(new DefaultComboBoxModel(racesUpdate));
+		raceFilter.setModel(new DefaultComboBoxModel<String>(racesUpdate));
 		raceFilter.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent evt) {
 				raceFilter_ItemStateChanged(evt);

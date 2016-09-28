@@ -1,5 +1,4 @@
 package verwandschaftscheck;
-import java.lang.*;
 import java.util.*;
 
 class RadixSort{
@@ -25,9 +24,10 @@ class RadixSort{
     }
     
     for(int i=0; i<=maxlength; i++){
-      Vector[] ascii = new Vector[257];
+      @SuppressWarnings("unchecked")
+	Vector<String>[] ascii = new Vector[257];
       for(int j=0; j<ascii.length; j++){
-        ascii[j] = new Vector();
+        ascii[j] = new Vector<String>();
       }
       for(int j=0; j<words.length; j++){
         if(words[j].length()-i<=0){

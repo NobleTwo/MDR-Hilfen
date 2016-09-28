@@ -23,10 +23,10 @@ public class RelativeCheckGUI extends JFrame {
   private DocumentManager dm;
   public JTextField[] horseNamesR;
   public JTextField[] horseNamesL;
-  public JComboBox[] horseRacesR;
-  public JComboBox[] horseRacesL;
+  public JComboBox<String>[] horseRacesR;
+  public JComboBox<String>[] horseRacesL;
   public JTextField[][] allNames;
-  public JComboBox[][] allRaces;
+  public JComboBox<String>[][] allRaces;
   private JLabel[][] genders;
   // Anfang Attribute
   private JTextField jTextField7 = new JTextField();
@@ -44,21 +44,21 @@ public class RelativeCheckGUI extends JFrame {
   private JTextField jTextField4 = new JTextField();
   private JTextField jTextField8 = new JTextField();
   private JTextField jTextField0 = new JTextField();
-  private JComboBox jComboBox0 = new JComboBox();
-  private JComboBox jComboBox1 = new JComboBox();
-  private JComboBox jComboBox2 = new JComboBox();
-  private JComboBox jComboBox3 = new JComboBox();
-  private JComboBox jComboBox4 = new JComboBox();
-  private JComboBox jComboBox5 = new JComboBox();
-  private JComboBox jComboBox6 = new JComboBox();
-  private JComboBox jComboBox7 = new JComboBox();
-  private JComboBox jComboBox8 = new JComboBox();
-  private JComboBox jComboBox9 = new JComboBox();
-  private JComboBox jComboBox10 = new JComboBox();
-  private JComboBox jComboBox11 = new JComboBox();
-  private JComboBox jComboBox12 = new JComboBox();
-  private JComboBox jComboBox13 = new JComboBox();
-  private JComboBox jComboBox14 = new JComboBox();
+  private JComboBox<String> jComboBox0 = new JComboBox<String>();
+  private JComboBox<String> jComboBox1 = new JComboBox<String>();
+  private JComboBox<String> jComboBox2 = new JComboBox<String>();
+  private JComboBox<String> jComboBox3 = new JComboBox<String>();
+  private JComboBox<String> jComboBox4 = new JComboBox<String>();
+  private JComboBox<String> jComboBox5 = new JComboBox<String>();
+  private JComboBox<String> jComboBox6 = new JComboBox<String>();
+  private JComboBox<String> jComboBox7 = new JComboBox<String>();
+  private JComboBox<String> jComboBox8 = new JComboBox<String>();
+  private JComboBox<String> jComboBox9 = new JComboBox<String>();
+  private JComboBox<String> jComboBox10 = new JComboBox<String>();
+  private JComboBox<String> jComboBox11 = new JComboBox<String>();
+  private JComboBox<String> jComboBox12 = new JComboBox<String>();
+  private JComboBox<String> jComboBox13 = new JComboBox<String>();
+  private JComboBox<String> jComboBox14 = new JComboBox<String>();
   private JTextField jTextField22 = new JTextField();
   private JTextField jTextField24 = new JTextField();
   private JTextField jTextField25 = new JTextField();
@@ -74,21 +74,21 @@ public class RelativeCheckGUI extends JFrame {
   private JTextField jTextField19 = new JTextField();
   private JTextField jTextField23 = new JTextField();
   private JTextField jTextField15 = new JTextField();
-  private JComboBox jComboBox15 = new JComboBox();
-  private JComboBox jComboBox16 = new JComboBox();
-  private JComboBox jComboBox17 = new JComboBox();
-  private JComboBox jComboBox18 = new JComboBox();
-  private JComboBox jComboBox19 = new JComboBox();
-  private JComboBox jComboBox20 = new JComboBox();
-  private JComboBox jComboBox21 = new JComboBox();
-  private JComboBox jComboBox22 = new JComboBox();
-  private JComboBox jComboBox23 = new JComboBox();
-  private JComboBox jComboBox24 = new JComboBox();
-  private JComboBox jComboBox25 = new JComboBox();
-  private JComboBox jComboBox26 = new JComboBox();
-  private JComboBox jComboBox27 = new JComboBox();
-  private JComboBox jComboBox28 = new JComboBox();
-  private JComboBox jComboBox29 = new JComboBox();
+  private JComboBox<String> jComboBox15 = new JComboBox<String>();
+  private JComboBox<String> jComboBox16 = new JComboBox<String>();
+  private JComboBox<String> jComboBox17 = new JComboBox<String>();
+  private JComboBox<String> jComboBox18 = new JComboBox<String>();
+  private JComboBox<String> jComboBox19 = new JComboBox<String>();
+  private JComboBox<String> jComboBox20 = new JComboBox<String>();
+  private JComboBox<String> jComboBox21 = new JComboBox<String>();
+  private JComboBox<String> jComboBox22 = new JComboBox<String>();
+  private JComboBox<String> jComboBox23 = new JComboBox<String>();
+  private JComboBox<String> jComboBox24 = new JComboBox<String>();
+  private JComboBox<String> jComboBox25 = new JComboBox<String>();
+  private JComboBox<String> jComboBox26 = new JComboBox<String>();
+  private JComboBox<String> jComboBox27 = new JComboBox<String>();
+  private JComboBox<String> jComboBox28 = new JComboBox<String>();
+  private JComboBox<String> jComboBox29 = new JComboBox<String>();
   private JButton editDatabase = new JButton();
   private JButton ButtonAnalyze = new JButton();
   private JButton changeLeft = new JButton();
@@ -106,7 +106,8 @@ public class RelativeCheckGUI extends JFrame {
   private JLabel labelIsFemaleRight = new JLabel();
   // Ende Attribute
   
-  public RelativeCheckGUI() { 
+  @SuppressWarnings("unchecked")
+public RelativeCheckGUI() { 
     // Frame-Initialisierung
     super("MDR-Hilfen");
     dm = new DocumentManager();
