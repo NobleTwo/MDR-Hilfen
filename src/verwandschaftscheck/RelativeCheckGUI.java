@@ -14,9 +14,12 @@ import allgemein.Menue;
   * @author 
   */
 
-@SuppressWarnings("serial")
 public class RelativeCheckGUI extends JFrame {
-  Color green = new Color(116, 235, 95);
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+Color green = new Color(116, 235, 95);
   Color orange = new Color(245, 172, 73);
   Color red = new Color(241, 88, 50);
 
@@ -595,7 +598,10 @@ public RelativeCheckGUI() {
   public void ButtonAnalyze_ActionPerformed(ActionEvent evt) {
     neutralizeBackgrounds(0);
     neutralizeBackgrounds(1);
-    if(!checkNames() && !checkRaces() && !checkGender()){
+    boolean namesException = checkNames();
+    boolean racesException = checkRaces();
+    boolean genderException = checkGender();
+    if(!namesException && racesException && genderException){ 
       for(int i=0; i<2; i++){
         for(int j=0; j<allNames[0].length; j++){
           String name = allNames[i][j].getText();
