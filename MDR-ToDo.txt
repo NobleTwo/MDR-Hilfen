@@ -4,5 +4,3 @@ Favoriten-Bug
 Wettbewerbsrechner-Ergebnisse in xls speichern
 mehrere Favoritenlisten
 in "Pferd auswählen" nach Gesamtpotential sortieren
-
-HorseChoice auf Doppelklick reagieren

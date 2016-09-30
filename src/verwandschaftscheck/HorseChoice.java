@@ -100,10 +100,15 @@ public class HorseChoice extends JFrame {
 		horseListfavsScrollPane.setBounds(24, 72, 193, 281);
 
 		horseListfavs.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		horseListfavs.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent evt) {
-				horseListfavs_ValueChanged(evt);
-			}
+		horseListfavs.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+	    		getFavs = true;
+	    		horseList.clearSelection();
+	    		horseListfavs.setSelectedIndex(horseListfavs.locationToIndex(evt.getPoint()));
+		        if (evt.getClickCount() == 2) {
+		    		choose();
+		        }
+		    }
 		});
 		cp.add(horseListfavsScrollPane);
 		jLabel1.setBounds(24, 48, 107, 19);
@@ -112,11 +117,21 @@ public class HorseChoice extends JFrame {
 		horseList.setModel(horseListModel);
 		horseListScrollPane.setBounds(240, 168, 193, 217);
 		horseList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		horseList.addListSelectionListener(new ListSelectionListener() {
+		horseList.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+	    		getFavs = false;
+	    		horseListfavs.clearSelection();
+	    		horseList.setSelectedIndex(horseList.locationToIndex(evt.getPoint()));
+		        if (evt.getClickCount() == 2) {
+		    		choose();
+		        }
+		    }
+		});
+		/*horseList.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent evt) {
 				horseList_ValueChanged(evt);
 			}
-		});
+		});*/
 		cp.add(horseListScrollPane);
 		raceFilter.setBounds(240, 64, 193, 25);
 		racesUpdate = new String[dm.races.length + 2];
@@ -226,8 +241,12 @@ public class HorseChoice extends JFrame {
 			horseListfavsModel.addElement(iterator.next());
 		}
 	}
-
+	
 	public void accept_ActionPerformed(ActionEvent evt) {
+		choose();
+	}
+
+	public void choose(){
 		//save options
 		ShortTimeMemory.setSelectedRace(raceFilter.getSelectedItem().toString());
 		ShortTimeMemory.setSelectedMale(checkBoxMale.isSelected());
