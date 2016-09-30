@@ -11,14 +11,6 @@ import allgemein.ShortTimeMemory;
 
 import java.util.*;
 
-/**
- *
- * Beschreibung
- *
- * @version 1.0 vom 15.02.2015
- * @author
- */
-
 public class HorseChoice extends JFrame {
 	/**
 	 * 
@@ -208,7 +200,7 @@ public class HorseChoice extends JFrame {
 		searched = searched.toLowerCase();
 		for (int i = 0; i < horses.size(); i++) {
 			RelativeHorse current = horses.get(i);
-			boolean delete = current.name.equals("Unbekannt") || !current.race.contains(race) || !current.name.toLowerCase().contains(searched);
+			boolean delete = current.getName().equals("Unbekannt") || !current.getRace().contains(race) || !current.getName().toLowerCase().contains(searched);
 			delete = delete || (current.isMale() && !showMale) || (!current.isMale() && !showFemale);
 			if (delete) {
 				horses.remove(i);
@@ -219,7 +211,7 @@ public class HorseChoice extends JFrame {
 		//for all horses
 		Collection<String> horseNamesAll = new TreeSet<String>(Collator.getInstance());
 		for (int i = 0; i < horses.size(); i++) {
-			horseNamesAll.add(horses.get(i).name);
+			horseNamesAll.add(horses.get(i).getName());
 		}
 		horseListModel.removeAllElements();
 		Iterator<String> iterator = horseNamesAll.iterator();
@@ -231,8 +223,8 @@ public class HorseChoice extends JFrame {
 		Collection<String> horseNamesFavs = new TreeSet<String>(Collator.getInstance());
 		for (int i = 0; i < horseNamesAll.size(); i++) {
 			RelativeHorse current = horses.get(i);
-			if (!current.name.equals("Unbekannt") && current.isFavourite) {
-				horseNamesFavs.add(current.name);
+			if (!current.getName().equals("Unbekannt") && current.isFavourite) {
+				horseNamesFavs.add(current.getName());
 			}
 		}
 		horseListfavsModel.removeAllElements();

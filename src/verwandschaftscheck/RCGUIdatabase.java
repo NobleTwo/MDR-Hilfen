@@ -5,15 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import allgemein.Menue;
-
-/**
- *
- * Beschreibung
- *
- * @version 1.0 vom 15.02.2015
- * @author
- */
+import allgemein.MainMenu;
 
 public class RCGUIdatabase extends JFrame {
 	/**
@@ -479,7 +471,7 @@ public class RCGUIdatabase extends JFrame {
 				mother = horses[2 * i + 2];
 			}
 			String currentRace = (String) horseRaces[i].getSelectedItem();
-			horses[i] = new RelativeHorse(currentName, father, mother, currentRace, false, i % 2 == 1);
+			horses[i] = new RelativeHorse(currentName, father, mother, currentRace, false, i % 2 == 1,-1);
 			dm.addHorse(horses[i]);
 		}
 
@@ -490,9 +482,9 @@ public class RCGUIdatabase extends JFrame {
 			boolean isFav = isFavourite.isSelected();
 			String race = String.valueOf(horseRaces[0].getSelectedItem());
 
-			dm.addHorse(new RelativeHorse(name, father, mother, race, isFav, radioButtonIsMale.isSelected()), true);
-			if(!subject.name.equals(name)){
-				dm.removeHorse(subject.name);
+			dm.addHorse(new RelativeHorse(name, father, mother, race, isFav, radioButtonIsMale.isSelected(),-1), true);
+			if(!subject.getName().equals(name)){
+				dm.removeHorse(subject.getName());
 			}
 		}
 	}
@@ -610,7 +602,7 @@ public class RCGUIdatabase extends JFrame {
 	}
 
 	public void ButtonGoToMenu_ActionPerformed(ActionEvent evt) {
-		new Menue();
+		new MainMenu();
 		this.dispose();
 	}
 

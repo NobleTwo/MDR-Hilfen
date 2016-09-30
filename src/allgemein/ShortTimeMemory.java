@@ -1,6 +1,6 @@
 package allgemein;
 
-public class ShortTimeMemory {
+public abstract class ShortTimeMemory {
 	private static String selectedRace="";
 	private static boolean selectedMale = true;
 	private static boolean selectedFemale = true;

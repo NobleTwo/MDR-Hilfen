@@ -19,7 +19,7 @@ public class JNumberField extends JTextField{
 	}
 	
 	public void setText(Double value){
-		DecimalFormat form = new DecimalFormat("#0.0000", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+		DecimalFormat form = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 		this.setText(form.format(value));
 	}
 	

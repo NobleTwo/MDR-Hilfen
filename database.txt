@@ -1,5 +1,5 @@
 
-DerErste%%%null%%%null%%%Englisches Vollblut%%%true%%%false
+DerErste%%%A%%%null%%%Englisches Vollblut%%%true%%%false
 3%%%null%%%null%%%Englisches Vollblut%%%true%%%false
 4%%%null%%%null%%%Englisches Vollblut%%%true%%%true
 B%%%null%%%null%%% Unbekannt%%%false%%%true

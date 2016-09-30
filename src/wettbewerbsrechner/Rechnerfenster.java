@@ -5,7 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import allgemein.JNumberField;
-import allgemein.Menue;
+import allgemein.MainMenu;
 
 
 /**
@@ -535,7 +535,7 @@ public class Rechnerfenster extends JFrame {
   } 
   
   public void ButtonZurueck_ActionPerformed(ActionEvent evt) {
-    new Menue();
+    new MainMenu();
     this.dispose();
   } 
   

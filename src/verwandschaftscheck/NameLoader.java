@@ -27,7 +27,7 @@ public class NameLoader{
          return;
       }
       RelativeHorse rh = dm.population.get(popIndex);
-      String raceName = rh.race;
+      String raceName = rh.getRace();
       raceArray[0].setSelectedIndex(findRaceIndex(raceName));
       if(isFavourite!=null)
         isFavourite.setSelected(rh.isFavourite);
@@ -59,13 +59,13 @@ public class NameLoader{
       int populationIndexChild = dm.find(childName);
       if(!(populationIndexChild<0)){
         RelativeHorse child = dm.population.get(populationIndexChild);
-        if(index%2==0 && child.mother!=null){
-              name = child.mother.name;
-              race = child.mother.race;
+        if(index%2==0 && child.getMother()!=null){
+              name = child.getMother().getName();
+              race = child.getMother().getRace();
         }
-        else if(index%2==1 && child.father!=null){
-             name = child.father.name;
-             race = child.father.race;
+        else if(index%2==1 && child.getFather()!=null){
+             name = child.getFather().getName();
+             race = child.getFather().getRace();
         } 
       }
       nameArray[index].setText(name);

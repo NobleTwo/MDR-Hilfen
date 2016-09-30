@@ -22,15 +22,15 @@ public class DocumentManager {
 	public void removeHorse(String n) {
 		for (int i = 0; i < population.size(); i++) {
 			RelativeHorse current = population.get(i);
-			if (current.father != null) {
-				if (current.father.name.equals(n))
-					current.father = null;
+			if (current.getFather() != null) {
+				if (current.getFather().getName().equals(n))
+					current.setFather(null);
 			}
-			if (current.mother != null) {
-				if (current.mother.name.equals(n))
-					current.mother = null;
+			if (current.getMother() != null) {
+				if (current.getMother().getName().equals(n))
+					current.setMother(null);
 			}
-			if (current.name.equals(n)) {
+			if (current.getName().equals(n)) {
 				population.remove(i);
 				i--;
 			}
@@ -40,7 +40,7 @@ public class DocumentManager {
 	public int find(String n) {
 		int i = 0;
 		while (i < this.population.size()) {
-			if (this.population.get(i).name.equals(n)) {
+			if (this.population.get(i).getName().equals(n)) {
 				return i;
 			}
 			i++;
@@ -53,20 +53,20 @@ public class DocumentManager {
 	}
 	
 	int addHorse(RelativeHorse rh, boolean priorizeNew) { // returns -1 if horse is already known and the index of insertion if horse is new
-		if (rh.name.equals("null"))
+		if (rh.getName().equals("null"))
 			return -2;
 		int numberOfHorses = this.population.size();
 		for (int i = 0; i < numberOfHorses; i++) {
 			RelativeHorse h = population.elementAt(i);
-			if (h.name.equals(rh.name)) {
-				if (rh.father != null) {
-					h.father = rh.father;
+			if (h.getName().equals(rh.getName())) {
+				if (rh.getFather() != null) {
+					h.setFather(rh.getFather());
 				}
-				if (rh.mother != null) {
-					h.mother = rh.mother;
+				if (rh.getMother() != null) {
+					h.setMother(rh.getMother());
 				}
-				if (!rh.race.equals(" Unbekannt")) {
-					h.race = rh.race;
+				if (!rh.getRace().equals(" Unbekannt")) {
+					h.setRace(rh.getRace());
 				}
 				if(priorizeNew){
 					h.isFavourite = rh.isFavourite;
@@ -83,20 +83,20 @@ public class DocumentManager {
 		if (this.population != null) {
 			for (int i = 0; i < this.population.size(); i++) {
 				RelativeHorse current = population.elementAt(i);
-				result = result + "\n" + current.name + detSep;
+				result = result + "\n" + current.getName() + detSep;
 
 				RelativeHorse temp;
-				if ((temp = current.father) != null) {
-					result = result + temp.name + detSep;
+				if ((temp = current.getFather()) != null) {
+					result = result + temp.getName() + detSep;
 				} else {
 					result = result + "null" + detSep;
 				}
-				if ((temp = current.mother) != null) {
-					result = result + temp.name + detSep;
+				if ((temp = current.getMother()) != null) {
+					result = result + temp.getName() + detSep;
 				} else {
 					result = result + "null" + detSep;
 				}
-				result += current.race + detSep + current.isFavourite + detSep + current.isMale();
+				result += current.getRace() + detSep + current.isFavourite + detSep + current.isMale();
 			}
 		}
 		return result;
@@ -156,23 +156,23 @@ public class DocumentManager {
 				if (!splitIntoDetails[1].equals("null")) {
 					father = new RelativeHorse(splitIntoDetails[1], null, null);
 					if (this.addHorse(father) == -1) {
-						father = population.get(find(father.name));
+						father = population.get(find(father.getName()));
 					}
 				}
 				if (!splitIntoDetails[2].equals("null")) {
 					mother = new RelativeHorse(splitIntoDetails[2], null, null);
 					this.addHorse(mother);
 					if (this.addHorse(mother) == -1) {
-						mother = population.get(find(mother.name));
+						mother = population.get(find(mother.getName()));
 					}
 				}
 				boolean isFavourite = splitIntoDetails[4].equals("true");
 				boolean isMale = true;
 				if (splitIntoDetails.length == 6) {
 					isMale = splitIntoDetails[5].equals("true");
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale,-1));
 				} else {
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale,-1));
 					throwException = true;
 				}
 
@@ -187,11 +187,11 @@ public class DocumentManager {
 
 	public static void main(String[] args) {
 		DocumentManager dm = new DocumentManager();
-		RelativeHorse rh1 = new RelativeHorse("1", null, null, "Englisches Vollblut", false, false);
-		RelativeHorse rh2 = new RelativeHorse("2", null, null, "Englisches Vollblut", false, true);
+		RelativeHorse rh1 = new RelativeHorse("1", null, null, "Englisches Vollblut", false, false,-1);
+		RelativeHorse rh2 = new RelativeHorse("2", null, null, "Englisches Vollblut", false, true,-1);
 		dm.addHorse(rh1);
 		dm.addHorse(rh2);
-		dm.addHorse(new RelativeHorse("DerErste", rh1, null, "Englisches Vollblut", false, true));
+		dm.addHorse(new RelativeHorse("DerErste", rh1, null, "Englisches Vollblut", false, true,-1));
 		dm.save();
 		try {
 			dm.analyzeFile();

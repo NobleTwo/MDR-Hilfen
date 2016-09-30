@@ -1,6 +1,10 @@
 Gesamtpotential hinzufügen
+
 "?" in Namen beheben
 Favoriten-Bug
+
 Wettbewerbsrechner-Ergebnisse in xls speichern
+
 mehrere Favoritenlisten
+
 in "Pferd auswählen" nach Gesamtpotential sortieren

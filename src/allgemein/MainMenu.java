@@ -7,15 +7,8 @@ import javax.swing.*;
 import verwandschaftscheck.RCGUIdatabase;
 import verwandschaftscheck.RelativeCheckGUI;
 import wettbewerbsrechner.Rechnerfenster;
-/**
-  *
-  * Beschreibung
-  *
-  * @version 1.0 vom 15.08.2014
-  * @author 
-  */
 
-public class Menue extends JFrame {
+public class MainMenu extends JFrame {
   /**
 	 * 
 	 */
@@ -29,7 +22,7 @@ public class Menue extends JFrame {
   private JButton ButtonVerwandtschaftscheckReal = new JButton();
   // Ende Attribute
   
-  public Menue() { 
+  public MainMenu() { 
     // Frame-Initialisierung
     super("MDR-Hilfen");
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -140,6 +133,6 @@ public class Menue extends JFrame {
   }
   
   public static void main(String[] args) throws Exception {
-    new Menue();
+    new MainMenu();
   }
 }

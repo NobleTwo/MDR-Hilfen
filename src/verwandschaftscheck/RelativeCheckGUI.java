@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import allgemein.Menue;
+import allgemein.MainMenu;
 
 /**
   *
@@ -731,7 +731,7 @@ public RelativeCheckGUI() {
   }
 
   public void ButtonGoToMenu_ActionPerformed(ActionEvent evt) {
-    new Menue();
+    new MainMenu();
     this.dispose();
   }
 
