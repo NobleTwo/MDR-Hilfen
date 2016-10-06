@@ -18,13 +18,14 @@ public abstract class MDRFrame extends JFrame{
 	 * 
 	 */
 	protected static final long serialVersionUID = 1L;
-	protected int gridButtonGap = 10;
+	public static final int gridButtonGap = 10;
+	public static final Color backgroundColor = new Color(0xB8CFE5);
 	
 	public MDRFrame(){
 		super("MDR-Hilfen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		getContentPane().setBackground(new Color(0xB8CFE5));
+		getContentPane().setBackground(backgroundColor);
 	}
 	
 	protected void super2(String title){

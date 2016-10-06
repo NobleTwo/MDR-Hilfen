@@ -1,5 +1,7 @@
 package allgemein;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -13,9 +15,27 @@ public class JNumberField extends JTextField{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public JNumberField(){
+	public JNumberField(boolean alignRight){
 		super();
-		this.setHorizontalAlignment(SwingConstants.RIGHT);
+		if(alignRight){
+			this.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		this.addKeyListener(new KeyListener(){
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent ke) {
+				if(!Character.isDigit(ke.getKeyChar())){
+				 ke.consume();
+				}
+			}
+		});
 	}
 	
 	public void setText(Double value){

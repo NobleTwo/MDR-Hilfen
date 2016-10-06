@@ -113,7 +113,7 @@ public class PopUpWettbewerbschancen extends JFrame {
     
     for(int i=0; i<chancen.length; i++){
       for (int j=0; j<chancen[0].length; j++) {
-        chancen[i][j]=new JNumberField();
+        chancen[i][j]=new JNumberField(true);
         chancen[i][j].setBounds(120+j*60, 56+i*24, 51, 17);
         
         if(w.wettbewerbschancen[i][j]==-100){

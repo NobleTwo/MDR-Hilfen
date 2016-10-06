@@ -34,17 +34,11 @@ public abstract class ManageHorseGUI extends MDRFrame{
 	private JTextArea textInput = new JTextArea();
 	protected JButton buttonAddOrSaveHorse;
 	protected JButton buttonResetOrDeleteHorse;
-	private boolean mainHorseIsMale = true;
-	private Vector<String> vectorFavourites = new Vector<String>();
-	private Color backgroundColor;
+	private HorseAndRaceField[] horseNamesAndRaces;
 	
 	public ManageHorseGUI(){
 		super();
-		
-		vectorFavourites.add("Favoriten");
-		vectorFavourites.add("Favoriten2");
-		
-		backgroundColor = getContentPane().getBackground();
+
 		setLayout(new BorderLayout());
 		
 		///
@@ -53,81 +47,9 @@ public abstract class ManageHorseGUI extends MDRFrame{
 		Container west = new Container();
 		this.add(west, BorderLayout.WEST);
 		west.setLayout(new BoxLayout(west, BoxLayout.Y_AXIS));
-		
-		Container containerHorses = new Container();
+		HorseFamilyTree containerHorses = new HorseFamilyTree();
 		west.add(containerHorses);
-		containerHorses.setLayout(new BoxLayout(containerHorses, BoxLayout.X_AXIS));
-		
-		containerHorses.add(Box.createRigidArea(new Dimension(gridButtonGap,0)));
-		Container mainHorse = new Container();
-		mainHorse.setLayout(new BoxLayout(mainHorse, BoxLayout.Y_AXIS));
-		mainHorse.add(new HorseAndRaceField());
-		
-		Container containerGP = new Container();
-		containerGP.setLayout(new BoxLayout(containerGP, BoxLayout.X_AXIS));
-		JLabel labelGP = new JLabel("GP: ");
-		containerGP.add(labelGP);
-		containerGP.add(new JTextField());
-		mainHorse.add(containerGP);
-		
-		JRadioButton buttonMale = new JRadioButton("Hengst");
-		buttonMale.setBackground(backgroundColor);
-		buttonMale.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mainHorseIsMale = buttonMale.isSelected();
-			}
-		});
-		JRadioButton buttonFemale = new JRadioButton("Stute");
-		buttonFemale.setBackground(backgroundColor);
-		buttonFemale.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mainHorseIsMale = buttonFemale.isSelected();
-			}
-		});
-		ButtonGroup buttonGroupSex = new ButtonGroup();
-		buttonGroupSex.add(buttonMale);
-		buttonGroupSex.add(buttonFemale);
-		mainHorse.add(buttonMale);
-		mainHorse.add(buttonFemale);
-		mainHorse.add(new JLabel("eingetragen in:"));
-		Iterator<String> it = vectorFavourites.iterator();
-		while(it.hasNext()){
-			JCheckBox currentCheckBox = new JCheckBox(it.next());
-			currentCheckBox.setBackground(backgroundColor);
-			mainHorse.add(currentCheckBox);
-		}
-		containerHorses.add(mainHorse);
-		
-		containerHorses.add(Box.createRigidArea(new Dimension(gridButtonGap,0)));
-		Container containerParents = new Container();
-		containerParents.setLayout(new BoxLayout(containerParents, BoxLayout.Y_AXIS));
-		containerParents.add(new HorseAndRaceField());
-		containerParents.add(new HorseAndRaceField());
-		containerHorses.add(containerParents);
-		
-		containerHorses.add(Box.createRigidArea(new Dimension(gridButtonGap,0)));
-		Container containerGrandparents = new Container();
-		containerGrandparents.setLayout(new BoxLayout(containerGrandparents, BoxLayout.Y_AXIS));
-		containerGrandparents.add(new HorseAndRaceField());
-		containerGrandparents.add(new HorseAndRaceField());
-		containerGrandparents.add(new HorseAndRaceField());
-		containerGrandparents.add(new HorseAndRaceField());
-		containerHorses.add(containerGrandparents);
-		
-		containerHorses.add(Box.createRigidArea(new Dimension(gridButtonGap,0)));
-		Container containerEldest = new Container();
-		containerEldest.setLayout(new BoxLayout(containerEldest, BoxLayout.Y_AXIS));
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerEldest.add(new HorseAndRaceField());
-		containerHorses.add(containerEldest);
+		horseNamesAndRaces = containerHorses.getHorseNamesAndRaces();
 		
 		Container buttonsManageHorse = new Container();
 		west.add(Box.createRigidArea(new Dimension(0,gridButtonGap)));
@@ -228,7 +150,7 @@ public abstract class ManageHorseGUI extends MDRFrame{
 		buttonsGoTo.add(buttonClose);
 		
 		JScrollPane textInputScrollPane = new JScrollPane(textInput);
-		textInputScrollPane.setPreferredSize(new Dimension(350, 330));
+		textInputScrollPane.setPreferredSize(new Dimension(350, 400));
 		east.add(Box.createRigidArea(new Dimension(0, gridButtonGap)));
 		east.add(textInputScrollPane);
 		east.add(Box.createRigidArea(new Dimension(0, gridButtonGap)));

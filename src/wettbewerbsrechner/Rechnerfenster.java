@@ -53,16 +53,16 @@ public class Rechnerfenster extends JFrame {
   private JLabel jLabel35 = new JLabel();
   private JLabel jLabel36 = new JLabel();
   private JLabel jLabel37 = new JLabel();
-  private JNumberField wertDressur = new JNumberField();
-  private JNumberField wertKondition = new JNumberField();
-  private JNumberField wertTempo = new JNumberField();
-  private JNumberField wertGelassenheit = new JNumberField();
-  private JNumberField wertWendigkeit = new JNumberField();
-  private JNumberField wertGrundgangarten = new JNumberField();
-  private JNumberField wertFahren = new JNumberField();
-  private JNumberField wertRennen = new JNumberField();
-  private JNumberField wertWestern = new JNumberField();
-  private JNumberField wertSpringen = new JNumberField();
+  private JNumberField wertDressur = new JNumberField(true);
+  private JNumberField wertKondition = new JNumberField(true);
+  private JNumberField wertTempo = new JNumberField(true);
+  private JNumberField wertGelassenheit = new JNumberField(true);
+  private JNumberField wertWendigkeit = new JNumberField(true);
+  private JNumberField wertGrundgangarten = new JNumberField(true);
+  private JNumberField wertFahren = new JNumberField(true);
+  private JNumberField wertRennen = new JNumberField(true);
+  private JNumberField wertWestern = new JNumberField(true);
+  private JNumberField wertSpringen = new JNumberField(true);
   private JComboBox<String> wertTemperament = new JComboBox<String>();
   private JComboBox<String> wertGelehrigkeit = new JComboBox<String>();
   private JComboBox<String> wertSiegeswille = new JComboBox<String>();
@@ -85,7 +85,7 @@ public class Rechnerfenster extends JFrame {
   private JButton ButtonBeenden = new JButton();
   public PopUpWettbewerbschancen chancen;
   private JLabel jlabelName = new JLabel();
-  public JNumberField nameDesPferds = new JNumberField();
+  public JTextField nameDesPferds = new JTextField();
   private JButton ButtonTextLoeschen = new JButton();
   // Ende Attribute
   
