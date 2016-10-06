@@ -8,3 +8,7 @@ Wettbewerbsrechner-Ergebnisse in xls speichern
 mehrere Favoritenlisten
 
 in "Pferd auswählen" nach Gesamtpotential sortieren
+
+
+rausfallende Generation RCGUI: Dopplung nur gelb & nicht rot
+requestFocus für TextArea RCGUIdatabase

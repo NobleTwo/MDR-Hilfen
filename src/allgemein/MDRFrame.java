@@ -6,8 +6,8 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -30,7 +30,12 @@ public abstract class MDRFrame extends JFrame{
 	protected void super2(String title){
 		JLabel labelTitle = new JLabel(title, SwingConstants.CENTER);
 		labelTitle.setFont(new Font("Dialog", Font.BOLD, 20));
-		add(labelTitle, BorderLayout.NORTH);
+		Container containerNorth = new Container();
+		containerNorth.setLayout(new BorderLayout());
+		containerNorth.add(Box.createRigidArea(new Dimension(gridButtonGap,gridButtonGap)), BorderLayout.NORTH);
+		containerNorth.add(Box.createRigidArea(new Dimension(gridButtonGap,gridButtonGap)), BorderLayout.SOUTH);
+		containerNorth.add(labelTitle, BorderLayout.CENTER);
+		this.add(containerNorth, BorderLayout.NORTH);
 		
 		pack();
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
