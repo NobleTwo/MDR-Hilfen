@@ -1,24 +1,39 @@
 package verwandschaftscheck;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Vector;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
+import allgemein.JNumberField;
 import allgemein.MDRFrame;
 import allgemein.MainMenu;
 
 public abstract class ManageHorseGUI extends MDRFrame {
-
-	private HorseAndRaceField[] horseNamesAndRaces = new HorseAndRaceField[15];
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	protected HorseAndRaceField[] horseNamesAndRaces = new HorseAndRaceField[15];
 	protected JButton buttonAddOrSaveHorse = new JButton();
 	protected JButton buttonChooseHorse = new JButton();
-	protected JButton buttonResetOrDelete = new JButton();
+	protected JButton buttonResetOrDeleteHorse = new JButton();
+	protected JTextArea textInput = new JTextArea(); 
+	private JRadioButton radioButtonIsMale = new JRadioButton("Hengst");
+	private JRadioButton radioButtonIsFemale = new JRadioButton("Stute");
+	private JNumberField numberfieldGP = new JNumberField(false);
+	private Vector<JCheckBox> checkboxFavourites = new Vector<JCheckBox>();
 
 	/*public ManageHorseGUI(String name) {
 		super();
@@ -32,61 +47,109 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		}
 	}*/
 
-	@SuppressWarnings("unchecked")
-	public ManageHorseGUI() {
-		super();
-
-		//Frame-Initialisierung
-		int frameWidth = 913;
-		int frameHeight = 575;
+	public ManageHorseGUI(String title) {
+		super(title);
+		int eastButtonWidth = 210;
+		int frameWidth =(int)(7.5*gridButtonGap+4*HorseAndRaceField.WIDTH+2*eastButtonWidth);
+		int frameHeight = 11*gridButtonGap+9*HorseAndRaceField.HEIGHT+buttonHeight+20;
 		setSize(frameWidth, frameHeight);
-		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-		int x = (d.width - getSize().width) / 2;
-		int y = (d.height - getSize().height) / 2;
-		setLocation(x, y);
-		Container cp = getContentPane();
-		cp.setLayout(null);
 		
-		//Anfang Komponenten		
+		Vector<String> vectorFavourites = new Vector<String>();
+		vectorFavourites.add("Favoriten1");
+		vectorFavourites.add("Favoriten2");
+		vectorFavourites.add("Favoriten2");
+		vectorFavourites.add("Favoriten2");
+		vectorFavourites.add("Favoriten2");
+		vectorFavourites.add("Favoriten6");
+		//max = 6
+		
+		//Komponenten
+		Container cp = getContentPane();
 		for(int i = 0; i<horseNamesAndRaces.length; i++){
 			horseNamesAndRaces[i] = new HorseAndRaceField();
 			cp.add(horseNamesAndRaces[i]);	
 		}
-		horseNamesAndRaces[0].setLocation(16, 248);
+		int yTop = 3*gridButtonGap + 20;
 		
-		horseNamesAndRaces[1].setLocation(144, 136);
-		horseNamesAndRaces[2].setLocation(144, 352);
+		//
+		//WEST
+		//
+		int y0 = (int)(yTop + 3.5*HorseAndRaceField.HEIGHT + 3*gridButtonGap);
+		horseNamesAndRaces[0].setLocation(gridButtonGap, y0);
 		
-		horseNamesAndRaces[3].setLocation(272, 80);
-		horseNamesAndRaces[3].setLocation(272, 192);
-		horseNamesAndRaces[5].setLocation(272, 296);
-		horseNamesAndRaces[6].setLocation(272, 416);
+		int x2row = 2*gridButtonGap + horseNamesAndRaces[0].getWidth();
+		int y1 = (int)(yTop + HorseAndRaceField.HEIGHT*1.5 + gridButtonGap);
+		horseNamesAndRaces[1].setLocation(x2row, y1);
+		int y2 = (int)(yTop + HorseAndRaceField.HEIGHT*5.5 + 5*gridButtonGap);
+		horseNamesAndRaces[2].setLocation(x2row, y2);
 		
-		horseNamesAndRaces[7].setLocation(400, 48);
-		horseNamesAndRaces[3].setLocation(400, 104);
-		horseNamesAndRaces[9].setLocation(400, 160);
-		horseNamesAndRaces[10].setLocation(400, 216);
-		horseNamesAndRaces[11].setLocation(400, 272);
-		horseNamesAndRaces[12].setLocation(400, 328);
-		horseNamesAndRaces[13].setLocation(400, 384);
-		horseNamesAndRaces[14].setLocation(400, 440);
+		int x3row = 3*gridButtonGap + 2*horseNamesAndRaces[0].getWidth();
+		for(int i = 3; i<=6; i++){
+			int y = (int)(yTop + HorseAndRaceField.HEIGHT/2 +(2*gridButtonGap + 2*HorseAndRaceField.HEIGHT)*(i-3));
+			horseNamesAndRaces[i].setLocation(x3row, y);	
+		}
 		
-		buttonAddOrSaveHorse.setBounds(272, 504, 123, 25);
-		buttonAddOrSaveHorse.setMargin(new Insets(2, 2, 2, 2));
+		int x4row = 4*gridButtonGap + 3*horseNamesAndRaces[0].getWidth();
+		for(int i = 7; i<=14; i++){
+			horseNamesAndRaces[i].setLocation(x4row, yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*(i-7));
+		}
+
+		Container containerGP = new Container();
+		containerGP.setLayout(new BorderLayout());
+		int y0GP = y0 + HorseAndRaceField.HEIGHT + gridButtonGap/2;
+		containerGP.setBounds(gridButtonGap, y0GP, HorseAndRaceField.WIDTH, 2*gridButtonGap);
+		JLabel labelGP = new JLabel("GP: ");
+		containerGP.add(labelGP, BorderLayout.WEST);
+		containerGP.add(numberfieldGP, BorderLayout.CENTER);
+		cp.add(containerGP);
+		
+		radioButtonIsMale.setBounds(gridButtonGap, (int)(y0GP+2.5*gridButtonGap), HorseAndRaceField.WIDTH, 2*gridButtonGap);
+		radioButtonIsMale.setOpaque(false);
+		radioButtonIsMale.setSelected(true);
+		cp.add(radioButtonIsMale);
+		radioButtonIsFemale.setBounds(gridButtonGap, (int)(y0GP+4*gridButtonGap), HorseAndRaceField.WIDTH, 2*gridButtonGap);
+		radioButtonIsFemale.setOpaque(false);
+		cp.add(radioButtonIsFemale);
+		ButtonGroup buttonGroupRadioButtons = new ButtonGroup();
+		buttonGroupRadioButtons.add(radioButtonIsMale);
+		buttonGroupRadioButtons.add(radioButtonIsFemale);
+		
+		int y0Favs = y0GP + 6*gridButtonGap;
+		for(int i = 0; i<vectorFavourites.size(); i++){
+			String name = vectorFavourites.get(i);
+			JCheckBox temp = new JCheckBox(name);
+			temp.setBounds(gridButtonGap, y0Favs+2*i*gridButtonGap, HorseAndRaceField.WIDTH, 2*gridButtonGap);
+			temp.setOpaque(false);
+			checkboxFavourites.add(temp);
+			cp.add(temp);
+		}
+		
+		int yBot = yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
+		buttonAddOrSaveHorse.setBounds(x2row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
 		buttonAddOrSaveHorse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				addOrSaveHorse();
 			}
 		});
 		cp.add(buttonAddOrSaveHorse);
 
-		JLabel labelGP = new JLabel("GP: ");
-		labelGP.setBounds(16, 304, 17, 17);
-		cp.add(labelGP);
-
-		buttonChooseHorse.setBounds(544, 48, 185, 25);
-		buttonChooseHorse.setMargin(new Insets(2, 2, 2, 2));
+		buttonResetOrDeleteHorse.setBounds(x3row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
+		buttonResetOrDeleteHorse.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				resetOrDelete();
+			}
+		});
+		cp.add(buttonResetOrDeleteHorse);
+		
+		//
+		//EAST
+		//		
+		int xEast = x4row + HorseAndRaceField.WIDTH + gridButtonGap;
+		buttonChooseHorse.setBounds(xEast, yTop, eastButtonWidth, buttonHeight);
 		buttonChooseHorse.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				new HorseChoice(new DocumentManager());
 				dispose();
@@ -94,278 +157,74 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		});
 		cp.add(buttonChooseHorse);
 		
-		buttonResetOrDelete.setBounds(400, 504, 121, 25);
-		buttonResetOrDelete.setMargin(new Insets(2, 2, 2, 2));
-		buttonResetOrDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				resetOrDelete();
-			}
-		});
-		cp.add(buttonResetOrDelete);
-		
-		JButton buttonSave = new JButton("Datenbank speichern");
-		buttonSave.setBounds(544, 112, 185, 25);
-		buttonSave.setMargin(new Insets(2, 2, 2, 2));
-		buttonSave.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				save();
-			}
-		});
-		cp.add(save);
-		createNewHorse.setBounds(544, 80, 185, 25);
-		createNewHorse.setText("Neues Pferd erstellen");
-		createNewHorse.setMargin(new Insets(2, 2, 2, 2));
-		if (newHorseMode)
-			createNewHorse.setVisible(false);
-		createNewHorse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				createNewHorse_ActionPerformed(evt);
-			}
-		});
-		cp.add(createNewHorse);
-		ButtonAnalyzeText.setBounds(720, 504, 169, 25);
-		ButtonAnalyzeText.setText("Text analysieren");
-		ButtonAnalyzeText.setMargin(new Insets(2, 2, 2, 2));
-		ButtonAnalyzeText.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				ButtonAnalyzeText_ActionPerformed(evt);
-			}
-		});
-		cp.add(ButtonAnalyzeText);
-		TextInputScrollPane.setBounds(544, 160, 345, 329);
-		cp.add(TextInputScrollPane);
-		jComboBox0.setBounds(16, 280, 121, 17);
-		jComboBox0.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox0);
-		jComboBox1.setBounds(144, 168, 121, 17);
-		jComboBox1.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox1);
-		jComboBox2.setBounds(144, 384, 121, 17);
-		jComboBox2.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox2);
-		jComboBox3.setBounds(272, 112, 121, 17);
-		jComboBox3.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox3);
-		jComboBox4.setBounds(272, 224, 121, 17);
-		jComboBox4.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox4);
-		jComboBox5.setBounds(272, 328, 121, 17);
-		jComboBox5.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox5);
-		jComboBox6.setBounds(272, 448, 121, 17);
-		jComboBox6.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox6);
-		jComboBox7.setBounds(400, 80, 121, 17);
-		jComboBox7.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox7);
-		jComboBox8.setBounds(400, 136, 121, 17);
-		jComboBox8.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox8);
-		jComboBox9.setBounds(400, 192, 121, 17);
-		jComboBox9.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox9);
-		jComboBox10.setBounds(400, 248, 121, 17);
-		jComboBox10.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox10);
-		jComboBox11.setBounds(400, 304, 121, 17);
-		jComboBox11.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox11);
-		jComboBox12.setBounds(400, 360, 121, 17);
-		jComboBox12.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox12);
-		jComboBox13.setBounds(400, 416, 121, 17);
-		jComboBox13.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox13);
-		jComboBox14.setBounds(400, 472, 121, 17);
-		jComboBox14.setFont(new Font("@Arial Unicode MS", Font.BOLD, 9));
-		cp.add(jComboBox14);
-		buttonGoToRC.setBounds(736, 48, 153, 25);
-		buttonGoToRC.setText("Verwandtschaftscheck");
-		buttonGoToRC.setMargin(new Insets(2, 2, 2, 2));
+		int xEastButton2 = xEast + gridButtonGap + eastButtonWidth;
+		JButton buttonGoToRC = new JButton("Verwandtschaftscheck");
+		buttonGoToRC.setBounds(xEastButton2, yTop, eastButtonWidth, buttonHeight);
 		buttonGoToRC.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				buttonGoToRC_ActionPerformed(evt);
+				new RelativeCheckGUI();
 			}
 		});
 		cp.add(buttonGoToRC);
-		ButtonExit.setBounds(736, 112, 153, 25);
-		ButtonExit.setText("Schließen");
-		ButtonExit.setMargin(new Insets(2, 2, 2, 2));
-		ButtonExit.addActionListener(new ActionListener() {
+		
+		int yButton2 = yTop + gridButtonGap + buttonHeight;
+		JButton buttonGoToMenu = new JButton("Hauptmenü");
+		buttonGoToMenu.setBounds(xEast, yButton2, eastButtonWidth, buttonHeight);
+		buttonGoToMenu.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				ButtonExit_ActionPerformed(evt);
+				new MainMenu();
+				dispose();
 			}
 		});
-		cp.add(ButtonExit);
-		ButtonGoToMenu.setBounds(736, 80, 153, 25);
-		ButtonGoToMenu.setText("Hauptmenü");
-		ButtonGoToMenu.setMargin(new Insets(2, 2, 2, 2));
-		ButtonGoToMenu.addActionListener(new ActionListener() {
+		cp.add(buttonGoToMenu);
+		
+		JButton buttonExit = new JButton("Schließen");
+		buttonExit.setBounds(xEastButton2, yButton2, eastButtonWidth, buttonHeight);
+		buttonExit.setMargin(new Insets(2, 2, 2, 2));
+		buttonExit.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				ButtonGoToMenu_ActionPerformed(evt);
+				dispose();
 			}
 		});
-		cp.add(ButtonGoToMenu);
-		cp.setBackground(new Color(0xB8CFE5));
-		resetText.setBounds(544, 504, 169, 25);
-		resetText.setText("Text löschen");
-		resetText.setMargin(new Insets(2, 2, 2, 2));
-		resetText.addActionListener(new ActionListener() {
+		cp.add(buttonExit);
+		
+		JScrollPane textInputScrollPane = new JScrollPane(textInput);
+		int textAreaHeight = 8*HorseAndRaceField.HEIGHT+5*gridButtonGap-2*buttonHeight;
+		textInputScrollPane.setBounds(xEast, yButton2+buttonHeight+gridButtonGap, 2*eastButtonWidth+gridButtonGap, textAreaHeight);
+		cp.add(textInputScrollPane);
+		
+		int yButton3 = yButton2 + buttonHeight + 2*gridButtonGap + textAreaHeight;
+		JButton buttonAnalyzeText = new JButton("Text analysieren");
+		buttonAnalyzeText.setBounds(xEast, yButton3, eastButtonWidth, buttonHeight);
+		buttonAnalyzeText.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				resetText_ActionPerformed(evt);
+				analyzeText();
 			}
 		});
-		cp.add(resetText);
-		jLabel2.setBounds(376, 8, 211, 33);
-		jLabel2.setText("Datenbankverwaltung");
-		jLabel2.setFont(new Font("Dialog", Font.BOLD, 20));
-		cp.add(jLabel2);
-		radioButtonIsMale.setBounds(16, 323, 17, 17);
-		radioButtonIsMale.setText("");
-		radioButtonIsMale.setOpaque(false);
-		radioButtonIsMale.setEnabled(true);
-		radioButtonIsMale.setSelected(true);
-		radioButtonIsMale.addActionListener(new ActionListener() {
+		cp.add(buttonAnalyzeText);
+		
+		JButton buttonResetText = new JButton("Text löschen");
+		buttonResetText.setBounds(xEast + gridButtonGap + eastButtonWidth, yButton3, eastButtonWidth, buttonHeight);
+		buttonResetText.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
-				radioButtonIsMale_ActionPerformed(evt);
+				textInput.setText("");
+				textInput.requestFocus();
 			}
 		});
-		cp.add(radioButtonIsMale);
-		radioButtonIsFemale.setBounds(16, 340, 17, 17);
-		radioButtonIsFemale.setText("");
-		radioButtonIsFemale.setOpaque(false);
-		radioButtonIsFemale.setEnabled(true);
-		radioButtonIsFemale.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				radioButtonIsFemale_ActionPerformed(evt);
-			}
-		});
-		cp.add(radioButtonIsFemale);
-		jLabel3.setBounds(40, 322, 59, 19);
-		jLabel3.setText("Hengst");
-		cp.add(jLabel3);
-		jLabel4.setBounds(40, 342, 59, 11);
-		jLabel4.setText("Stute");
-		cp.add(jLabel4);
-		// Ende Komponenten
-		horseNames = new JTextField[15];
-		horseNames[0] = jTextField0;
-		horseNames[1] = jTextField1;
-		horseNames[2] = jTextField2;
-		horseNames[3] = jTextField3;
-		horseNames[4] = jTextField4;
-		horseNames[5] = jTextField5;
-		horseNames[6] = jTextField6;
-		horseNames[7] = jTextField7;
-		horseNames[8] = jTextField8;
-		horseNames[9] = jTextField9;
-		horseNames[10] = jTextField10;
-		horseNames[11] = jTextField11;
-		horseNames[12] = jTextField12;
-		horseNames[13] = jTextField13;
-		horseNames[14] = jTextField14;
-
-		horseRaces = new JComboBox[horseNames.length];
-		horseRaces[0] = jComboBox0;
-		horseRaces[1] = jComboBox1;
-		horseRaces[2] = jComboBox2;
-		horseRaces[3] = jComboBox3;
-		horseRaces[4] = jComboBox4;
-		horseRaces[5] = jComboBox5;
-		horseRaces[6] = jComboBox6;
-		horseRaces[7] = jComboBox7;
-		horseRaces[8] = jComboBox8;
-		horseRaces[9] = jComboBox9;
-		horseRaces[10] = jComboBox10;
-		horseRaces[11] = jComboBox11;
-		horseRaces[12] = jComboBox12;
-		horseRaces[13] = jComboBox13;
-		horseRaces[14] = jComboBox14;
-
-		for (int i = 0; i < horseRaces.length; i++) {
-			for (int j = 0; j < races.length; j++) {
-				horseRaces[i].addItem(races[j]);
-			}
-		}
-		setVisible(true);
-	} // end of public RCGUIdatabase
-
-	// Anfang Methoden
-	public void addHorse_ActionPerformed(ActionEvent evt) {
-		if ((horseNames[0].getText()).equals("") && newHorseMode){
-			return;
-		}
-		RelativeHorse father = null;
-		RelativeHorse mother = null;
-		String name;
-		RelativeHorse[] horses = new RelativeHorse[horseNames.length];
-		for (int i = horseNames.length - 1; i > 0; i--) {
-			String currentName = horseNames[i].getText();
-			if (currentName.equals("") || currentName.equals("nicht in DB"))
-				continue;
-			if ((2 * i + 1) < horseNames.length) {
-				father = horses[2 * i + 1];
-				mother = horses[2 * i + 2];
-			}
-			String currentRace = (String) horseRaces[i].getSelectedItem();
-			horses[i] = new RelativeHorse(currentName, father, mother, currentRace, false, i % 2 == 1,-1);
-			dm.addHorse(horses[i]);
-		}
-
-		name = horseNames[0].getText();
-		if (!(name.equals("") || name.equals("nicht in DB"))) {
-			father = horses[1];
-			mother = horses[2];
-			boolean isFav = isFavourite.isSelected();
-			String race = String.valueOf(horseRaces[0].getSelectedItem());
-
-			dm.addHorse(new RelativeHorse(name, father, mother, race, isFav, radioButtonIsMale.isSelected(),-1), true);
-			if(!subject.getName().equals(name)){
-				dm.removeHorse(subject.getName());
-			}
-		}
+		cp.add(buttonResetText);
 	}
 
-	public void changeMode_ActionPerformed(ActionEvent evt) {
-		new HorseChoice(dm);
-		this.dispose();
-	}
+	//
+	//Methoden
+	//
 
-	public void reset_ActionPerformed(ActionEvent evt) {
-		if (!newHorseMode)
-			delete();
-		for (int i = 0; i < horseNames.length; i++) {
-			horseNames[i].setText("");
-		}
-		isFavourite.setSelected(false);
-		for (int i = 0; i < horseRaces.length; i++) {
-			horseRaces[i].setSelectedIndex(0);
-		}
-	}
-
-	public void delete() {
-		if ((horseNames[0].getText()).equals(""))
-			return;
-		dm.removeHorse(horseNames[0].getText());
-	}
-
-	public void save(){
-		DocumentManager dm = new DocumentManager();
-		dm.save();
-		try {
-			dm.analyzeFile();
-		} catch (IllegalFileException e) {
-			e.popUp(this);
-		}
-	}
-
-	public void createNewHorse_ActionPerformed(ActionEvent evt) {
-		new ManageHorseGUI();
-		this.dispose();
-	}
-
-	public void ButtonAnalyzeText_ActionPerformed(ActionEvent evt) {
-		String[] lineSplit = TextInput.getText().split("\n");
+	public void analyzeText(){
+		String[] lineSplit = textInput.getText().split("\n");
 		int counter = 0;
 		int start = 0;
 		for (int i = 0; i < lineSplit.length; i++) {
@@ -375,45 +234,55 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		}
 
-		for (int i = start; i < lineSplit.length && counter < horseNames.length; i++) {
+		for (int i = start; i < lineSplit.length && counter < horseNamesAndRaces.length; i++) {
 			String current = lineSplit[i];
 			if (current.contains("Unbekannt")) {
-				horseNames[counter].setText(lineSplit[i]);
+				horseNamesAndRaces[counter].setName(lineSplit[i]);
 				counter++;
 			} else {
 				if (counter < 7 && current.contains("Gesamtpotential")) {
-					horseNames[counter].setText(lineSplit[i - 3]);
-					horseNames[counter].setCaretPosition(0);
+					horseNamesAndRaces[counter].setName(lineSplit[i - 3]);
+					horseNamesAndRaces[counter].setCaretPosition(0);
 					String racename = lineSplit[i - 2];
-					for (int j = 0; j < races.length; j++) {
-						if (racename.contains(races[j])) {
-							racename = races[j];
+					for (int j = 0; j < horseNamesAndRaces.length; j++) {
+						String currentRace = horseNamesAndRaces[j].getRace();
+						if (racename.contains(currentRace)) {
+							racename = currentRace;
 						}
 					}
-					horseRaces[counter].setSelectedItem(racename);
+					horseNamesAndRaces[counter].setSelectedItem(racename);
 					counter++;
 				} else if (counter >= 7) {
-					horseNames[counter].setText(lineSplit[i]);
-					horseNames[counter].setCaretPosition(0);
+					horseNamesAndRaces[counter].setName(lineSplit[i]);
+					horseNamesAndRaces[counter].setCaretPosition(0);
 					i++;
 					String racename = lineSplit[i];
-					for (int j = 0; j < races.length; j++) {
-						if (racename.contains(races[j])) {
-							racename = races[j];
+					for (int j = 0; j < horseNamesAndRaces.length; j++) {
+						String currentRace = horseNamesAndRaces[j].getRace();
+						if (racename.contains(currentRace)) {
+							racename = currentRace;
 						}
 					}
-					horseRaces[counter].setSelectedItem(racename);
+					horseNamesAndRaces[counter].setSelectedItem(racename);
 					counter++;
 				}
 			}
 		}
-		if (counter != horseNames.length)
-			TextInput.setText("Nicht alle Pferdenamen gefunden.");
+		if (counter != horseNamesAndRaces.length)
+			textInput.setText("Nicht alle Pferdenamen gefunden.");
+		
 		for (int i = 0; i < lineSplit.length; i++) {
 			if (lineSplit[i].contains("Geschlecht")) {
 				boolean isMale = lineSplit[i].contains("Hengst");
 				radioButtonIsMale.setSelected(isMale);
 				radioButtonIsFemale.setSelected(!isMale);
+			}
+		}
+		
+		for(int i = 0; i<lineSplit.length; i++){
+			if(lineSplit[i].contains("Gesamtpotential: ")){
+				String[] wordSplit = lineSplit[i].split(" ");
+				numberfieldGP.setText(wordSplit[1]);
 			}
 		}
 	}
@@ -422,49 +291,15 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		while (start < words.length) {
 			if (words[start].contains("Unbekannt"))
 				return start;
-			for (int i = 0; i < races.length; i++) {
-				if (words[start].contains(races[i]))
+			for (int i = 0; i < horseNamesAndRaces.length; i++) {
+				if (words[start].contains(horseNamesAndRaces[i].getRace()))
 					return start;
 			}
 		}
 		return -1;
 	}
-
-	public void buttonGoToRC_ActionPerformed(ActionEvent evt) {
-		new RelativeCheckGUI();
-		this.dispose();
-	}
-
-	public void ButtonExit_ActionPerformed(ActionEvent evt) {
-		this.dispose();
-	}
-
-	public void ButtonGoToMenu_ActionPerformed(ActionEvent evt) {
-		new MainMenu();
-		this.dispose();
-	}
-	
-	public void resetText_ActionPerformed(ActionEvent evt) {
-		TextInput.setText("");
-		TextInput.requestFocus();
-	}
-
-	public void radioButtonIsMale_ActionPerformed(ActionEvent evt) {
-		radioButtonIsMale.setSelected(true);
-		radioButtonIsFemale.setSelected(false);
-	}
-
-	public void radioButtonIsFemale_ActionPerformed(ActionEvent evt) {
-		radioButtonIsMale.setSelected(false);
-		radioButtonIsFemale.setSelected(true);
-	}
 	
 	protected abstract void addOrSaveHorse();
 	protected abstract void resetOrDelete();
-	// Ende Methoden
 
-	public static void main(String[] args) {
-		new ManageHorseGUI();
-	} // end of main
-
-} // end of class RCGUIdatabase
+}
