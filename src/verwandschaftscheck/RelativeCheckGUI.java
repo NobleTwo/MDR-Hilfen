@@ -591,7 +591,7 @@ public RelativeCheckGUI() {
   
   // Anfang Methoden
   public void editDatabase_ActionPerformed(ActionEvent evt) {
-    new RCGUIdatabase();
+    new ManageHorseGUI();
     this.dispose();
   }
 

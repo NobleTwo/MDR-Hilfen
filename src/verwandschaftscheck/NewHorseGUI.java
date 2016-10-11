@@ -1,16 +1,18 @@
 package verwandschaftscheck;
 
-public class NewHorseGUI extends ManageHorseGUI{
-
+public class NewHorseGUI extends ManageHorseGUI2{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	public NewHorseGUI(){
 		super();
 		buttonAddOrSaveHorse.setText("Pferd hinzufügen");
 		buttonResetOrDeleteHorse.setText("Zurücksetzen");
+		buttonChooseHorse.setText("Bestehendes Pferd bearbeiten");
 	}
+	
 	@Override
 	protected void addOrSave() {
 		//add

@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import verwandschaftscheck.RCGUIdatabase;
+import verwandschaftscheck.ManageHorseGUI;
 import verwandschaftscheck.RelativeCheckGUI;
 import wettbewerbsrechner.Rechnerfenster;
 
@@ -128,7 +128,7 @@ public class MainMenu extends JFrame {
   }
 
   public void ButtonDatenbank_ActionPerformed(ActionEvent evt){
-    new RCGUIdatabase();
+    new ManageHorseGUI();
     this.dispose();
   }
   

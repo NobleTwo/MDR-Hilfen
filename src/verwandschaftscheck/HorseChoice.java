@@ -253,7 +253,7 @@ public class HorseChoice extends JFrame {
 			name = (String) horseList.getSelectedValue();
 		}
 		if (rcgui == null)
-			new RCGUIdatabase(name);
+			new ManageHorseGUI(name);
 		else if (workLeft) {
 			new NameLoader(name, dm, rcgui.horseNamesL, rcgui.horseRacesL, null, rcgui.getRadioButtonIsMaleLeft(), rcgui.getRadioButtonIsFemaleLeft());
 		} else {
