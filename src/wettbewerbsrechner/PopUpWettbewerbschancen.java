@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import allgemein.JNumberField;
+import allgemein.MDRNumberField;
 
 /**
   *
@@ -29,7 +29,7 @@ public class PopUpWettbewerbschancen extends JFrame {
   private JLabel jlabel7 = new JLabel();
   private JLabel jlabel8 = new JLabel();
   public JLabel[] klassen= new JLabel[5];
-  public JNumberField[][] chancen;
+  public MDRNumberField[][] chancen;
   
   private JButton jButton1 = new JButton();
   // Ende Attribute
@@ -94,7 +94,7 @@ public class PopUpWettbewerbschancen extends JFrame {
     cp.setBackground(new Color(0xB8CFE5));
     // Ende Komponenten
     
-    chancen = new JNumberField[w.wettbewerbschancen.length][w.wettbewerbschancen[0].length];
+    chancen = new MDRNumberField[w.wettbewerbschancen.length][w.wettbewerbschancen[0].length];
     
     for(int i=0; i<klassen.length; i++){
       klassen[i]=new JLabel();
@@ -113,7 +113,7 @@ public class PopUpWettbewerbschancen extends JFrame {
     
     for(int i=0; i<chancen.length; i++){
       for (int j=0; j<chancen[0].length; j++) {
-        chancen[i][j]=new JNumberField(true);
+        chancen[i][j]=new MDRNumberField(true);
         chancen[i][j].setBounds(120+j*60, 56+i*24, 51, 17);
         
         if(w.wettbewerbschancen[i][j]==-100){

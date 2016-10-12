@@ -1,5 +1,7 @@
 package allgemein;
 
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
@@ -9,14 +11,15 @@ import java.util.Locale;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class JNumberField extends JTextField{
+public class MDRNumberField extends JTextField{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public JNumberField(boolean alignRight){
+	public MDRNumberField(boolean alignRight){
 		super();
+		this.setText("0");
 		if(alignRight){
 			this.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
@@ -33,6 +36,18 @@ public class JNumberField extends JTextField{
 			public void keyTyped(KeyEvent ke) {
 				if(!Character.isDigit(ke.getKeyChar())){
 				 ke.consume();
+				}
+			}
+		});
+		this.addFocusListener(new FocusListener(){
+			@Override
+			public void focusGained(FocusEvent fe){
+				setText("");
+			}
+			@Override
+			public void focusLost(FocusEvent fe){
+				if(getText().equals("")){
+					setText("0");
 				}
 			}
 		});

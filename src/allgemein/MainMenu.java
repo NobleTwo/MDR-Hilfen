@@ -1,136 +1,111 @@
 package allgemein;
-import java.awt.*;
-import java.awt.event.*;
 
-import javax.swing.*;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import verwandschaftscheck.ManageHorseGUI;
+import javax.swing.JButton;
+
 import verwandschaftscheck.NewHorseGUI;
 import verwandschaftscheck.RelativeCheckGUI;
-import wettbewerbsrechner.Rechnerfenster;
+import wettbewerbsrechner.WettbewerbsrechnerGUI;
 
-public class MainMenu extends JFrame {
+public class MainMenu extends MDRFrame {
   /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-// Anfang Attribute
-  private JButton ButtonWettbewerbsrechner = new JButton();
-  private JButton ButtonVerwandtschaftscheck = new JButton();
-  private JButton ButtonBeenden = new JButton();
-  private JButton ButtonAbout = new JButton();
-  private JButton ButtonDatenbank = new JButton();
-  private JButton ButtonVerwandtschaftscheckReal = new JButton();
-  // Ende Attribute
-  
+	private JButton buttonRC = new JButton("Verwandtschaftscheck");
+	private JButton buttonClose = new JButton("Beenden");
+	private JButton buttonAbout = new JButton("?");
+	
+	final private int buttonWidth = 260;
+	final private int buttonCloseWidth = buttonWidth-buttonHeight-20-gridButtonGap;
+	private final int frameWidth = (int)(4.5*gridButtonGap+buttonWidth);
+	
   public MainMenu() { 
-    // Frame-Initialisierung
-    super("MDR-Hilfen");
-    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    int frameWidth = 238; 
-    int frameHeight = 160;
+    //Frame-Initialisierung
+    super("Hauptmenü");
+    int frameHeight = 8*gridButtonGap + 3*buttonHeight + 20;
     setSize(frameWidth, frameHeight);
-    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-    int x = (d.width - getSize().width) / 2;
-    int y = (d.height - getSize().height) / 2;
-    setLocation(x, y);
-    setResizable(false);
     Container cp = getContentPane();
-    cp.setLayout(null);
-    // Anfang Komponenten
     
-    ButtonWettbewerbsrechner.setBounds(8, 8, 217, 25);
-    ButtonWettbewerbsrechner.setText("Wettbewerbsrechner");
-    ButtonWettbewerbsrechner.setMargin(new Insets(2, 2, 2, 2));
-    ButtonWettbewerbsrechner.addActionListener(new ActionListener() { 
-      public void actionPerformed(ActionEvent evt) { 
-        ButtonWettbewerbsrechner_ActionPerformed(evt);
-      }
+    //Komponenten
+    JButton buttonGoToWettbewerbsrechner = new JButton("Wettbewerbsrechner");
+    int yTop = 2*gridButtonGap + 20;
+    buttonGoToWettbewerbsrechner.setBounds(2*gridButtonGap, yTop, buttonWidth, buttonHeight);
+    buttonGoToWettbewerbsrechner.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed(ActionEvent evt) { 
+    		new WettbewerbsrechnerGUI();
+    		dispose();
+    	}
     });
-    cp.add(ButtonWettbewerbsrechner);
-    ButtonVerwandtschaftscheck.setBounds(8, 40, 217, 25);
-    ButtonVerwandtschaftscheck.setText("Verwandtschaftscheck");
-    ButtonVerwandtschaftscheck.setMargin(new Insets(2, 2, 2, 2));
-    ButtonVerwandtschaftscheck.addActionListener(new ActionListener() { 
-      public void actionPerformed(ActionEvent evt) { 
-        ButtonVerwandtschaftscheck_ActionPerformed(evt);
-      }
-    });
-    ButtonVerwandtschaftscheck.setEnabled(true);
-    cp.add(ButtonVerwandtschaftscheck);
-    ButtonBeenden.setBounds(8, 88, 185, 25);
-    ButtonBeenden.setText("Beenden");
-    ButtonBeenden.setMargin(new Insets(2, 2, 2, 2));
-    ButtonBeenden.addActionListener(new ActionListener() { 
-      public void actionPerformed(ActionEvent evt) { 
-        ButtonBeenden_ActionPerformed(evt);
-      }
-    });
-    cp.add(ButtonBeenden);
-    ButtonAbout.setBounds(200, 88, 25, 25);
-    ButtonAbout.setText("?");
-    ButtonAbout.setMargin(new Insets(2, 2, 2, 2));
-    ButtonAbout.addActionListener(new ActionListener() { 
-      public void actionPerformed(ActionEvent evt) { 
-        ButtonAbout_ActionPerformed(evt);
-      }
-    });
-    cp.add(ButtonAbout);
-    cp.setBackground(new Color(0xB8CFE5));
-    // Ende Komponenten
+    cp.add(buttonGoToWettbewerbsrechner);
     
-    setVisible(true);
-  } // end of public Menue
+    buttonRC.setBounds(2*gridButtonGap, yTop+buttonHeight+gridButtonGap, buttonWidth, buttonHeight);
+    buttonRC.addActionListener(new ActionListener() {
+    	@Override
+	    public void actionPerformed(ActionEvent evt) { 
+	      showRC();
+	    }
+    });
+    cp.add(buttonRC);
+    
+    int y3 = yTop+2*gridButtonGap+2*buttonHeight;
+    buttonClose.setBounds(2*gridButtonGap, y3, buttonCloseWidth, buttonHeight);
+    buttonClose.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed(ActionEvent evt) { 
+    		dispose();
+    	}
+    });
+    cp.add(buttonClose);
+    
+    buttonAbout.setBounds((int)(gridButtonGap*3+buttonCloseWidth), y3, buttonHeight+20, buttonHeight);
+    buttonAbout.addActionListener(new ActionListener() {
+    	@Override
+    	public void actionPerformed(ActionEvent evt) { 
+    		new PopUpAbout();
+    	}
+    });
+    cp.add(buttonAbout);
+    
+    super2();
+  }
   
-  // Anfang Methoden
-  public void ButtonWettbewerbsrechner_ActionPerformed(ActionEvent evt) {
-    new Rechnerfenster("MDR-Hilfen");
-    this.dispose();
-  } // end of ButtonWettbewerbsrechner_ActionPerformed
-  
-  public void ButtonVerwandtschaftscheck_ActionPerformed(ActionEvent evt) {
-    ButtonVerwandtschaftscheck.setEnabled(false);
-    ButtonBeenden.setBounds(8, 148, 185, 25);
-    ButtonAbout.setBounds(200, 148, 25, 25);
-    setSize(238, 213);
-
-    Container cp = getContentPane();
-    ButtonDatenbank.setBounds(40, 70, 153, 25);
-    ButtonDatenbank.setText("Datenbankverwaltung");
-    ButtonDatenbank.setMargin(new Insets(2, 2, 2, 2));
-    ButtonDatenbank.addActionListener(new ActionListener() { 
+  //Methoden
+  public void showRC(){
+    buttonRC.setEnabled(false);
+    
+    JButton buttonDatabase = new JButton("Datenbankverwaltung");
+    int y3 = (int)(gridButtonGap*3.5+20+2*buttonHeight);
+    buttonDatabase.setBounds(2*gridButtonGap+buttonWidth/6, y3, buttonWidth*2/3, buttonHeight);
+    buttonDatabase.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        ButtonDatenbank_ActionPerformed(evt);
+        new NewHorseGUI();
+        dispose();
       }
     });
-    cp.add(ButtonDatenbank);
-    ButtonVerwandtschaftscheckReal.setBounds(40, 100, 153, 25);
-    ButtonVerwandtschaftscheckReal.setText("Verwandtschaftscheck");
-    ButtonVerwandtschaftscheckReal.setMargin(new Insets(2, 2, 2, 2));
-    ButtonVerwandtschaftscheckReal.addActionListener(new ActionListener() { 
+    cp.add(buttonDatabase);
+    
+    JButton buttonGoToRC = new JButton("Verwandtschaftscheck");
+    int y4 = y3+buttonHeight+gridButtonGap/2;
+    buttonGoToRC.setBounds(2*gridButtonGap+buttonWidth/6, y4, buttonWidth*2/3, buttonHeight);
+    buttonGoToRC.addActionListener(new ActionListener() { 
       public void actionPerformed(ActionEvent evt) { 
-        ButtonVerwandtschaftscheckReal_ActionPerformed(evt);
+        new RelativeCheckGUI();
+        dispose();
       }
     });
-    cp.add(ButtonVerwandtschaftscheckReal);
-  }
-  
-  public void ButtonBeenden_ActionPerformed(ActionEvent evt) {
-    this.dispose();
-  }
-  
-  public void ButtonAbout_ActionPerformed(ActionEvent evt) {
-    new PopUpAbout("About");
-  }
-  
-  public void ButtonVerwandtschaftscheckReal_ActionPerformed(ActionEvent evt){
-    new RelativeCheckGUI();
-    this.dispose();
-  }
-
-  public void ButtonDatenbank_ActionPerformed(ActionEvent evt){
-    new NewHorseGUI();
-    this.dispose();
+    cp.add(buttonGoToRC);
+    
+    int y5 = y4+gridButtonGap+buttonHeight;
+    buttonClose.setBounds(2*gridButtonGap, y5, buttonCloseWidth, buttonHeight);
+    buttonAbout.setBounds((int)(gridButtonGap*3+buttonCloseWidth), y5, buttonHeight+20, buttonHeight);
+    
+    int frameHeight = 9*gridButtonGap + 5*buttonHeight + 20;
+    this.setSize(frameWidth, frameHeight);
   }
   
   public static void main(String[] args) throws Exception {

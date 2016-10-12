@@ -22,12 +22,12 @@ public abstract class MDRFrame extends JFrame{
 	public static final Color backgroundColor = new Color(0xB8CFE5);
 	protected JLabel labelTitle;
 	public static final int buttonHeight = 25;
+	protected Container cp = getContentPane();
 	
 	public MDRFrame(String title){
 		super("MDR-Hilfen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
-		Container cp = getContentPane();
 		cp.setBackground(backgroundColor);
 		cp.setLayout(null);
 		
