@@ -18,14 +18,13 @@ public class PopUpAbout extends MDRFrame {
     setLocation(x, y);
     Container cp = getContentPane();
     
+    final Font fontLabel = new Font("Arial", Font.PLAIN, 10);
     //Komponenten
     final int widthLabel = 355;
     JLabel labelTitle = new JLabel("MDR-Hilfen Ver. 1.1");
     labelTitle.setBounds(gridButtonGap, 8, widthLabel, 19);
     labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
     cp.add(labelTitle);
-    
-    final Font fontLabel = new Font("Arial", Font.PLAIN, 10);
     
     JLabel labelReleaseDate = new JLabel("Release: 12.10.2016");
     labelReleaseDate.setBounds(gridButtonGap, 32, widthLabel, 19);

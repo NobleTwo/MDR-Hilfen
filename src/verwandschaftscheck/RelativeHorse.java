@@ -1,25 +1,36 @@
 package verwandschaftscheck;
-public class RelativeHorse {
-  private RelativeHorse father;
-  private RelativeHorse mother;
-  private String name;
-  private String race = " Unbekannt";
-  boolean isFavourite = false;
-  private boolean isMale = true;
-  private int completePotential = -1;
+
+import java.io.Serializable;
+import java.util.Vector;
+
+public class RelativeHorse implements Serializable{
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static String[] races = new String[] { " Unbekannt", "Achal-Tekkiner", "American Paint Horse", "American Quarter Horse", "Andalusier", "Appaloosa", "Berber", "Cape Boerperd", "Criollo",
+			"Deutsches Reitpony", "Englisches Vollblut", "Hannoveraner", "Holsteiner", "Lipizzaner", "Lusitano", "Oldenburger", "Pinto", "Trakehner", "Vollblutaraber" };
+	
+	private RelativeHorse father;
+	private RelativeHorse mother;
+	private String name;
+	private String race = " Unbekannt";
+	private boolean isMale = true;
+	private Vector<String> favourites = new Vector<String>();
+	private int completePotential = -1;
   
-  public RelativeHorse(String n, RelativeHorse f, RelativeHorse m){
-    this.setFather(f);
-    this.setMother(m);
-    this.setName(n);
-  }
+	public RelativeHorse(String n, RelativeHorse f, RelativeHorse m){
+		this.setFather(f);
+	    this.setMother(m);
+	    this.setName(n);
+	}
   
-  public RelativeHorse(String name, RelativeHorse father, RelativeHorse mother, String race, boolean isFavourite, boolean isMale, int completePotential){
+  public RelativeHorse(String name, RelativeHorse father, RelativeHorse mother, String race, Vector<String> favourites, boolean isMale, int completePotential){
     setFather(father);
     setMother(mother);
     setName(name);
     setRace(race);
-    this.isFavourite = isFavourite;
+    this.favourites = favourites;
     this.isMale = isMale;
     setCompletePotential(completePotential);
   }
@@ -66,5 +77,21 @@ public class RelativeHorse {
 	
 	public void setMother(RelativeHorse mother) {
 		this.mother = mother;
+	}
+	
+	public Vector<String> getFavourites(){
+		return this.favourites;
+	}
+	
+	public void addFavourite(String name){
+		this.favourites.add(name);
+	}
+	
+	public void removeFavourite(String name){
+		this.favourites.remove(name);
+	}
+	
+	public void setFavourites(Vector<String> favourites){
+		this.favourites = favourites;
 	}
 }

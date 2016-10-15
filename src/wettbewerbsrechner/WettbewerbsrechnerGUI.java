@@ -28,15 +28,13 @@ public class WettbewerbsrechnerGUI extends MDRFrame {
 	private JTextArea textInput = new JTextArea("");  
 	private JTextField textfieldHorseName = new JTextField();
 	
-	private final String[] kategories= new String[]{"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"};
+	private final String[] kategories = new String[]{"Miserabel", "Schlecht", "In Ordnung", "Gut", "Exzellent"};
   
 	public WettbewerbsrechnerGUI() { 
 		//Frame-Initialisierung
 		super("Wettbewerbsrechner");
 
 	    final Font fontLabel = new Font("Dialog", Font.PLAIN, 12);
-	    final int heightLabel = 20;
-	    final int widthLabel = 120;
 	    final int widthComboBox = 90;
 	    final int xGrundlagen = 6*gridButtonGap+widthLabel+widthComboBox;
 	    final int widthTextArea = 8*gridButtonGap+2*widthLabel+2*widthComboBox;
@@ -228,7 +226,7 @@ public class WettbewerbsrechnerGUI extends MDRFrame {
     p.weiseWertezu(disziplinenwerte, grundlagenwerte, interieurwerte);  
     Wettbewerbsrechner w = new Wettbewerbsrechner(p);
     
-    new PopUpWettbewerbschancen("Wettbewerbschancen "+textfieldHorseName.getText(), w);
+    new PopUpWettbewerbschancen(textfieldHorseName.getText(), w);
     
     
     int[] indexMaximum = new int[2];

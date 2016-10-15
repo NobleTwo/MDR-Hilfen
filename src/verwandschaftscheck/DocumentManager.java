@@ -1,16 +1,18 @@
 package verwandschaftscheck;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Vector;
 
+/**
+ * 
+ * deprecated
+ *
+ */
 public class DocumentManager {
 	String dataname;
-	Vector<RelativeHorse> population = new Vector<RelativeHorse>();
+	public Vector<RelativeHorse> population = new Vector<RelativeHorse>();
 	String detSep = "%%%"; // separates details of a horse
 	String[] races = new String[] { " Unbekannt", "Achal-Tekkiner", "American Paint Horse", "American Quarter Horse", "Andalusier", "Appaloosa", "Berber", "Cape Boerperd", "Criollo",
 			"Deutsches Reitpony", "Englisches Vollblut", "Hannoveraner", "Holsteiner", "Lipizzaner", "Lusitano", "Oldenburger", "Pinto", "Trakehner", "Vollblutaraber" };
@@ -74,50 +76,14 @@ public class DocumentManager {
 					h.setRace(rh.getRace());
 				}
 				if(priorizeNew){
-					h.isFavourite = rh.isFavourite;
+					for(String fav: rh.getFavourites())
+						h.addFavourite(fav);
 				}
 				return -1;
 			}
 		}
 		this.population.add(rh);
 		return this.population.size() - 1;
-	}
-
-	String populationToString() {
-		String result = "";
-		if (this.population != null) {
-			for (int i = 0; i < this.population.size(); i++) {
-				RelativeHorse current = population.elementAt(i);
-				result = result + "\n" + current.getName() + detSep;
-
-				RelativeHorse temp;
-				if ((temp = current.getFather()) != null) {
-					result = result + temp.getName() + detSep;
-				} else {
-					result = result + "null" + detSep;
-				}
-				if ((temp = current.getMother()) != null) {
-					result = result + temp.getName() + detSep;
-				} else {
-					result = result + "null" + detSep;
-				}
-				result += current.getRace() + detSep + current.isFavourite + detSep + current.isMale();
-			}
-		}
-		return result;
-	}
-
-	int save() {
-		PrintWriter pwriter = null;
-		try {
-			pwriter = new PrintWriter(new BufferedWriter(new FileWriter(this.dataname)));
-			pwriter.print(this.populationToString());
-			pwriter.flush();
-			pwriter.close();
-		} catch (IOException ioe) {
-			return -1;
-		}
-		return 0;
 	}
 
 	/**
@@ -173,35 +139,22 @@ public class DocumentManager {
 				}
 				boolean isFavourite = splitIntoDetails[4].equals("true");
 				boolean isMale = true;
+				Vector<String> favourites = new Vector<String>();
+				if(isFavourite)
+					favourites.add("Standardfavoriten");
 				if (splitIntoDetails.length == 6) {
 					isMale = splitIntoDetails[5].equals("true");
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale,-1));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale,-1));
 				} else {
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], isFavourite, isMale,-1));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale,-1));
 					throwException = true;
 				}
 
 			}
 		}
 		if (throwException) {
-			save();
 			throw new IllegalFileException(fatal);
 		}
 		return 1;
-	}
-
-	public static void main(String[] args) {
-		DocumentManager dm = new DocumentManager();
-		RelativeHorse rh1 = new RelativeHorse("1", null, null, "Englisches Vollblut", false, false,-1);
-		RelativeHorse rh2 = new RelativeHorse("2", null, null, "Englisches Vollblut", false, true,-1);
-		dm.addHorse(rh1);
-		dm.addHorse(rh2);
-		dm.addHorse(new RelativeHorse("DerErste", rh1, null, "Englisches Vollblut", false, true,-1));
-		dm.save();
-		try {
-			dm.analyzeFile();
-		} catch (IllegalFileException e) {
-			System.out.println("Fehler");
-		}
 	}
 }

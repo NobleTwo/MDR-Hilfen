@@ -1,164 +1,144 @@
 package wettbewerbsrechner;
-import java.awt.*;
-import java.awt.event.*;
 
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
 
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+
+import allgemein.MDRFrame;
 import allgemein.MDRNumberField;
 
-/**
-  *
-  * Beschreibung
-  *
-  * @version 1.0 vom 03.10.2014
-  * @author 
-  */
-
-public class PopUpWettbewerbschancen extends JFrame {
+public class PopUpWettbewerbschancen extends MDRFrame {
   /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-// Anfang Attribute
-  private JLabel jlabel1 = new JLabel();
-  private JLabel jlabel2 = new JLabel();
-  private JLabel jlabel3 = new JLabel();
-  private JLabel jlabel4 = new JLabel();
-  private JLabel jlabel5 = new JLabel();
-  private JLabel jlabel6 = new JLabel();
-  private JLabel jlabel7 = new JLabel();
-  private JLabel jlabel8 = new JLabel();
-  public JLabel[] klassen= new JLabel[5];
-  public MDRNumberField[][] chancen;
   
-  private JButton jButton1 = new JButton();
-  // Ende Attribute
-  
-  public PopUpWettbewerbschancen(String title, Wettbewerbsrechner w) { 
-    // Frame-Initialisierung
-    super(title);
-    setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-    int frameWidth = 433; 
-    int frameHeight = 273;
-    setSize(frameWidth, frameHeight);
-    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-    int x = (d.width - getSize().width) / 2;
-    int y = (d.height - getSize().height) / 2;
-    setLocation(x, y);
-    setResizable(false);
-    Container cp = getContentPane();
-    cp.setLayout(null);
-    // Anfang Komponenten
-    
-    jlabel1.setBounds(8, 8, 51, 17);
-    jlabel1.setText("Klasse");
-    jlabel1.setFont(new Font("Arial", Font.BOLD, 12));
-    cp.add(jlabel1);
-    jlabel2.setBounds(8, 32, 51, 17);
-    jlabel2.setText("Disziplin");
-    jlabel2.setFont(new Font("Arial", Font.BOLD, 12));
-    cp.add(jlabel2);
-    jlabel3.setBounds(24, 56, 51, 17);
-    jlabel3.setText("Dressur");
-    jlabel3.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel3);
-    jlabel4.setBounds(24, 80, 75, 17);
-    jlabel4.setText("Vielseitigkeit");
-    jlabel4.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel4);
-    jlabel5.setBounds(24, 104, 51, 17);
-    jlabel5.setText("Springen");
-    jlabel5.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel5);
-    jlabel6.setBounds(24, 128, 51, 17);
-    jlabel6.setText("Western");
-    jlabel6.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel6);
-    jlabel7.setBounds(24, 152, 51, 17);
-    jlabel7.setText("Rennen");
-    jlabel7.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel7);
-    jlabel8.setBounds(24, 176, 51, 17);
-    jlabel8.setText("Fahren");
-    jlabel8.setFont(new Font("Arial", Font.PLAIN, 12));
-    cp.add(jlabel8);
-    jButton1.setBounds(312, 208, 99, 25);
-    jButton1.setText("Schlieﬂen");
-    jButton1.setMargin(new Insets(2, 2, 2, 2));
-    jButton1.addActionListener(new ActionListener() { 
-      public void actionPerformed(ActionEvent evt) { 
-        jButton1_ActionPerformed(evt);
-      }
-    });
-    cp.add(jButton1);
-    cp.setBackground(new Color(0xB8CFE5));
-    // Ende Komponenten
-    
-    chancen = new MDRNumberField[w.wettbewerbschancen.length][w.wettbewerbschancen[0].length];
-    
-    for(int i=0; i<klassen.length; i++){
-      klassen[i]=new JLabel();
-      klassen[i].setBounds(120+i*60, 8, 51, 17);
-      klassen[i].setFont(new Font("Arial", Font.BOLD, 12));
-      klassen[i].setHorizontalAlignment(SwingConstants.CENTER);
-      cp.add(klassen[i]);                      
-    }  
-    klassen[0].setText("E");   
-    klassen[1].setText("A");
-    klassen[2].setText("L");   
-    klassen[3].setText("M");
-    klassen[4].setText("S");    
-    
-    double maximum = 0;
-    
-    for(int i=0; i<chancen.length; i++){
-      for (int j=0; j<chancen[0].length; j++) {
-        chancen[i][j]=new MDRNumberField(true);
-        chancen[i][j].setBounds(120+j*60, 56+i*24, 51, 17);
-        
-        if(w.wettbewerbschancen[i][j]==-100){
-          chancen[i][j].setText("X");
-          chancen[i][j].setEnabled(false);
-          chancen[i][j].setHorizontalAlignment(SwingConstants.CENTER);
-        }
-        else{
-          chancen[i][j].setText(w.wettbewerbschancen[i][j]);
-          if(Double.parseDouble(chancen[i][j].getText())>maximum){
-            maximum=Double.parseDouble(chancen[i][j].getText());
-          }
-        }
-        
-        chancen[i][j].setEditable(false);
-        cp.add(chancen[i][j]);
-      } 
-    }
-    
-    for(int i=0; i<chancen.length; i++){
-      for(int j=0; j<chancen[0].length; j++){
-        if(chancen[i][j].isEnabled()==true && Double.parseDouble(chancen[i][j].getText())==maximum){
-          chancen[i][j].setBackground(Color.ORANGE);
-        }
-      }
-    }
-    
-    setVisible(true);
-  } // end of public PopUpWettbewerbschancen
-  
-  // Anfang Methoden
-  public double verkuerze(double zahl, int stellen){
-    zahl=zahl*Math.pow(10,stellen);
-    zahl=Math.round(zahl);
-    zahl=zahl/Math.pow(10, stellen);
-    return zahl;
+	public PopUpWettbewerbschancen(String horseName, Wettbewerbsrechner w) { 
+	    //Frame-Initialisierung
+	    super("Wettbewerbschancen "+horseName);
+	    
+	    final Font fontLabel = new Font("Arial", Font.PLAIN, 12);
+	    //Komponenten
+	    JLabel labelClass = new JLabel("Klasse");
+	    int y0 = 2*gridButtonGap+20;
+	    labelClass.setBounds(gridButtonGap, y0, widthLabel, heightLabel);
+	    cp.add(labelClass);
+	    
+	    JLabel labelDiscipline = new JLabel("Disziplin");
+	    int yDiscipline = (int)(2.5*gridButtonGap+20+heightLabel);
+	    labelDiscipline.setBounds(gridButtonGap, yDiscipline, widthLabel, heightLabel);
+	    cp.add(labelDiscipline);
+	    
+	    Container containerTable = new Container();
+	    JLabel[] labelLevel = new JLabel[5];
+	    JLabel[] labelDisciplines = new JLabel[6];
+	    
+	    Container containerDisciplines = new Container();
+	    GridLayout glDisc = new GridLayout(labelDisciplines.length+2,1);
+	    glDisc.setHgap(gridButtonGap/2);
+	    glDisc.setVgap(gridButtonGap/2);
+	    containerDisciplines.setLayout(glDisc);
+	    containerDisciplines.add(Box.createGlue());
+	    containerDisciplines.add(Box.createGlue());
+	    
+	    labelDisciplines[0] = new JLabel("Dressur");
+	    labelDisciplines[1] = new JLabel("Vielseitigkeit");
+	    labelDisciplines[2] = new JLabel("Springen");
+	    labelDisciplines[3] = new JLabel("Western");
+	    labelDisciplines[4] = new JLabel("Rennen");
+	    labelDisciplines[5] = new JLabel("Fahren");
+	    for(int i=0; i<labelDisciplines.length;i++){
+	    	labelDisciplines[i].setFont(fontLabel);
+	    	containerDisciplines.add(labelDisciplines[i]);
+	    }
+	    final int widthLabel = 70;
+	    final int heightGrid = 190;
+	    containerDisciplines.setBounds(3*gridButtonGap, y0, widthLabel, heightGrid);
+	    cp.add(containerDisciplines);
+	    
+	    GridLayout glTab = new GridLayout(labelDisciplines.length+2,labelLevel.length);
+	    glTab.setHgap(gridButtonGap/2);
+	    glTab.setVgap(gridButtonGap/2);
+	    containerTable.setLayout(glTab);
+	    MDRNumberField[][] numberFieldValue = new MDRNumberField[labelDisciplines.length][labelLevel.length];
+	    
+	    labelLevel[0] = new JLabel("E");
+	    labelLevel[1] = new JLabel("A");
+	    labelLevel[2] = new JLabel("L");
+	    labelLevel[3] = new JLabel("M");
+	    labelLevel[4] = new JLabel("S");
+	    for(int i=0; i<labelLevel.length; i++){
+	    	labelLevel[i].setHorizontalAlignment(SwingConstants.CENTER);
+	    	containerTable.add(labelLevel[i]);
+	    }
+	    for(int i=0; i<labelLevel.length; i++){
+	    	containerTable.add(Box.createGlue());
+	    }
+	    for(int i=0; i<labelDisciplines.length; i++){
+	    	for(int j=0; j<labelLevel.length; j++){
+	    		numberFieldValue[i][j] = new MDRNumberField(true);
+				numberFieldValue[i][j].setEditable(false);
+				for(FocusListener fl: numberFieldValue[i][j].getFocusListeners()){
+					numberFieldValue[i][j].removeFocusListener(fl);
+				}
+				containerTable.add(numberFieldValue[i][j]);
+	    	}
+	    }
+	    final int widthNumberField = 40;
+	    containerTable.setBounds(4*gridButtonGap+widthLabel, y0, 5*widthNumberField+2*gridButtonGap, heightGrid);
+	    cp.add(containerTable);
+	    
+	    JButton buttonClose = new JButton("Schlieﬂen");
+	    buttonClose.setBounds((int)(5*gridButtonGap+widthLabel+2*widthNumberField), y0+heightGrid+gridButtonGap, 3*widthNumberField+gridButtonGap, buttonHeight);
+	    buttonClose.addActionListener(new ActionListener() { 
+	      public void actionPerformed(ActionEvent evt) { 
+	        dispose();
+	      }
+	    });
+	    cp.add(buttonClose);
+	    
+	    double maximum = 0;
+	    for(int i=0; i<numberFieldValue.length; i++){
+	      for (int j=0; j<numberFieldValue[0].length; j++) {        
+	        if(w.wettbewerbschancen[i][j]==-100){
+	          numberFieldValue[i][j].setText("X");
+	          numberFieldValue[i][j].setEnabled(false);
+	          numberFieldValue[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+	        }
+	        else{
+	        	numberFieldValue[i][j].setText(w.wettbewerbschancen[i][j]);
+	          if(Double.parseDouble(numberFieldValue[i][j].getText())>maximum){
+	            maximum=Double.parseDouble(numberFieldValue[i][j].getText());
+	          }
+	        }
+	      } 
+	    }
+	    
+	    for(int i=0; i<numberFieldValue.length; i++){
+	      for(int j=0; j<numberFieldValue[0].length; j++){
+	        if(numberFieldValue[i][j].isEnabled()==true && Double.parseDouble(numberFieldValue[i][j].getText())==maximum){
+	        	numberFieldValue[i][j].setBackground(Color.ORANGE);
+	        }
+	      }
+	    }
+	    
+	    int frameWidth = (int)(7.5*gridButtonGap+widthLabel+5*widthNumberField);
+	    int frameHeight = (int)(y0+heightGrid+4.5*gridButtonGap+buttonHeight);
+	    setSize(frameWidth, frameHeight);
+	    super2();
   }
-  public void jButton1_ActionPerformed(ActionEvent evt) {
-    this.dispose();
-  } // end of jButton1_ActionPerformed
   
-  // Ende Methoden
-  
+  //Methoden  
   public static void main(String[] args) {
-    new PopUpWettbewerbschancen("Wettbewerbschancen", new Wettbewerbsrechner(new Wettbewerbspferd()));
-  } // end of main
-  
-} // end of class Wettbewerbschancen
+    new PopUpWettbewerbschancen("Test", new Wettbewerbsrechner(new Wettbewerbspferd()));
+  } 
+}

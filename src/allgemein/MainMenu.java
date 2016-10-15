@@ -3,9 +3,13 @@ package allgemein;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 
+import verwandschaftscheck.DatabaseManager;
+import verwandschaftscheck.DocumentManager;
+import verwandschaftscheck.IllegalFileException;
 import verwandschaftscheck.NewHorseGUI;
 import verwandschaftscheck.RelativeCheckGUI;
 import wettbewerbsrechner.WettbewerbsrechnerGUI;
@@ -47,7 +51,8 @@ public class MainMenu extends MDRFrame {
     buttonRC.addActionListener(new ActionListener() {
     	@Override
 	    public void actionPerformed(ActionEvent evt) { 
-	      showRC();
+    		loadDatabase();
+    		showRC();
 	    }
     });
     cp.add(buttonRC);
@@ -106,6 +111,28 @@ public class MainMenu extends MDRFrame {
     
     int frameHeight = 9*gridButtonGap + 5*buttonHeight + 20;
     this.setSize(frameWidth, frameHeight);
+  }
+  
+  private void loadDatabase(){
+	  File fileNew = new File("MDR-Datenbank");
+	  if(fileNew.isFile()){
+		  DatabaseManager.load();
+		  File fileOld = new File("database.txt");
+		  if(fileOld.isFile()){
+			  fileOld.delete();
+		  }
+	  } else{
+		  File fileOld = new File("database.txt");
+		  DocumentManager dm = new DocumentManager();
+		  try{
+			  dm.analyzeFile();
+			  DatabaseManager.setPopulation(dm.population);
+			  fileOld.delete();
+			  DatabaseManager.save();
+		  } catch(IllegalFileException e){
+			  System.out.println(e.getMessage());
+		  }
+	  }
   }
   
   public static void main(String[] args) throws Exception {

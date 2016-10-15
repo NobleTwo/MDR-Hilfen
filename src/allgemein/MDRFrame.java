@@ -18,12 +18,15 @@ public abstract class MDRFrame extends JFrame{
 	 * 
 	 */
 	protected static final long serialVersionUID = 1L;
-	public static final int gridButtonGap = 10;
-	public static final Color backgroundColor = new Color(0xB8CFE5);
-	protected JLabel labelTitle;
-	public static final int buttonHeight = 25;
-	protected Container cp = getContentPane();
-	
+	protected static final int gridButtonGap = 10;
+	protected static final Color backgroundColor = new Color(0xB8CFE5);
+    protected static final int heightLabel = 20;
+    protected static final int widthLabel = 120;
+    
+    protected Container cp = getContentPane();
+    protected static final int buttonHeight = 25;
+    protected JLabel labelTitle;
+    
 	public MDRFrame(String title){
 		super("MDR-Hilfen");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
