@@ -1,6 +1,5 @@
 package general;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -32,7 +31,6 @@ public class MainMenu extends MDRFrame {
     super("Hauptmenü");
     int frameHeight = 8*gridButtonGap + 3*buttonHeight + 20;
     setSize(frameWidth, frameHeight);
-    Container cp = getContentPane();
     
     //Komponenten
     JButton buttonGoToWettbewerbsrechner = new JButton("Wettbewerbsrechner");

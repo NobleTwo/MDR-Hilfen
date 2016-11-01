@@ -2,8 +2,6 @@ package relativeCheck;
 
 import static general.MDRFrame.*;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -19,11 +17,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 import general.MDRNumberField;
 
@@ -72,6 +67,7 @@ public class HorseFamilyTree extends Container{
 		containerHorseInfo.add(containerGP);
 		
 		JRadioButton buttonMale = new JRadioButton("Hengst");
+		buttonMale.setOpaque(false);
 		buttonMale.setBackground(backgroundColor);
 		buttonMale.addActionListener(new ActionListener() {
 			@Override
@@ -80,7 +76,7 @@ public class HorseFamilyTree extends Container{
 			}
 		});
 		JRadioButton buttonFemale = new JRadioButton("Stute");
-		buttonFemale.setBackground(backgroundColor);
+		buttonFemale.setOpaque(false);
 		buttonFemale.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

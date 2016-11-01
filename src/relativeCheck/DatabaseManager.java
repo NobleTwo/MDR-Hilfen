@@ -117,4 +117,8 @@ public abstract class DatabaseManager {
 	public static void setPopulation(Vector<RelativeHorse> newPop){
 		population = newPop;
 	}
+	
+	public static Vector<String> getFavourites(){
+		return favourites;
+	}
 }
