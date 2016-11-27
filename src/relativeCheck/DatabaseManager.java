@@ -8,11 +8,17 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.Vector;
+
+import javax.swing.JFrame;
+
+import general.Warndialog;
 
 public abstract class DatabaseManager {
 	private static Vector<RelativeHorse> population = new Vector<RelativeHorse>();
 	private static Vector<String> favourites = new Vector<String>();
+	public static final String fileName = "MDR-Datenbank";
 	
 	public static Vector<RelativeHorse> getPopulation(){
 		return population;
@@ -34,6 +40,7 @@ public abstract class DatabaseManager {
 				i--;
 			}
 		}
+		save();
 	}
 	
 	public static int find(String n) {
@@ -67,16 +74,17 @@ public abstract class DatabaseManager {
 			}
 		}
 		population.add(rh);
+		save();
 		return population.size() - 1;
 	}
 	
-	public static int save() {
+	private static int save() {
 		RelativeHorse forFavs = new RelativeHorse("forFavs", null, null);
 		forFavs.setFavourites(favourites);
 		population.add(0, forFavs);
 		OutputStream fos = null;
 		try{
-			fos = new FileOutputStream("MDR-Datenbank");
+			fos = new FileOutputStream(fileName);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			for(RelativeHorse rh: population){
 				oos.writeObject(rh);
@@ -84,6 +92,7 @@ public abstract class DatabaseManager {
 			oos.close();
 			fos.close();
 		} catch(Exception e){
+			new Warndialog(new JFrame(), "Kann nicht auf Datei '"+fileName+"' zugreifen. Vielleicht ist schon ein andere Instanz von MDR-Hilfen geöffnet?");
 			return -1;
 		}
 		population.remove(forFavs);
@@ -93,7 +102,7 @@ public abstract class DatabaseManager {
 	public static int load(){
 		InputStream fis = null;
 		try{
-			fis = new FileInputStream("MDR-Datenbank");
+			fis = new FileInputStream(fileName);
 			ObjectInputStream ois = new ObjectInputStream(fis);
 			population = new Vector<RelativeHorse>();
 			while(true){
@@ -104,6 +113,7 @@ public abstract class DatabaseManager {
 			population.remove(0);
 			return 0;
 		} catch(Exception e){
+			new Warndialog(new JFrame(), "Kann Datei '"+fileName+"' nicht laden.");
 			return -1;
 		} finally{
 			try{
@@ -116,9 +126,56 @@ public abstract class DatabaseManager {
 	
 	public static void setPopulation(Vector<RelativeHorse> newPop){
 		population = newPop;
+		save();
 	}
 	
 	public static Vector<String> getFavourites(){
 		return favourites;
+	}
+	
+	public static boolean addFavourite(String name){
+		if(favourites.contains(name)){
+			return false;
+		} else{
+			favourites.add(name);
+			save();
+		}
+		return true;
+	}
+	
+	//gibt -1 zurück, wenn alter Name nicht vorhanden
+	// gibt -2 zurück, wenn neuer Name bereits vorhanden
+	//gibt sonst 0 zurück
+	public static int editFavourite(String oldName, String newName){
+		if(!favourites.contains(oldName)){
+			return -1;
+		} else if(favourites.contains(newName)){
+			return -2;
+		} else{
+			favourites.remove(oldName);
+			favourites.add(newName);
+			Iterator<RelativeHorse> it = population.iterator();
+			while(it.hasNext()){
+				Vector<String> favTemp = it.next().getFavourites();
+				if(favTemp.contains(oldName)){
+					favTemp.remove(oldName);
+					favTemp.add(newName);
+				}
+			}
+			save();
+			return 0;
+		}
+	}
+	
+	public static void deleteFavourite(String name){
+		favourites.remove(name);
+		Iterator<RelativeHorse> it = population.iterator();
+		while(it.hasNext()){
+			Vector<String> favTemp = it.next().getFavourites();
+			if(favTemp.contains(name)){
+				favTemp.remove(name);
+			}
+		}
+		save();
 	}
 }

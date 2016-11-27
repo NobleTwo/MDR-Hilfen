@@ -1,33 +1,28 @@
 package general;
-import java.awt.*;
-import java.awt.event.*;
 
-import javax.swing.*;
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 
 
 @SuppressWarnings("serial")
-public class PopUpAbout extends MDRFrame {
+public class PopUpAbout extends MDRDialog {
   
-  public PopUpAbout() { 
+  public PopUpAbout(MainMenu mainMenuFrame) { 
     //Frame-Initialisierung
-    super("Über");
-    setSize(380, 220);
-    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-    int x = (d.width - getSize().width) / 2;
-    int y = (d.height - getSize().height) / 2;
-    setLocation(x, y);
+    super(mainMenuFrame, "MDR-Hilfen Ver. 1.1");
+    setSize(380, 215);
     Container cp = getContentPane();
     
-    final Font fontLabel = new Font("Arial", Font.PLAIN, 10);
     //Komponenten
     final int widthLabel = 355;
-    JLabel labelTitle = new JLabel("MDR-Hilfen Ver. 1.1");
-    labelTitle.setBounds(gridButtonGap, 8, widthLabel, 19);
-    labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
-    cp.add(labelTitle);
     
     JLabel labelReleaseDate = new JLabel("Release: 12.10.2016");
-    labelReleaseDate.setBounds(gridButtonGap, 32, widthLabel, 19);
+    labelReleaseDate.setBounds(gridButtonGap, yTop, widthLabel, 19);
     labelReleaseDate.setFont(fontLabel);
     labelReleaseDate.setHorizontalAlignment(SwingConstants.CENTER);
     cp.add(labelReleaseDate);
@@ -59,10 +54,11 @@ public class PopUpAbout extends MDRFrame {
     	}
     });
     cp.add(buttonClose);
-    setVisible(true);
+    
+    super2();
   }
   
   public static void main(String[] args) {
-    new PopUpAbout();
+    new PopUpAbout(new MainMenu());
   }
 }

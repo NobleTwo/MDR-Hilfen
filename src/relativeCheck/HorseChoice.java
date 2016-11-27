@@ -74,7 +74,6 @@ public class HorseChoice extends MDRFrame {
 		final int columnWidth = 200;
 		//final Vector<RelativeHorse> horseList = DatabaseManager.getPopulation();
 		
-		int yTop = 2*gridButtonGap + 20;
 		JLabel labelRaceFilter = new JLabel("Rassefilter:");
 		labelRaceFilter.setBounds(gridButtonGap, yTop, columnWidth, heightLabel);
 		cp.add(labelRaceFilter);

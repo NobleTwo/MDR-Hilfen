@@ -5,10 +5,12 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 import relativeCheck.DatabaseManager;
 import relativeCheck.DocumentManager;
 import relativeCheck.IllegalFileException;
+import relativeCheck.ManageFavouritesGUI;
 import relativeCheck.NewHorseGUI;
 import relativeCheck.RelativeCheckGUI;
 import tournamentCalculator.WettbewerbsrechnerGUI;
@@ -66,10 +68,11 @@ public class MainMenu extends MDRFrame {
     cp.add(buttonClose);
     
     buttonAbout.setBounds((int)(gridButtonGap*3+buttonCloseWidth), y3, buttonHeight+20, buttonHeight);
+    MainMenu temp = this;
     buttonAbout.addActionListener(new ActionListener() {
     	@Override
     	public void actionPerformed(ActionEvent evt) { 
-    		new PopUpAbout();
+    		new PopUpAbout(temp);
     	}
     });
     cp.add(buttonAbout);
@@ -103,16 +106,28 @@ public class MainMenu extends MDRFrame {
     });
     cp.add(buttonGoToRC);
     
-    int y5 = y4+gridButtonGap+buttonHeight;
-    buttonClose.setBounds(2*gridButtonGap, y5, buttonCloseWidth, buttonHeight);
-    buttonAbout.setBounds((int)(gridButtonGap*3+buttonCloseWidth), y5, buttonHeight+20, buttonHeight);
+    JButton buttonGoToManageFavs = new JButton("Favoriten-Listen");
+    int y5 = y4+buttonHeight+gridButtonGap/2;
+    buttonGoToManageFavs.setBounds(2*gridButtonGap+buttonWidth/6, y5, buttonWidth*2/3, buttonHeight);
+    buttonGoToManageFavs.addActionListener(new ActionListener() { 
+      public void actionPerformed(ActionEvent evt) { 
+        new ManageFavouritesGUI();
+        dispose();
+      }
+    });
+    cp.add(buttonGoToManageFavs);
     
-    int frameHeight = 9*gridButtonGap + 5*buttonHeight + 20;
+    int y6 = y5+gridButtonGap+buttonHeight;
+    buttonClose.setBounds(2*gridButtonGap, y6, buttonCloseWidth, buttonHeight);
+    buttonAbout.setBounds((int)(gridButtonGap*3+buttonCloseWidth), y6, buttonHeight+20, buttonHeight);
+    
+    int frameHeight = 10*gridButtonGap + 6*buttonHeight + 20;
     this.setSize(frameWidth, frameHeight);
   }
   
   private void loadDatabase(){
-	  File fileNew = new File("MDR-Datenbank");
+	  System.out.println("Check");
+	  File fileNew = new File(DatabaseManager.fileName);
 	  if(fileNew.isFile()){
 		  DatabaseManager.load();
 		  File fileOld = new File("database.txt");
@@ -126,14 +141,14 @@ public class MainMenu extends MDRFrame {
 			  dm.analyzeFile();
 			  DatabaseManager.setPopulation(dm.population);
 			  fileOld.delete();
-			  DatabaseManager.save();
+			  new Warndialog(this, "Veraltete Datei 'database.txt' ersetzt durch neue Datei '"+DatabaseManager.fileName+"'.\nEs werden nun mehrere Favoritenlisten, GP und Sonderzeichen in Namen unterstützt.");
 		  } catch(IllegalFileException e){
 			  System.out.println(e.getMessage());
 		  }
 	  }
   }
   
-  public static void main(String[] args) throws Exception {
-    new MainMenu();
+  public static void main(String[] args) throws Exception {	  
+	  new MainMenu();
   }
 }

@@ -21,7 +21,7 @@ import javax.swing.text.StyledDocument;
 @SuppressWarnings("serial")
 public class Warndialog extends JDialog{
 	public Warndialog(JFrame owner, String message){
-		super(owner, "Fehler", true);
+		super(owner, "Hinweis", true);
 	    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 	    int x = (d.width - getSize().width) / 2;
 	    int y = (d.height - getSize().height) / 2;

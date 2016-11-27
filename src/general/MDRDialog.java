@@ -8,35 +8,41 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-public abstract class MDRFrame extends JFrame{
+public abstract class MDRDialog extends JDialog{
 
 	/**
 	 * 
 	 */
-	protected static final long serialVersionUID = 1L;
-	public static final int gridButtonGap = 10;
-	public static final Color backgroundColor = new Color(0x9FC5C8);//B8CFE5 488793 559AA7
+	private static final long serialVersionUID = 1L;
+	
+	public static final int gridButtonGap = MDRFrame.gridButtonGap;
+	public static final Color backgroundColor = MDRFrame.backgroundColor;
+	public static final int buttonHeight = MDRFrame.buttonHeight;
+	protected static final Font fontLabel = new Font("Arial", Font.PLAIN, 10);
+	protected static final int yTop = 32;
     protected static final int heightLabel = 20;
     protected static final int widthLabel = 120;
-    protected static final int yTop = 2*gridButtonGap + 20;
-    public static final int buttonHeight = 25;
-    
+	
     protected Container cp = getContentPane();
     protected JLabel labelTitle;
     
-	public MDRFrame(String title){
-		super("MDR-Hilfen");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public MDRDialog(MDRFrame parentFrame, String title){
+		super(parentFrame, "MDR-Hilfen", true);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		cp.setBackground(backgroundColor);
 		cp.setLayout(null);
 		
-		labelTitle = new JLabel(title, SwingConstants.CENTER);
-		labelTitle.setFont(new Font("Dialog", Font.BOLD, 20));
+	    final int widthLabel = 355;
+	    labelTitle = new JLabel(title);
+	    labelTitle.setBounds(gridButtonGap, 8, widthLabel, 19);
+	    labelTitle.setHorizontalAlignment(SwingConstants.CENTER);
+	    cp.add(labelTitle);
 	}
 		
 	public void super2(){
