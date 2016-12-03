@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
@@ -39,7 +40,7 @@ public class HorseChoice extends MDRFrame {
 	//============ Attributes ===============
 	//
 	@SuppressWarnings("unchecked")
-	private JList<String>[] listsOfHorses = new JList[DatabaseManager.getFavourites().size()+1];
+	private JTable[] listsOfHorses = new JTable[DatabaseManager.getFavourites().size()+1];
 	private DefaultListModel<String> listModelAllHorses = new DefaultListModel<String>();
 	
 	private JComboBox<String> raceFilter = new JComboBox<String>();
@@ -57,7 +58,6 @@ public class HorseChoice extends MDRFrame {
 	//
 	// ============== Constructors ===============
 	//
-
 	public HorseChoice() {
 		super("Pferd auswählen");
 		initiate();
@@ -72,7 +72,8 @@ public class HorseChoice extends MDRFrame {
 
 	public void initiate() {
 		final int columnWidth = 200;
-		//final Vector<RelativeHorse> horseList = DatabaseManager.getPopulation();
+		DatabaseManager.load();
+		final Vector<RelativeHorse> horseList = DatabaseManager.getPopulation();
 		
 		JLabel labelRaceFilter = new JLabel("Rassefilter:");
 		labelRaceFilter.setBounds(gridButtonGap, yTop, columnWidth, heightLabel);
@@ -145,8 +146,21 @@ public class HorseChoice extends MDRFrame {
 		buttonGroupSortOrder.add(radioButtonSortByName);
 		buttonGroupSortOrder.add(radioButtonSortByCP);
 		
-		listsOfHorses[0] = new JList<String>();
-		listsOfHorses[0].setModel(listModelAllHorses);
+		Vector<Object[]> rowData = new Vector<Object[]>();
+		Iterator<RelativeHorse> it = horseList.iterator();
+		while(it.hasNext()){
+			Object[] temp = new Object[2];
+			RelativeHorse rh = it.next();
+			temp[0] = rh.getName();
+			temp[1] = rh.getCompletePotential();
+			rowData.add(temp);
+		}
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.add("Name");
+		columnNames.add("GP");
+		
+		listsOfHorses[0] = new JTable(rowData, columnNames);
+		//listsOfHorses[0].setModel(listModelAllHorses);
 		JScrollPane scrollPaneListAllHorses = new JScrollPane(listsOfHorses[0]);
 		scrollPaneListAllHorses.setBounds(gridButtonGap, yRadioButtons+heightLabel+gridButtonGap/2, columnWidth, columnWidth);
 		listsOfHorses[0].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -168,8 +182,8 @@ public class HorseChoice extends MDRFrame {
 		cp.add(buttonAccept);
 		
 		int columnHeight = yRadioButtons+heightLabel+gridButtonGap/2+buttonHeight;
-		Vector<String> favouriteLists = DatabaseManager.getFavourites();
-		for(int i=0; i<favouriteLists.size(); i++){
+		final Vector<String> favouriteLists = DatabaseManager.getFavourites();
+		/*for(int i=0; i<favouriteLists.size(); i++){
 			JLabel labelTemp = new JLabel(favouriteLists.get(i));
 			int x = (gridButtonGap+columnWidth)*(i+1);
 			labelTemp.setBounds(x, yTop, columnWidth, heightLabel);
@@ -189,7 +203,7 @@ public class HorseChoice extends MDRFrame {
 			    }
 			});
 			cp.add(horseListTempScrollPane);
-		}
+		}*/
 		
 		getFilterSettings();
 		
@@ -247,18 +261,18 @@ public class HorseChoice extends MDRFrame {
 		}
 		
 		//insert into ListModels
-		for(int i=0; i<listsOfHorses.length; i++){
+		/*for(int i=0; i<listsOfHorses.length; i++){
 			DefaultListModel<String> listModel = (DefaultListModel<String>)(listsOfHorses[i].getModel());
 			Iterator<String> iterator = horseNames[i].iterator();
 			while(iterator.hasNext()){
 				listModel.addElement(iterator.next());
 			}
-		}
+		}*/
 	}
 
-	private void indexSelected(JList<String> list, MouseEvent evt){
+	private void indexSelected(JTable table, MouseEvent evt){
     	clearSelections();
-		list.setSelectedIndex(list.locationToIndex(evt.getPoint()));
+		//table.setSelectedIndex(table.locationToIndex(evt.getPoint()));
         if (evt.getClickCount() == 2) {
     		choose();
         }
@@ -274,11 +288,11 @@ public class HorseChoice extends MDRFrame {
 		
 		//insert into other frame
 		String name = null;
-		for(JList<String> list: listsOfHorses){
-			if(!list.isSelectionEmpty()){
-				name = list.getSelectedValue();
+		for(JTable table: listsOfHorses){
+			/*if(!table.isSelectionEmpty()){
+				name = table.getSelectedValue();
 				break;
-			}
+			}*/
 		}
 		if(name == null){
 			return;

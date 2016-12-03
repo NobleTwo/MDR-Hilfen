@@ -3,9 +3,12 @@ package general;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Vector;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 
 import relativeCheck.DatabaseManager;
 import relativeCheck.DocumentManager;
@@ -13,6 +16,7 @@ import relativeCheck.IllegalFileException;
 import relativeCheck.ManageFavouritesGUI;
 import relativeCheck.NewHorseGUI;
 import relativeCheck.RelativeCheckGUI;
+import relativeCheck.RelativeHorse;
 import tournamentCalculator.WettbewerbsrechnerGUI;
 
 public class MainMenu extends MDRFrame {
@@ -126,7 +130,6 @@ public class MainMenu extends MDRFrame {
   }
   
   private void loadDatabase(){
-	  System.out.println("Check");
 	  File fileNew = new File(DatabaseManager.fileName);
 	  if(fileNew.isFile()){
 		  DatabaseManager.load();
@@ -136,14 +139,25 @@ public class MainMenu extends MDRFrame {
 		  }
 	  } else{
 		  File fileOld = new File("database.txt");
-		  DocumentManager dm = new DocumentManager();
+		  if(fileOld.isFile()){
+			  DocumentManager dm = new DocumentManager();
+			  try{
+				  dm.analyzeFile();
+				  DatabaseManager.setPopulation(dm.population);
+				  fileOld.delete();
+				  new WarningDialog(this, "Veraltete Datei 'database.txt' ersetzt durch (versteckte) neue Datei '"+DatabaseManager.fileName+"'.\nEs werden nun mehrere Favoritenlisten, GP (Standardwert -1) und Sonderzeichen in Namen unterstützt.");
+			  } catch(IllegalFileException e){
+				  System.out.println(e.getMessage());
+			  }
+		  } else{
+			  DatabaseManager.setPopulation(new Vector<RelativeHorse>());
+			  new WarningDialog(this, "Pferde werden in der (versteckten) Datei '"+DatabaseManager.fileName+"' gespeichert.\nEs werden nun mehrere Favoritenlisten, GP (Standardwert -1) und Sonderzeichen in Namen unterstützt.");
+		  }
 		  try{
-			  dm.analyzeFile();
-			  DatabaseManager.setPopulation(dm.population);
-			  fileOld.delete();
-			  new Warndialog(this, "Veraltete Datei 'database.txt' ersetzt durch neue Datei '"+DatabaseManager.fileName+"'.\nEs werden nun mehrere Favoritenlisten, GP und Sonderzeichen in Namen unterstützt.");
-		  } catch(IllegalFileException e){
-			  System.out.println(e.getMessage());
+			  Path path = fileNew.toPath();
+			  Files.setAttribute(path, "dos:hidden", true);
+		  }catch(IOException e){
+			  System.out.println("fail");
 		  }
 	  }
   }

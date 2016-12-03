@@ -13,12 +13,12 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import general.Warndialog;
+import general.WarningDialog;
 
 public abstract class DatabaseManager {
 	private static Vector<RelativeHorse> population = new Vector<RelativeHorse>();
 	private static Vector<String> favourites = new Vector<String>();
-	public static final String fileName = "MDR-Datenbank";
+	public static final String fileName = "Datenbank.mdr";//"MDR-Datenbank";
 	
 	public static Vector<RelativeHorse> getPopulation(){
 		return population;
@@ -43,10 +43,10 @@ public abstract class DatabaseManager {
 		save();
 	}
 	
-	public static int find(String n) {
+	public static int findHorse(String name) {
 		int i = 0;
 		while (i < population.size()) {
-			if (population.get(i).getName().equals(n)) {
+			if (population.get(i).getName().equals(name)) {
 				return i;
 			}
 			i++;
@@ -92,7 +92,7 @@ public abstract class DatabaseManager {
 			oos.close();
 			fos.close();
 		} catch(Exception e){
-			new Warndialog(new JFrame(), "Kann nicht auf Datei '"+fileName+"' zugreifen. Vielleicht ist schon ein andere Instanz von MDR-Hilfen geöffnet?");
+			new WarningDialog(new JFrame(), "Kann nicht auf Datei '"+fileName+"' zugreifen. Vielleicht ist schon ein andere Instanz von MDR-Hilfen geöffnet?");
 			return -1;
 		}
 		population.remove(forFavs);
@@ -113,7 +113,7 @@ public abstract class DatabaseManager {
 			population.remove(0);
 			return 0;
 		} catch(Exception e){
-			new Warndialog(new JFrame(), "Kann Datei '"+fileName+"' nicht laden.");
+			new WarningDialog(new JFrame(), "Kann Datei '"+fileName+"' nicht laden.");
 			return -1;
 		} finally{
 			try{

@@ -31,8 +31,9 @@ public abstract class MDRDialog extends JDialog{
     protected Container cp = getContentPane();
     protected JLabel labelTitle;
     
-	public MDRDialog(MDRFrame parentFrame, String title){
+	public MDRDialog(JFrame parentFrame, String title){
 		super(parentFrame, "MDR-Hilfen", true);
+
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		cp.setBackground(backgroundColor);

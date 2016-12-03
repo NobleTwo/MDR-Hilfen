@@ -2,7 +2,7 @@ package relativeCheck;
 
 import javax.swing.JFrame;
 
-import general.Warndialog;
+import general.WarningDialog;
 
 @SuppressWarnings("serial")
 public class IllegalFileException extends Exception{
@@ -24,6 +24,6 @@ public class IllegalFileException extends Exception{
 	}
 	
 	public void popUp(JFrame owner){
-		new Warndialog(owner, message);
+		new WarningDialog(owner, message);
 	}
 }
