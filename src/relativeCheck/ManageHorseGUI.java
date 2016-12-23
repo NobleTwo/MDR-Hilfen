@@ -51,12 +51,10 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		super(title);
 		int eastButtonWidth = 210;
 		int frameWidth =(int)(7.5*gridButtonGap+4*HorseAndRaceField.WIDTH+2*eastButtonWidth);
-		int frameHeight = 11*gridButtonGap+9*HorseAndRaceField.HEIGHT+buttonHeight+20;
-		setSize(frameWidth, frameHeight);
+		int frameHeight = 11*gridButtonGap+9*HorseAndRaceField.HEIGHT+buttonHeight+20; //if too many favs changed in favs-section
 		
 		Vector<String> vectorFavourites = new Vector<String>();
 		vectorFavourites.add("Favoriten1");
-		vectorFavourites.add("Favoriten2");
 		vectorFavourites.add("Favoriten2");
 		vectorFavourites.add("Favoriten2");
 		vectorFavourites.add("Favoriten2");
@@ -123,8 +121,13 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			checkboxFavourites.add(temp);
 			cp.add(temp);
 		}
+		int frameHeightFavs = y0Favs+2*gridButtonGap*(vectorFavourites.size()+1)+buttonHeight+20;
+		if(frameHeightFavs>frameHeight){
+			frameHeight = frameHeightFavs;
+			System.out.println("Check");
+		}
 		
-		int yBot = yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
+		int yBot = frameHeight-20-buttonHeight-2*gridButtonGap;//yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
 		buttonAddOrSaveHorse.setBounds(x2row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
 		buttonAddOrSaveHorse.addActionListener(new ActionListener() {
 			@Override
@@ -151,7 +154,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		buttonChooseHorse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				new HorseChoice();
+				new HorseChoiceGUI();
 				dispose();
 			}
 		});
@@ -217,6 +220,13 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonResetText);
+		
+		if(frameHeightFavs>frameHeight){
+			frameHeight = frameHeightFavs;
+		}
+		setSize(frameWidth, frameHeight);
+		super2();
+		textInput.requestFocus();
 	}
 
 	//

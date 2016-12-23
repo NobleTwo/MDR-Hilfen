@@ -25,7 +25,6 @@ public class NewHorseGUI extends ManageHorseGUI{
 		Container cp = this.getContentPane();
 		cp.add(buttonCreateNewHorse);*/
 		super2();
-		textInput.requestFocus();
 	}
 	
 	@Override

@@ -31,8 +31,9 @@ public class HorseAndRaceField extends Container{
 		textfieldName.setPreferredSize(new Dimension(WIDTH, MDRFrame.buttonHeight));
 		textfieldName.addFocusListener(new FocusAdapter() {
 			public void focusGained(FocusEvent evt) {
-				if ((textfieldName.getText()).equals("nicht in DB"))
+				if ((textfieldName.getText()).equals("nicht in DB")){
 					textfieldName.setText("");
+				}
 			}
 		});
 		comboboxRace.setPreferredSize(new Dimension(125, HEIGHT - MDRFrame.buttonHeight));

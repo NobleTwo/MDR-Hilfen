@@ -19,7 +19,7 @@ public abstract class MDRFrame extends JFrame{
 	 */
 	protected static final long serialVersionUID = 1L;
 	public static final int gridButtonGap = 10;
-	public static final Color backgroundColor = new Color(0x9FC5C8);//B8CFE5 488793 559AA7
+	public static final Color backgroundColor = new Color(0x9FC5C8);//     0x488793 0x559AA7 0xB8CFE5
     protected static final int heightLabel = 20;
     protected static final int widthLabel = 120;
     protected static final int yTop = 2*gridButtonGap + 20;

@@ -19,6 +19,7 @@ public class EditHorseGUI extends ManageHorseGUI{
 		buttonResetOrDeleteHorse.setText("Pferd löschen");
 		buttonChooseHorse.setText("Anderes Pferd bearbeiten");
 		this.name = name;
+		HorseLoader.assignNamesAndRaces(name, horseNamesAndRaces);
 		
 		JButton buttonNewHorse = new JButton("Neues Pferd");
 		int x4row = 4*gridButtonGap + 3*horseNamesAndRaces[0].getWidth();
@@ -35,7 +36,6 @@ public class EditHorseGUI extends ManageHorseGUI{
 		cp.add(buttonNewHorse);
 		
 		super2();
-		textInput.requestFocus();
 	}
 
 	@Override
@@ -53,6 +53,7 @@ public class EditHorseGUI extends ManageHorseGUI{
 	}
 	
 	public static void main(String[] args){
-		new EditHorseGUI("Test");
+		DatabaseManager.load();
+		new EditHorseGUI("DerErste");
 	}
 }

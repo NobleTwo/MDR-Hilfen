@@ -5,7 +5,7 @@ public abstract class ShortTimeMemory {
 	private static boolean selectedMale = true;
 	private static boolean selectedFemale = true;
 	private static String searchedString = "";
-	private static boolean sortByName = true;
+	private static String nameFavListShown = "Alle";
 	
 	public static String getSelectedRace() {
 		return selectedRace;
@@ -31,10 +31,10 @@ public abstract class ShortTimeMemory {
 	public static void setSearchedString(String searchedString) {
 		ShortTimeMemory.searchedString = searchedString;
 	}
-	public static boolean isSortByName() {
-		return sortByName;
+	public static String getNameFavListShown() {
+		return nameFavListShown;
 	}
-	public static void setSortByName(boolean sortByName) {
-		ShortTimeMemory.sortByName = sortByName;
+	public static void setNameFavListShown(String name) {
+		ShortTimeMemory.nameFavListShown = name;
 	}
 }

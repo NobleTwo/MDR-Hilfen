@@ -31,7 +31,7 @@ import javax.swing.ListSelectionModel;
 import general.MDRFrame;
 import general.ShortTimeMemory;
 
-public class HorseChoice extends MDRFrame {
+public class HorseChoiceGUI extends MDRFrame {
 	/**
 	 * 
 	 */
@@ -45,25 +45,23 @@ public class HorseChoice extends MDRFrame {
 	
 	private JComboBox<String> raceFilter = new JComboBox<String>();
 	private JTextField textfieldSearchKey = new JTextField();
-
-	boolean getFavs = true;
-	RelativeCheckGUI rcgui;
-	boolean workLeft;
-	private JTextField search = new JTextField();
-	private JCheckBox checkBoxShowMale = new JCheckBox("Hengste");
-	private JCheckBox checkBoxShowFemale = new JCheckBox("Stuten");
+	private JRadioButton[] radioButtonsSelectFavs;
 	
-	private JRadioButton radioButtonSortByName = new JRadioButton("Name");
+	private boolean getFavs = true;
+	private RelativeCheckGUI rcgui;
+	
+	private boolean workLeft;
+	private JTextField search = new JTextField();
 
 	//
 	// ============== Constructors ===============
 	//
-	public HorseChoice() {
+	public HorseChoiceGUI() {
 		super("Pferd auswählen");
 		initiate();
 	}
 
-	public HorseChoice(RelativeCheckGUI rc, boolean workL) {
+	public HorseChoiceGUI(RelativeCheckGUI rc, boolean workL) {
 		super("Pferd auswählen");
 		rcgui = rc;
 		workLeft = workL;
@@ -74,6 +72,10 @@ public class HorseChoice extends MDRFrame {
 		final int columnWidth = 200;
 		DatabaseManager.load();
 		final Vector<RelativeHorse> horseList = DatabaseManager.getPopulation();
+		final Vector<String> favList = DatabaseManager.getFavourites();
+		
+		int frameWidth = 3*(columnWidth+gridButtonGap)+gridButtonGap*3/2;
+		int frameHeight = yTop+heightLabel+columnWidth+gridButtonGap*4; //is changed by favList if to small
 		
 		JLabel labelRaceFilter = new JLabel("Rassefilter:");
 		labelRaceFilter.setBounds(gridButtonGap, yTop, columnWidth, heightLabel);
@@ -96,32 +98,11 @@ public class HorseChoice extends MDRFrame {
 		});
 		cp.add(raceFilter);
 		
-		int yCheckBox = yTop + 2*heightLabel + gridButtonGap;
-		checkBoxShowMale.setBounds(gridButtonGap, yCheckBox, 75, heightLabel);
-		checkBoxShowMale.setOpaque(false);
-		checkBoxShowMale.setSelected(ShortTimeMemory.isSelectedMale());
-		checkBoxShowMale.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent evt) {
-				getFilterSettings();
-			}
-		});
-		cp.add(checkBoxShowMale);
-		checkBoxShowFemale.setBounds(gridButtonGap+columnWidth/2, yCheckBox, 65, heightLabel);
-		checkBoxShowFemale.setOpaque(false);
-		checkBoxShowFemale.setSelected(ShortTimeMemory.isSelectedFemale());
-		checkBoxShowFemale.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent evt) {
-				getFilterSettings();
-			}
-		});
-		cp.add(checkBoxShowFemale);
-		
+		int ySearch = yTop + 2*heightLabel + gridButtonGap;
 		JLabel labelSearchKey = new JLabel("Suchen:");
-		labelSearchKey.setBounds(gridButtonGap, yCheckBox+heightLabel+gridButtonGap/2, columnWidth, heightLabel);
+		labelSearchKey.setBounds(gridButtonGap, ySearch, columnWidth, heightLabel);
 		cp.add(labelSearchKey);
-		textfieldSearchKey.setBounds(gridButtonGap, yCheckBox+2*heightLabel+gridButtonGap/2, columnWidth, heightLabel);
+		textfieldSearchKey.setBounds(gridButtonGap, ySearch+heightLabel, columnWidth, heightLabel);
 		textfieldSearchKey.setText(ShortTimeMemory.getSearchedString());
 		textfieldSearchKey.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent evt) {
@@ -130,49 +111,73 @@ public class HorseChoice extends MDRFrame {
 		});
 		cp.add(textfieldSearchKey);
 		
-		JLabel labelSortOrder = new JLabel("Sortieren nach");
-		labelSortOrder.setBounds(gridButtonGap, yCheckBox+3*heightLabel+gridButtonGap, columnWidth, heightLabel);
-		cp.add(labelSortOrder);
-		int yRadioButtons = yCheckBox+4*heightLabel+gridButtonGap;
-		radioButtonSortByName.setSelected(ShortTimeMemory.isSortByName());
-		radioButtonSortByName.setBounds(gridButtonGap, yRadioButtons, 60, heightLabel);
-		radioButtonSortByName.setOpaque(false);
-		cp.add(radioButtonSortByName);
-		JRadioButton radioButtonSortByCP = new JRadioButton("GP");
-		radioButtonSortByCP.setBounds(gridButtonGap+columnWidth/2, yRadioButtons, 45, heightLabel);
-		radioButtonSortByCP.setOpaque(false);
-		cp.add(radioButtonSortByCP);
-		ButtonGroup buttonGroupSortOrder = new ButtonGroup();
-		buttonGroupSortOrder.add(radioButtonSortByName);
-		buttonGroupSortOrder.add(radioButtonSortByCP);
+		JLabel labelFavList = new JLabel("Anzeigen:");
+		labelFavList.setBounds(gridButtonGap, ySearch+2*heightLabel+gridButtonGap, columnWidth, heightLabel);
+		cp.add(labelFavList);
+		int yRadioButtons = ySearch+3*heightLabel+gridButtonGap;
+		radioButtonsSelectFavs = new JRadioButton[favList.size()+1];
+		ButtonGroup buttonGroupSelectFav = new ButtonGroup();
+		for(int i=0; i<radioButtonsSelectFavs.length; i++){
+			if(i==0){
+				radioButtonsSelectFavs[i] = new JRadioButton("Alle");
+				radioButtonsSelectFavs[i].setSelected(true);
+			} else{
+				radioButtonsSelectFavs[i] = new JRadioButton(favList.get(i-1));
+			}
+			buttonGroupSelectFav.add(radioButtonsSelectFavs[i]);
+			if(i!=0){
+				radioButtonsSelectFavs[i].setSelected(ShortTimeMemory.getNameFavListShown().equals(radioButtonsSelectFavs[i].getText()));
+			}
+			radioButtonsSelectFavs[i].setBounds(gridButtonGap, yRadioButtons+i*heightLabel, widthLabel, heightLabel);
+			radioButtonsSelectFavs[i].setOpaque(false);
+			cp.add(radioButtonsSelectFavs[i]);
+		}
 		
-		Vector<Object[]> rowData = new Vector<Object[]>();
-		Iterator<RelativeHorse> it = horseList.iterator();
+		int frameHeightFavs = ySearch+(3+favList.size())*heightLabel+gridButtonGap;
+		if(frameHeight<frameHeightFavs){
+			frameHeight = frameHeightFavs;
+		}		
+		Vector<RelativeHorse> horses = getFilterSettings();
+		Vector<Vector<String>> rowDataMale = new Vector<Vector<String>>();
+		Vector<Vector<String>> rowDataFemale = new Vector<Vector<String>>();
+		Iterator<RelativeHorse> it = horses.iterator();
 		while(it.hasNext()){
-			Object[] temp = new Object[2];
+			Vector<String> temp = new Vector<String>();
 			RelativeHorse rh = it.next();
-			temp[0] = rh.getName();
-			temp[1] = rh.getCompletePotential();
-			rowData.add(temp);
+			temp.add(rh.getName());
+			temp.add(((Integer)(rh.getCompletePotential())).toString());
+			if(rh.isMale()){
+				rowDataMale.add(temp);
+			} else{
+				rowDataFemale.add(temp);
+			}
 		}
 		Vector<String> columnNames = new Vector<String>();
 		columnNames.add("Name");
 		columnNames.add("GP");
 		
-		listsOfHorses[0] = new JTable(rowData, columnNames);
-		//listsOfHorses[0].setModel(listModelAllHorses);
-		JScrollPane scrollPaneListAllHorses = new JScrollPane(listsOfHorses[0]);
-		scrollPaneListAllHorses.setBounds(gridButtonGap, yRadioButtons+heightLabel+gridButtonGap/2, columnWidth, columnWidth);
-		listsOfHorses[0].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listsOfHorses[0].addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent evt) {
-		    	indexSelected(listsOfHorses[0], evt);
-		    }
-		});
-		cp.add(scrollPaneListAllHorses);
-	
+		JLabel labelMale = new JLabel("Hengste");
+		labelMale.setBounds(gridButtonGap*2+columnWidth, yTop, widthLabel, heightLabel);
+		cp.add(labelMale);
+		JTable tableMale = new JTable(rowDataMale, columnNames);
+		tableMale.setAutoCreateRowSorter(true);
+		tableMale.getColumnModel().getColumn(1).setPreferredWidth(0); //TODO
+		JScrollPane scrollPaneTableMale = new JScrollPane(tableMale);
+		scrollPaneTableMale.setBounds(2*gridButtonGap+columnWidth, yTop+heightLabel, columnWidth, frameHeight-yTop-heightLabel-40);
+		cp.add(scrollPaneTableMale);
+		
+		JLabel labelFemale = new JLabel("Stuten");
+		labelFemale.setBounds(gridButtonGap*3+2*columnWidth, yTop, widthLabel, heightLabel);
+		cp.add(labelFemale);
+		JTable tableFemale = new JTable(rowDataFemale, columnNames);
+		tableFemale.setAutoCreateRowSorter(true);
+		tableFemale.getColumnModel().getColumn(1).setPreferredWidth(0); //TODO
+		JScrollPane scrollPaneTableFemale = new JScrollPane(tableFemale);
+		scrollPaneTableFemale.setBounds(3*gridButtonGap+2*columnWidth, yTop+heightLabel, columnWidth, frameHeight-yTop-heightLabel-40);
+		cp.add(scrollPaneTableFemale);
+		
 		JButton buttonAccept = new JButton("OK");
-		buttonAccept.setBounds(gridButtonGap, yRadioButtons+heightLabel+gridButtonGap*3/2+columnWidth, columnWidth, buttonHeight);
+		buttonAccept.setBounds(gridButtonGap, frameHeight-40-buttonHeight, columnWidth, buttonHeight);
 		buttonAccept.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
@@ -181,34 +186,6 @@ public class HorseChoice extends MDRFrame {
 		});
 		cp.add(buttonAccept);
 		
-		int columnHeight = yRadioButtons+heightLabel+gridButtonGap/2+buttonHeight;
-		final Vector<String> favouriteLists = DatabaseManager.getFavourites();
-		/*for(int i=0; i<favouriteLists.size(); i++){
-			JLabel labelTemp = new JLabel(favouriteLists.get(i));
-			int x = (gridButtonGap+columnWidth)*(i+1);
-			labelTemp.setBounds(x, yTop, columnWidth, heightLabel);
-			
-			listsOfHorses[i+1] = new JList<String>();
-			DefaultListModel<String> horseListTempModel = new DefaultListModel<String>();
-			JScrollPane horseListTempScrollPane = new JScrollPane(listsOfHorses[i+1]);
-			
-			listsOfHorses[i+1].setModel(horseListTempModel);
-			horseListTempScrollPane.setBounds(x, yTop+heightLabel, columnWidth, columnHeight-heightLabel);
-			listsOfHorses[i+1].setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			int temp = i+1;
-			listsOfHorses[i+1].addMouseListener(new MouseAdapter() {
-				@Override
-			    public void mouseClicked(MouseEvent evt) {
-			    	indexSelected(listsOfHorses[temp], evt);
-			    }
-			});
-			cp.add(horseListTempScrollPane);
-		}*/
-		
-		getFilterSettings();
-		
-		int frameWidth = (favouriteLists.size()+1)*(columnWidth+gridButtonGap)+gridButtonGap*3/2;
-		int frameHeight = yRadioButtons+heightLabel+gridButtonGap*5+columnWidth+buttonHeight;
 		setSize(frameWidth, frameHeight);
 		super2();
 	}
@@ -222,7 +199,7 @@ public class HorseChoice extends MDRFrame {
 		}
 	}
 	
-	private void filterVisible(String race, String searched, boolean showMale, boolean showFemale) {
+	private Vector<RelativeHorse> filterVisible(String race, String searched, String nameSelectedFavList) {
 		searched = searched.toLowerCase();
 		Vector<RelativeHorse> horseList = DatabaseManager.getPopulation(); 
 		final Vector<String> favourites = DatabaseManager.getFavourites();
@@ -232,13 +209,17 @@ public class HorseChoice extends MDRFrame {
 		for(int i = 0; i < horseList.size(); i++) {
 			RelativeHorse current = horseList.get(i);
 			boolean delete = current.getName().equals("Unbekannt") || !current.getRace().contains(race) || !current.getName().toLowerCase().contains(searched);
-			delete = delete || (current.isMale() && !showMale) || (!current.isMale() && !showFemale);
+			if(!nameSelectedFavList.equals("Alle")){
+					delete = delete || (current.getFavourites().contains(nameSelectedFavList));
+			}
 			if (delete) {
 				horseList.remove(i);
 				i--;
 			}
 		}
 		
+		return horseList;
+		/*
 		//create a TreeSet for each list of favourites
 		@SuppressWarnings("unchecked")
 		Collection<String>[] horseNames = new TreeSet[favourites.size()+1];
@@ -278,16 +259,23 @@ public class HorseChoice extends MDRFrame {
         }
 	}
 	
+	private String getSelectedFavList(){
+		for(int i=0; i<radioButtonsSelectFavs.length; i++){
+			if(radioButtonsSelectFavs[i].isSelected()){
+				return radioButtonsSelectFavs[i].getText();
+			}
+		}
+		return "Alle";
+	}
+	
 	public void choose(){
 		//save options
 		ShortTimeMemory.setSelectedRace(raceFilter.getSelectedItem().toString());
-		ShortTimeMemory.setSelectedMale(checkBoxShowMale.isSelected());
-		ShortTimeMemory.setSelectedFemale(checkBoxShowFemale.isSelected());
 		ShortTimeMemory.setSearchedString(search.getText());
-		ShortTimeMemory.setSortByName(radioButtonSortByName.isSelected());
+		ShortTimeMemory.setNameFavListShown(getSelectedFavList());
 		
 		//insert into other frame
-		String name = null;
+		String name = "";
 		for(JTable table: listsOfHorses){
 			/*if(!table.isSelectionEmpty()){
 				name = table.getSelectedValue();
@@ -300,22 +288,22 @@ public class HorseChoice extends MDRFrame {
 		if (rcgui == null)
 			new EditHorseGUI(name);
 		else if (workLeft) {
-			new NameLoader(name, new DocumentManager(), rcgui.horseNamesL, rcgui.horseRacesL, null, rcgui.getRadioButtonIsMaleLeft(), rcgui.getRadioButtonIsFemaleLeft());
+			new HorseLoader(name, new DocumentManager(), rcgui.horseNamesL, rcgui.horseRacesL, null, rcgui.getRadioButtonIsMaleLeft(), rcgui.getRadioButtonIsFemaleLeft());
 		} else {
-			new NameLoader(name, new DocumentManager(), rcgui.horseNamesR, rcgui.horseRacesR, null, rcgui.getRadioButtonIsMaleRight(), rcgui.getRadioButtonIsFemaleRight());
+			new HorseLoader(name, new DocumentManager(), rcgui.horseNamesR, rcgui.horseRacesR, null, rcgui.getRadioButtonIsMaleRight(), rcgui.getRadioButtonIsFemaleRight());
 		}
 		this.dispose();
 	}
 
-	public void getFilterSettings() {
+	public Vector<RelativeHorse> getFilterSettings() {
 		String selectedRace = raceFilter.getSelectedItem().toString();
 		if (selectedRace.equals("----------") || selectedRace.equals(" Alle")) {
 			selectedRace = "";
 		}
-		filterVisible(selectedRace, search.getText(), checkBoxShowMale.isSelected(), checkBoxShowFemale.isSelected());
+		return filterVisible(selectedRace, search.getText(), getSelectedFavList()); 
 	}
 
 	public static void main(String[] args) {
-		new HorseChoice();
+		new HorseChoiceGUI();
 	}
 }
