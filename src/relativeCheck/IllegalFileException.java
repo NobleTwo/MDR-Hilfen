@@ -4,26 +4,29 @@ import javax.swing.JFrame;
 
 import general.WarningDialog;
 
-@SuppressWarnings("serial")
-public class IllegalFileException extends Exception{
+public class IllegalFileException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message;
-	
-	public IllegalFileException(boolean fatal){
+
+	public IllegalFileException(boolean fatal) {
 		message = "";
-		if(fatal){
+		if (fatal) {
 			message += "Teils ungültige";
-		} else{
+		} else {
 			message += "Veraltete";
 		}
 		message += " Datenbank gefunden.\n";
-		if(fatal){
+		if (fatal) {
 			message += "Ungültige Abschnitte wurden gelöscht.";
-		} else{
+		} else {
 			message += "Datenbank wurde angepasst:\nUnpassende Pferde standardmäßig männlich.";
 		}
 	}
-	
-	public void popUp(JFrame owner){
+
+	public void popUp(JFrame owner) {
 		new WarningDialog(owner, message);
 	}
 }

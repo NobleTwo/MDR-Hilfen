@@ -11,19 +11,21 @@ import java.util.Locale;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-public class MDRNumberField extends JTextField{
+public class MDRNumberField extends JTextField {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public MDRNumberField(boolean alignRight){
+	public MDRNumberField(boolean alignRight) {
 		super();
 		this.setText("0");
-		if(alignRight){
+		if (alignRight) {
 			this.setHorizontalAlignment(SwingConstants.RIGHT);
+		} else {
+			this.setHorizontalAlignment(SwingConstants.CENTER);
 		}
-		this.addKeyListener(new KeyListener(){
+		this.addKeyListener(new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 			}
@@ -34,31 +36,32 @@ public class MDRNumberField extends JTextField{
 
 			@Override
 			public void keyTyped(KeyEvent ke) {
-				if(!Character.isDigit(ke.getKeyChar())){
-				 ke.consume();
+				if (!Character.isDigit(ke.getKeyChar())) {
+					ke.consume();
 				}
 			}
 		});
-		this.addFocusListener(new FocusListener(){
+		this.addFocusListener(new FocusListener() {
 			@Override
-			public void focusGained(FocusEvent fe){
+			public void focusGained(FocusEvent fe) {
 				setText("");
 			}
+
 			@Override
-			public void focusLost(FocusEvent fe){
-				if(getText().equals("")){
+			public void focusLost(FocusEvent fe) {
+				if (getText().equals("")) {
 					setText("0");
 				}
 			}
 		});
 	}
-	
-	public void setText(Double value){
+
+	public void setText(Double value) {
 		DecimalFormat form = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 		this.setText(form.format(value));
 	}
-	
-	public void setText(int value){
+
+	public void setText(int value) {
 		this.setText(String.valueOf(value));
 	}
 }

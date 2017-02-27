@@ -1,64 +1,74 @@
 package general;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
-
-@SuppressWarnings("serial")
 public class PopUpAbout extends MDRDialog {
-  
-  public PopUpAbout(MainMenu mainMenuFrame) { 
-    //Frame-Initialisierung
-    super(mainMenuFrame, "MDR-Hilfen Ver. 1.1");
-    setSize(380, 215);
-    Container cp = getContentPane();
-    
-    //Komponenten
-    final int widthLabel = 355;
-    
-    JLabel labelReleaseDate = new JLabel("Release: 12.10.2016");
-    labelReleaseDate.setBounds(gridButtonGap, yTop, widthLabel, 19);
-    labelReleaseDate.setFont(fontLabel);
-    labelReleaseDate.setHorizontalAlignment(SwingConstants.CENTER);
-    cp.add(labelReleaseDate);
-    
-    JLabel labelMDRVersion = new JLabel("Basierend auf MDR, Version 3.0, Stand 11.10.2016");
-    labelMDRVersion.setBounds(gridButtonGap, 64, widthLabel, 25);
-    labelMDRVersion.setFont(fontLabel);
-    labelMDRVersion.setHorizontalAlignment(SwingConstants.CENTER);
-    cp.add(labelMDRVersion);
-    
-    JLabel labelWarning = new JLabel("Es können Fehler bei Verwendung mit anderen MDR-Versionen auftreten.");
-    labelWarning.setBounds(gridButtonGap, 88, widthLabel, 17);
-    labelWarning.setFont(fontLabel);
-    labelWarning.setHorizontalAlignment(SwingConstants.CENTER);
-    cp.add(labelWarning);
-    
-    JLabel labelCopyright = new JLabel("\u00A9 nola Linys Freund, 2014-2016.");
-    labelCopyright.setBounds(gridButtonGap, 120, widthLabel, 17);
-    labelCopyright.setFont(fontLabel);
-    labelCopyright.setHorizontalAlignment(SwingConstants.CENTER);
-    cp.add(labelCopyright);
-    
-    JButton buttonClose = new JButton("Schließen");
-    buttonClose.setBounds(144, 152, 105, buttonHeight);
-    buttonClose.addActionListener(new ActionListener() {
-    	@Override
-    	public void actionPerformed(ActionEvent evt) { 
-    		dispose();
-    	}
-    });
-    cp.add(buttonClose);
-    
-    super2();
-  }
-  
-  public static void main(String[] args) {
-    new PopUpAbout(new MainMenu());
-  }
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public PopUpAbout(MainMenu mainMenuFrame) {
+		// Frame-Initialisierung
+		super(mainMenuFrame, "Wird die Datenbank nicht gefunden?");
+		// Komponenten
+		final int widthLabel = 355;
+
+		JTextArea helpText = new JTextArea("Die Datenbank für MDR-Hilfen ist eine versteckte Datei. Diese können im \nWindows-Explorer unter \"Ansicht \u2192 Ausgeblendete Elemente\" angezeigt \nwerden.");
+		helpText.setBounds(gridButtonGap, yTop, widthLabel, 50);
+		helpText.setFont(fontLabel);
+		helpText.setLineWrap(true);
+		helpText.setOpaque(false);
+		helpText.setEditable(false);
+		helpText.setHighlighter(null);
+		cp.add(helpText);
+
+		JLabel labelVersionInfo = new JLabel("Versionsinformationen");
+		labelVersionInfo.setBounds(gridButtonGap, 80, widthLabel, 19);
+		labelVersionInfo.setHorizontalAlignment(SwingConstants.CENTER);
+		cp.add(labelVersionInfo);
+
+		JTextPane versionText = new JTextPane();
+		versionText.setText("MDR-Hilfen Ver. 1.2\nRelease: 24.02.2017\nBasierend auf MDR, Version 3.0, Stand 11.10.2016\nEs können Fehler bei Verwendung mit anderen MDR-Versionen auftreten.\n\u00A9 nola Linys Freund, 2014-2017.");
+		versionText.setBounds(gridButtonGap, 100, widthLabel, 70);
+		versionText.setFont(fontLabel);
+		versionText.setEditable(false);
+		versionText.setHighlighter(null);
+		versionText.setOpaque(false);
+
+		// for centering text
+		StyledDocument doc = versionText.getStyledDocument();
+		SimpleAttributeSet center = new SimpleAttributeSet();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
+
+		cp.add(versionText);
+
+		MDRButton buttonClose = new MDRButton("Schließen");
+		buttonClose.setBounds(144, 175, 105, buttonHeight);
+		buttonClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+				dispose();
+			}
+		});
+		cp.add(buttonClose);
+
+		setSize(380, 240);
+		super2();
+	}
+
+	public static void main(String[] args) {
+		new PopUpAbout(new MainMenu());
+	}
 }

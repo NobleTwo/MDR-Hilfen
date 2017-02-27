@@ -5,16 +5,19 @@ import java.awt.Container;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.Iterator;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import general.MDRButton;
 import general.MDRFrame;
 import general.MDRNumberField;
 import general.MainMenu;
@@ -24,110 +27,114 @@ public abstract class ManageHorseGUI extends MDRFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	protected HorseAndRaceField[] horseNamesAndRaces = new HorseAndRaceField[15];
-	protected JButton buttonAddOrSaveHorse = new JButton();
-	protected JButton buttonChooseHorse = new JButton();
-	protected JButton buttonResetOrDeleteHorse = new JButton();
-	protected JTextArea textInput = new JTextArea(); 
-	private JRadioButton radioButtonIsMale = new JRadioButton("Hengst");
-	private JRadioButton radioButtonIsFemale = new JRadioButton("Stute");
-	private MDRNumberField numberfieldGP = new MDRNumberField(false);
-	private Vector<JCheckBox> checkboxFavourites = new Vector<JCheckBox>();
 
-	/*public ManageHorseGUI(String name) {
-		super();
-		start(false);
-		new NameLoader(name, dm, horseNames, horseRaces, isFavourite, radioButtonIsMale, radioButtonIsFemale);
-		int subjectPosition = dm.find(horseNames[0].getText());
-		if(subjectPosition >=0){
-			subject = dm.population.get(subjectPosition);
-		} else{
-			subject = null;
-		}
-	}*/
+	protected HorseAndRaceField[] horseNamesAndRaces = new HorseAndRaceField[15];
+	protected MDRButton buttonAddOrSaveHorse = new MDRButton();
+	protected MDRButton buttonChooseHorse = new MDRButton();
+	protected MDRButton buttonResetOrDeleteHorse = new MDRButton();
+	protected JTextArea textInput = new JTextArea();
+	protected JRadioButton radioButtonIsMale = new JRadioButton("Hengst");
+	protected JRadioButton radioButtonIsFemale = new JRadioButton("Stute");
+	protected MDRNumberField numberfieldGP = new MDRNumberField(false);
+	protected Vector<JCheckBox> checkboxFavourites = new Vector<JCheckBox>();
+	private RelativeHorse subject;
 
 	public ManageHorseGUI(String title) {
 		super(title);
 		int eastButtonWidth = 210;
-		int frameWidth =(int)(7.5*gridButtonGap+4*HorseAndRaceField.WIDTH+2*eastButtonWidth);
-		int frameHeight = 11*gridButtonGap+9*HorseAndRaceField.HEIGHT+buttonHeight+20; //if too many favs changed in favs-section
-		
-		Vector<String> vectorFavourites = new Vector<String>();
-		vectorFavourites.add("Favoriten1");
-		vectorFavourites.add("Favoriten2");
-		vectorFavourites.add("Favoriten2");
-		vectorFavourites.add("Favoriten2");
-		vectorFavourites.add("Favoriten6");
-		//max = 6
-		
-		//Komponenten
-		Container cp = getContentPane();
-		for(int i = 0; i<horseNamesAndRaces.length; i++){
+		int frameWidth = (int) (7.5 * gridButtonGap + 4 * HorseAndRaceField.WIDTH + 2 * eastButtonWidth);
+		int frameHeight = 11 * gridButtonGap + 9 * HorseAndRaceField.HEIGHT + buttonHeight + 20; // if too many favs changed in favs-section
+
+		final Vector<String> vectorFavourites = DatabaseManager.getFavourites();
+
+		// Komponenten
+		for (int i = 0; i < horseNamesAndRaces.length; i++) {
 			horseNamesAndRaces[i] = new HorseAndRaceField();
-			cp.add(horseNamesAndRaces[i]);	
+			cp.add(horseNamesAndRaces[i]);
 		}
-		int yTop = 3*gridButtonGap + 20;
-		
+		int yTop = 3 * gridButtonGap + 20;
+
 		//
-		//WEST
+		// WEST
 		//
-		int y0 = (int)(yTop + 3.5*HorseAndRaceField.HEIGHT + 3*gridButtonGap);
+		int y0 = (int) (yTop + 3.5 * HorseAndRaceField.HEIGHT + 3 * gridButtonGap);
 		horseNamesAndRaces[0].setLocation(gridButtonGap, y0);
-		
-		int x2row = 2*gridButtonGap + horseNamesAndRaces[0].getWidth();
-		int y1 = (int)(yTop + HorseAndRaceField.HEIGHT*1.5 + gridButtonGap);
+
+		int x2row = 2 * gridButtonGap + horseNamesAndRaces[0].getWidth();
+		int y1 = (int) (yTop + HorseAndRaceField.HEIGHT * 1.5 + gridButtonGap);
 		horseNamesAndRaces[1].setLocation(x2row, y1);
-		int y2 = (int)(yTop + HorseAndRaceField.HEIGHT*5.5 + 5*gridButtonGap);
+		int y2 = (int) (yTop + HorseAndRaceField.HEIGHT * 5.5 + 5 * gridButtonGap);
 		horseNamesAndRaces[2].setLocation(x2row, y2);
-		
-		int x3row = 3*gridButtonGap + 2*horseNamesAndRaces[0].getWidth();
-		for(int i = 3; i<=6; i++){
-			int y = (int)(yTop + HorseAndRaceField.HEIGHT/2 +(2*gridButtonGap + 2*HorseAndRaceField.HEIGHT)*(i-3));
-			horseNamesAndRaces[i].setLocation(x3row, y);	
+
+		int x3row = 3 * gridButtonGap + 2 * horseNamesAndRaces[0].getWidth();
+		for (int i = 3; i <= 6; i++) {
+			int y = (int) (yTop + HorseAndRaceField.HEIGHT / 2 + (2 * gridButtonGap + 2 * HorseAndRaceField.HEIGHT) * (i - 3));
+			horseNamesAndRaces[i].setLocation(x3row, y);
 		}
-		
-		int x4row = 4*gridButtonGap + 3*horseNamesAndRaces[0].getWidth();
-		for(int i = 7; i<=14; i++){
-			horseNamesAndRaces[i].setLocation(x4row, yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*(i-7));
+
+		int x4row = 4 * gridButtonGap + 3 * horseNamesAndRaces[0].getWidth();
+		for (int i = 7; i <= 14; i++) {
+			horseNamesAndRaces[i].setLocation(x4row, yTop + (gridButtonGap + HorseAndRaceField.HEIGHT) * (i - 7));
 		}
 
 		Container containerGP = new Container();
 		containerGP.setLayout(new BorderLayout());
-		int y0GP = y0 + HorseAndRaceField.HEIGHT + gridButtonGap/2;
-		containerGP.setBounds(gridButtonGap, y0GP, HorseAndRaceField.WIDTH, 2*gridButtonGap);
+		int y0GP = y0 + HorseAndRaceField.HEIGHT + gridButtonGap / 2;
+		containerGP.setBounds(gridButtonGap, y0GP, HorseAndRaceField.WIDTH, 2 * gridButtonGap);
 		JLabel labelGP = new JLabel("GP: ");
 		containerGP.add(labelGP, BorderLayout.WEST);
 		containerGP.add(numberfieldGP, BorderLayout.CENTER);
+		for (FocusListener f : numberfieldGP.getFocusListeners()) {
+			numberfieldGP.removeFocusListener(f);
+		}
+		numberfieldGP.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent fe) {
+				numberfieldGP.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent fe) {
+				if (numberfieldGP.getText().equals("")) {
+					if (subject != null) {
+						numberfieldGP.setText(subject.getCompletePotential());
+					} else {
+						numberfieldGP.setText("0");
+					}
+				}
+			}
+		});
 		cp.add(containerGP);
-		
-		radioButtonIsMale.setBounds(gridButtonGap, (int)(y0GP+2.5*gridButtonGap), HorseAndRaceField.WIDTH, 2*gridButtonGap);
+
+		radioButtonIsMale.setBounds(gridButtonGap, (int) (y0GP + 2.5 * gridButtonGap), HorseAndRaceField.WIDTH, 2 * gridButtonGap);
 		radioButtonIsMale.setOpaque(false);
 		radioButtonIsMale.setSelected(true);
+		radioButtonIsMale.setFocusPainted(false);
 		cp.add(radioButtonIsMale);
-		radioButtonIsFemale.setBounds(gridButtonGap, (int)(y0GP+4*gridButtonGap), HorseAndRaceField.WIDTH, 2*gridButtonGap);
-		radioButtonIsFemale.setOpaque(false);
+		radioButtonIsFemale.setBounds(gridButtonGap, (int) (y0GP + 4 * gridButtonGap), HorseAndRaceField.WIDTH, 2 * gridButtonGap);
+		radioButtonIsFemale.setOpaque(false);	
+		radioButtonIsFemale.setFocusPainted(false);
 		cp.add(radioButtonIsFemale);
 		ButtonGroup buttonGroupRadioButtons = new ButtonGroup();
 		buttonGroupRadioButtons.add(radioButtonIsMale);
 		buttonGroupRadioButtons.add(radioButtonIsFemale);
-		
-		int y0Favs = y0GP + 6*gridButtonGap;
-		for(int i = 0; i<vectorFavourites.size(); i++){
+
+		int y0Favs = y0GP + 6 * gridButtonGap;
+		for (int i = 0; i < vectorFavourites.size(); i++) {
 			String name = vectorFavourites.get(i);
 			JCheckBox temp = new JCheckBox(name);
-			temp.setBounds(gridButtonGap, y0Favs+2*i*gridButtonGap, HorseAndRaceField.WIDTH, 2*gridButtonGap);
+			temp.setBounds(gridButtonGap, y0Favs + 2 * i * gridButtonGap, HorseAndRaceField.WIDTH, 2 * gridButtonGap);
 			temp.setOpaque(false);
+			temp.setFocusPainted(false);
 			checkboxFavourites.add(temp);
 			cp.add(temp);
 		}
-		int frameHeightFavs = y0Favs+2*gridButtonGap*(vectorFavourites.size()+1)+buttonHeight+20;
-		if(frameHeightFavs>frameHeight){
+		int frameHeightFavs = y0Favs + 2 * gridButtonGap * (vectorFavourites.size() + 1) + buttonHeight + 20;
+		if (frameHeightFavs > frameHeight) {
 			frameHeight = frameHeightFavs;
-			System.out.println("Check");
 		}
-		
-		int yBot = frameHeight-20-buttonHeight-2*gridButtonGap;//yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
+
+		int yBot = frameHeight - 20 - buttonHeight - 2 * gridButtonGap;// yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
 		buttonAddOrSaveHorse.setBounds(x2row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
 		buttonAddOrSaveHorse.addActionListener(new ActionListener() {
 			@Override
@@ -145,34 +152,39 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonResetOrDeleteHorse);
-		
+
 		//
-		//EAST
-		//		
+		// EAST
+		//
 		int xEast = x4row + HorseAndRaceField.WIDTH + gridButtonGap;
 		buttonChooseHorse.setBounds(xEast, yTop, eastButtonWidth, buttonHeight);
+		ManageHorseGUI temp = this;
 		buttonChooseHorse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
-				new HorseChoiceGUI();
-				dispose();
+				new HorseChoiceGUI(temp);
+				if (subject != null) {
+					new EditHorseGUI(getSubject());
+					dispose();
+				}
 			}
 		});
 		cp.add(buttonChooseHorse);
-		
+
 		int xEastButton2 = xEast + gridButtonGap + eastButtonWidth;
-		JButton buttonGoToRC = new JButton("Verwandtschaftscheck");
+		MDRButton buttonGoToRC = new MDRButton("Verwandtschaftscheck");
 		buttonGoToRC.setBounds(xEastButton2, yTop, eastButtonWidth, buttonHeight);
 		buttonGoToRC.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent evt) {
 				new RelativeCheckGUI();
+				dispose();
 			}
 		});
 		cp.add(buttonGoToRC);
-		
+
 		int yButton2 = yTop + gridButtonGap + buttonHeight;
-		JButton buttonGoToMenu = new JButton("Hauptmenü");
+		MDRButton buttonGoToMenu = new MDRButton("Hauptmenü");
 		buttonGoToMenu.setBounds(xEast, yButton2, eastButtonWidth, buttonHeight);
 		buttonGoToMenu.addActionListener(new ActionListener() {
 			@Override
@@ -182,8 +194,8 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonGoToMenu);
-		
-		JButton buttonExit = new JButton("Schließen");
+
+		MDRButton buttonExit = new MDRButton("Schließen");
 		buttonExit.setBounds(xEastButton2, yButton2, eastButtonWidth, buttonHeight);
 		buttonExit.setMargin(new Insets(2, 2, 2, 2));
 		buttonExit.addActionListener(new ActionListener() {
@@ -193,14 +205,14 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonExit);
-		
+
 		JScrollPane textInputScrollPane = new JScrollPane(textInput);
-		int textAreaHeight = 8*HorseAndRaceField.HEIGHT+5*gridButtonGap-2*buttonHeight;
-		textInputScrollPane.setBounds(xEast, yButton2+buttonHeight+gridButtonGap, 2*eastButtonWidth+gridButtonGap, textAreaHeight);
+		int textAreaHeight = 8 * HorseAndRaceField.HEIGHT + 5 * gridButtonGap - 2 * buttonHeight;
+		textInputScrollPane.setBounds(xEast, yButton2 + buttonHeight + gridButtonGap, 2 * eastButtonWidth + gridButtonGap, textAreaHeight);
 		cp.add(textInputScrollPane);
-		
-		int yButton3 = yButton2 + buttonHeight + 2*gridButtonGap + textAreaHeight;
-		JButton buttonAnalyzeText = new JButton("Text analysieren");
+
+		int yButton3 = yButton2 + buttonHeight + 2 * gridButtonGap + textAreaHeight;
+		MDRButton buttonAnalyzeText = new MDRButton("Text analysieren");
 		buttonAnalyzeText.setBounds(xEast, yButton3, eastButtonWidth, buttonHeight);
 		buttonAnalyzeText.addActionListener(new ActionListener() {
 			@Override
@@ -209,8 +221,8 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonAnalyzeText);
-		
-		JButton buttonResetText = new JButton("Text löschen");
+
+		MDRButton buttonResetText = new MDRButton("Text löschen");
 		buttonResetText.setBounds(xEast + gridButtonGap + eastButtonWidth, yButton3, eastButtonWidth, buttonHeight);
 		buttonResetText.addActionListener(new ActionListener() {
 			@Override
@@ -220,8 +232,8 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 		});
 		cp.add(buttonResetText);
-		
-		if(frameHeightFavs>frameHeight){
+
+		if (frameHeightFavs > frameHeight) {
 			frameHeight = frameHeightFavs;
 		}
 		setSize(frameWidth, frameHeight);
@@ -230,10 +242,10 @@ public abstract class ManageHorseGUI extends MDRFrame {
 	}
 
 	//
-	//Methoden
+	// Methoden
 	//
 
-	public void analyzeText(){
+	public void analyzeText() {
 		String[] lineSplit = textInput.getText().split("\n");
 		int counter = 0;
 		int start = 0;
@@ -280,7 +292,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		}
 		if (counter != horseNamesAndRaces.length)
 			textInput.setText("Nicht alle Pferdenamen gefunden.");
-		
+
 		for (int i = 0; i < lineSplit.length; i++) {
 			if (lineSplit[i].contains("Geschlecht")) {
 				boolean isMale = lineSplit[i].contains("Hengst");
@@ -288,9 +300,9 @@ public abstract class ManageHorseGUI extends MDRFrame {
 				radioButtonIsFemale.setSelected(!isMale);
 			}
 		}
-		
-		for(int i = 0; i<lineSplit.length; i++){
-			if(lineSplit[i].contains("Gesamtpotential: ")){
+
+		for (int i = 0; i < lineSplit.length; i++) {
+			if (lineSplit[i].contains("Gesamtpotential: ")) {
 				String[] wordSplit = lineSplit[i].split(" ");
 				numberfieldGP.setText(wordSplit[1]);
 			}
@@ -308,8 +320,65 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		}
 		return -1;
 	}
-	
-	protected abstract void addOrSaveHorse();
+
+	protected void setSubject(RelativeHorse subject) {
+		this.subject = subject;
+	}
+
+	public void setSubject(String name) {
+		RelativeHorse tempSubject = DatabaseManager.findHorse(name);
+		if (tempSubject != null) {
+			this.subject = tempSubject;
+		}
+	}
+
+	protected RelativeHorse getSubject() {
+		return subject;
+	}
+
+	void addOrSaveHorse() {
+		if ((horseNamesAndRaces[0].getName()).equals("")) {
+			return;
+		}
+		RelativeHorse father = null;
+		RelativeHorse mother = null;
+		String name;
+		RelativeHorse[] horses = new RelativeHorse[horseNamesAndRaces.length];
+		for (int i = horseNamesAndRaces.length - 1; i > 0; i--) {
+			String currentName = horseNamesAndRaces[i].getName();
+			if (currentName.equals("") || currentName.equals("nicht in DB"))
+				continue;
+			if ((2 * i + 1) < horseNamesAndRaces.length) {
+				father = horses[2 * i + 1];
+				mother = horses[2 * i + 2];
+			}
+			String currentRace = horseNamesAndRaces[i].getSelectedItem();
+			horses[i] = new RelativeHorse(currentName, father, mother, currentRace, null, i % 2 == 1, -1);
+			horses[i] = DatabaseManager.addHorse(horses[i]);
+		}
+		name = horseNamesAndRaces[0].getName();
+		if (!(name.equals("") || name.equals("nicht in DB"))) {
+			father = horses[1];
+			mother = horses[2];
+			Vector<String> favourites = new Vector<String>();
+			Iterator<JCheckBox> it = checkboxFavourites.iterator();
+			while (it.hasNext()) {
+				JCheckBox currentCheckbox = it.next();
+				if (currentCheckbox.isSelected()) {
+					favourites.add(currentCheckbox.getText());
+				}
+			}
+			String race = horseNamesAndRaces[0].getRace();
+			int GP = Integer.valueOf(numberfieldGP.getText());
+			RelativeHorse newHorse = new RelativeHorse(name, father, mother, race, favourites, radioButtonIsMale.isSelected(), GP);
+			DatabaseManager.addHorse(newHorse);
+
+			if (subject != null && !subject.getName().equals(name)) {
+				DatabaseManager.removeHorse(subject.getName());
+			}
+		}
+	}
+
 	protected abstract void resetOrDelete();
 
 }

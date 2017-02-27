@@ -1,9 +1,10 @@
 package general;
+
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -11,15 +12,14 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-
-public class WarningDialog extends MDRDialog{
+public class WarningDialog extends MDRDialog {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public WarningDialog(JFrame owner, String message){
-		super(owner, "Hinweis");	
+	public WarningDialog(JFrame owner, String message) {
+		super(owner, "Hinweis");
 
 		setLayout(new BorderLayout());
 		JTextPane text = new JTextPane();
@@ -31,19 +31,20 @@ public class WarningDialog extends MDRDialog{
 		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 		add(text, BorderLayout.NORTH);
-		
+
 		JPanel pnlSouth = new JPanel();
 		pnlSouth.setOpaque(false);
-		JButton buttonAccept = new JButton("OK");
-		buttonAccept.addActionListener(new ActionListener(){
+		MDRButton buttonAccept = new MDRButton("OK");
+		buttonAccept.setPreferredSize(new Dimension(50, buttonHeight));
+		buttonAccept.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e){
+			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
 		});
 		pnlSouth.add(buttonAccept);
 		add(pnlSouth, BorderLayout.SOUTH);
-		
+
 		pack();
 		super2();
 	}

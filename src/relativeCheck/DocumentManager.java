@@ -14,8 +14,7 @@ public class DocumentManager {
 	String dataname;
 	public Vector<RelativeHorse> population = new Vector<RelativeHorse>();
 	String detSep = "%%%"; // separates details of a horse
-	String[] races = new String[] { " Unbekannt", "Achal-Tekkiner", "American Paint Horse", "American Quarter Horse", "Andalusier", "Appaloosa", "Berber", "Cape Boerperd", "Criollo",
-			"Deutsches Reitpony", "Englisches Vollblut", "Hannoveraner", "Holsteiner", "Lipizzaner", "Lusitano", "Oldenburger", "Pinto", "Trakehner", "Vollblutaraber" };
+	String[] races = new String[] { " Unbekannt", "Achal-Tekkiner", "American Paint Horse", "American Quarter Horse", "Andalusier", "Appaloosa", "Berber", "Cape Boerperd", "Criollo", "Deutsches Reitpony", "Englisches Vollblut", "Hannoveraner", "Holsteiner", "Lipizzaner", "Lusitano", "Oldenburger", "Pinto", "Trakehner", "Vollblutaraber" };
 
 	public DocumentManager(String dn) {
 		this.dataname = dn;
@@ -55,11 +54,15 @@ public class DocumentManager {
 		return -1;
 	}
 
-	public int addHorse(RelativeHorse rc){
+	public int addHorse(RelativeHorse rc) {
 		return addHorse(rc, false);
 	}
-	
-	int addHorse(RelativeHorse rh, boolean priorizeNew) { // returns -1 if horse is already known and the index of insertion if horse is new
+
+	int addHorse(RelativeHorse rh, boolean priorizeNew) { // returns -1 if horse
+															// is already known
+															// and the index of
+															// insertion if
+															// horse is new
 		if (rh.getName().equals("null"))
 			return -2;
 		int numberOfHorses = this.population.size();
@@ -75,8 +78,8 @@ public class DocumentManager {
 				if (!rh.getRace().equals(" Unbekannt")) {
 					h.setRace(rh.getRace());
 				}
-				if(priorizeNew){
-					for(String fav: rh.getFavourites())
+				if (priorizeNew) {
+					for (String fav : rh.getFavourites())
 						h.addFavourite(fav);
 				}
 				return -1;
@@ -140,13 +143,13 @@ public class DocumentManager {
 				boolean isFavourite = splitIntoDetails[4].equals("true");
 				boolean isMale = true;
 				Vector<String> favourites = new Vector<String>();
-				if(isFavourite)
+				if (isFavourite)
 					favourites.add("Standardfavoriten");
 				if (splitIntoDetails.length == 6) {
 					isMale = splitIntoDetails[5].equals("true");
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale,-1));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale, -1));
 				} else {
-					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale,-1));
+					this.addHorse(new RelativeHorse(splitIntoDetails[0], father, mother, splitIntoDetails[3], favourites, isMale, -1));
 					throwException = true;
 				}
 
