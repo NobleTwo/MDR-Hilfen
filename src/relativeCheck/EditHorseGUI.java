@@ -20,8 +20,7 @@ public class EditHorseGUI extends ManageHorseGUI {
 		buttonResetOrDeleteHorse.setText("Pferd löschen");
 		buttonChooseHorse.setText("Anderes Pferd bearbeiten");
 		setSubject(subject);
-		HorseLoader.assignNamesAndRaces(subject.getName(), horseNamesAndRaces);
-		numberfieldGP.setText(subject.getCompletePotential());
+		HorseLoader.assignNamesAndRaces(subject.getName(), horseNamesAndRaces, fieldGP);
 		for (JCheckBox checkbox : checkboxFavourites) {
 			if (subject.getFavourites() != null && subject.getFavourites().contains(checkbox.getText())) {
 				checkbox.setSelected(true);

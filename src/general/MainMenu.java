@@ -144,6 +144,7 @@ public class MainMenu extends MDRFrame {
 					new WarningDialog(this, "Pferde werden in der (versteckten) Datei '" + DatabaseManager.fileName + "' gespeichert.\nEs werden nun mehrere Favoritenlisten, GP (Standardwert -1) und Sonderzeichen in Namen unterstützt.");
 				} else{
 					DatabaseManager.setPopulation(dm.population);
+					DatabaseManager.addFavourite("Standard");
 					new WarningDialog(this, "Veraltete Datei 'database.txt' ersetzt durch (versteckte) neue Datei '" + DatabaseManager.fileName + "'.\nEs werden nun mehrere Favoritenlisten, GP (Standardwert -1) und Sonderzeichen in Namen unterstützt.");
 				}
 				fileOld.delete();

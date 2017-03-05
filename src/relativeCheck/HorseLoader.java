@@ -5,7 +5,7 @@ import java.util.Iterator;
 public class HorseLoader {
 	private static RelativeHorse[] horseArray = new RelativeHorse[15];
 
-	private static RelativeHorse[] load(String name) {
+	public static RelativeHorse[] load(String name) {
 		horseArray[0] = find(name);
 		for (int i = 1; i < horseArray.length; i++) {
 			load(i);
@@ -38,16 +38,23 @@ public class HorseLoader {
 		}
 	}
 
-	public static void assignNamesAndRaces(String name, HorseAndRaceField[] horseNamesAndRaces) {
+	public static void assignNamesAndRaces(String name, HorseAndRaceField[] horseNamesAndRaces, GPField[] fieldGP) {
 		RelativeHorse[] population = load(name);
 		for (int i = 0; i < population.length; i++) {
 			if (population[i] != null) {
 				horseNamesAndRaces[i].setName(population[i].getName());
 				horseNamesAndRaces[i].setCaretPosition(0);
 				horseNamesAndRaces[i].setSelectedItem(population[i].getRace());
+				if(fieldGP!=null && i<fieldGP.length){
+					fieldGP[i].setGP(population[i].getCompletePotential());
+				}
+				
 			} else {
 				horseNamesAndRaces[i].setName("nicht in DB");
 				horseNamesAndRaces[i].setSelectedItem(" Unbekannt");
+				if(fieldGP!=null && i<fieldGP.length){
+					fieldGP[i].setGP(-1);
+				}
 			}
 		}
 	}

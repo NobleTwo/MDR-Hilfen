@@ -160,7 +160,7 @@ public class RelativeCheckGUI extends MDRFrame {
 
 	private void update(int position) {
 		if (subject[position] != null) {
-			HorseLoader.assignNamesAndRaces(subject[position].getName(), horseNamesAndRaces[position]);
+			HorseLoader.assignNamesAndRaces(subject[position].getName(), horseNamesAndRaces[position], null);
 			numberfieldGP[position].setText(subject[position].getCompletePotential());
 			radioButtonIsMale[position].setSelected(subject[position].isMale());
 			radioButtonIsFemale[position].setSelected(!subject[position].isMale());

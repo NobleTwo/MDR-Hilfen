@@ -39,7 +39,7 @@ public class PopUpAbout extends MDRDialog {
 		cp.add(labelVersionInfo);
 
 		JTextPane versionText = new JTextPane();
-		versionText.setText("MDR-Hilfen Ver. 1.2\nRelease: 24.02.2017\nBasierend auf MDR, Version 3.0, Stand 11.10.2016\nEs können Fehler bei Verwendung mit anderen MDR-Versionen auftreten.\n\u00A9 nola Linys Freund, 2014-2017.");
+		versionText.setText("MDR-Hilfen Ver. 1.2.1\nRelease: 05.03.2017\nBasierend auf MDR, Version 3.0, Stand 05.03.2017\nEs können Fehler bei Verwendung mit anderen MDR-Versionen auftreten.\n\u00A9 nola Linys Freund, 2014-2017.");
 		versionText.setBounds(gridButtonGap, 100, widthLabel, 70);
 		versionText.setFont(fontLabel);
 		versionText.setEditable(false);

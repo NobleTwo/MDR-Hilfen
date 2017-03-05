@@ -1,7 +1,5 @@
 package relativeCheck;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +10,6 @@ import java.util.Vector;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -35,7 +32,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 	protected JTextArea textInput = new JTextArea();
 	protected JRadioButton radioButtonIsMale = new JRadioButton("Hengst");
 	protected JRadioButton radioButtonIsFemale = new JRadioButton("Stute");
-	protected MDRNumberField numberfieldGP = new MDRNumberField(false);
+	protected GPField[] fieldGP = new GPField[7];
 	protected Vector<JCheckBox> checkboxFavourites = new Vector<JCheckBox>();
 	private RelativeHorse subject;
 
@@ -52,6 +49,10 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			horseNamesAndRaces[i] = new HorseAndRaceField();
 			cp.add(horseNamesAndRaces[i]);
 		}
+		for (int i = 0; i < fieldGP.length; i++) {
+			fieldGP[i] = new GPField();
+			cp.add(fieldGP[i]);
+		}
 		int yTop = 3 * gridButtonGap + 20;
 
 		//
@@ -63,13 +64,16 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		int x2row = 2 * gridButtonGap + horseNamesAndRaces[0].getWidth();
 		int y1 = (int) (yTop + HorseAndRaceField.HEIGHT * 1.5 + gridButtonGap);
 		horseNamesAndRaces[1].setLocation(x2row, y1);
+		fieldGP[1].setLocation(x2row, y1 + HorseAndRaceField.HEIGHT + gridButtonGap / 2);
 		int y2 = (int) (yTop + HorseAndRaceField.HEIGHT * 5.5 + 5 * gridButtonGap);
 		horseNamesAndRaces[2].setLocation(x2row, y2);
+		fieldGP[2].setLocation(x2row, y2 + HorseAndRaceField.HEIGHT + gridButtonGap / 2);
 
 		int x3row = 3 * gridButtonGap + 2 * horseNamesAndRaces[0].getWidth();
 		for (int i = 3; i <= 6; i++) {
 			int y = (int) (yTop + HorseAndRaceField.HEIGHT / 2 + (2 * gridButtonGap + 2 * HorseAndRaceField.HEIGHT) * (i - 3));
 			horseNamesAndRaces[i].setLocation(x3row, y);
+			fieldGP[i].setLocation(x3row, y + HorseAndRaceField.HEIGHT + gridButtonGap / 2);
 		}
 
 		int x4row = 4 * gridButtonGap + 3 * horseNamesAndRaces[0].getWidth();
@@ -77,34 +81,26 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			horseNamesAndRaces[i].setLocation(x4row, yTop + (gridButtonGap + HorseAndRaceField.HEIGHT) * (i - 7));
 		}
 
-		Container containerGP = new Container();
-		containerGP.setLayout(new BorderLayout());
 		int y0GP = y0 + HorseAndRaceField.HEIGHT + gridButtonGap / 2;
-		containerGP.setBounds(gridButtonGap, y0GP, HorseAndRaceField.WIDTH, 2 * gridButtonGap);
-		JLabel labelGP = new JLabel("GP: ");
-		containerGP.add(labelGP, BorderLayout.WEST);
-		containerGP.add(numberfieldGP, BorderLayout.CENTER);
-		for (FocusListener f : numberfieldGP.getFocusListeners()) {
-			numberfieldGP.removeFocusListener(f);
-		}
-		numberfieldGP.addFocusListener(new FocusListener() {
+		fieldGP[0].setLocation(gridButtonGap, y0GP);
+		MDRNumberField numberField0 = fieldGP[0].getNumberField();
+		numberField0.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent fe) {
-				numberfieldGP.setText("");
+				numberField0.setText("");
 			}
 
 			@Override
 			public void focusLost(FocusEvent fe) {
-				if (numberfieldGP.getText().equals("")) {
+				if (numberField0.getText().equals("")) {
 					if (subject != null) {
-						numberfieldGP.setText(subject.getCompletePotential());
+						numberField0.setText(subject.getCompletePotential());
 					} else {
-						numberfieldGP.setText("0");
+						numberField0.setText("0");
 					}
 				}
 			}
 		});
-		cp.add(containerGP);
 
 		radioButtonIsMale.setBounds(gridButtonGap, (int) (y0GP + 2.5 * gridButtonGap), HorseAndRaceField.WIDTH, 2 * gridButtonGap);
 		radioButtonIsMale.setOpaque(false);
@@ -112,7 +108,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		radioButtonIsMale.setFocusPainted(false);
 		cp.add(radioButtonIsMale);
 		radioButtonIsFemale.setBounds(gridButtonGap, (int) (y0GP + 4 * gridButtonGap), HorseAndRaceField.WIDTH, 2 * gridButtonGap);
-		radioButtonIsFemale.setOpaque(false);	
+		radioButtonIsFemale.setOpaque(false);
 		radioButtonIsFemale.setFocusPainted(false);
 		cp.add(radioButtonIsFemale);
 		ButtonGroup buttonGroupRadioButtons = new ButtonGroup();
@@ -242,7 +238,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 	}
 
 	//
-	// Methoden
+	// Methods
 	//
 
 	public void analyzeText() {
@@ -273,6 +269,12 @@ public abstract class ManageHorseGUI extends MDRFrame {
 						}
 					}
 					horseNamesAndRaces[counter].setSelectedItem(racename);
+					if (horseNamesAndRaces[counter].equals("Unbekannt")) {
+						fieldGP[counter].setGP(-1);
+					} else {
+						String[] wordSplit = lineSplit[i].split(" ");
+						fieldGP[counter].setGP(Integer.valueOf(wordSplit[1].split("\t")[0]));
+					}
 					counter++;
 				} else if (counter >= 7) {
 					horseNamesAndRaces[counter].setName(lineSplit[i]);
@@ -298,15 +300,13 @@ public abstract class ManageHorseGUI extends MDRFrame {
 				boolean isMale = lineSplit[i].contains("Hengst");
 				radioButtonIsMale.setSelected(isMale);
 				radioButtonIsFemale.setSelected(!isMale);
+				break;
 			}
 		}
 
-		for (int i = 0; i < lineSplit.length; i++) {
-			if (lineSplit[i].contains("Gesamtpotential: ")) {
-				String[] wordSplit = lineSplit[i].split(" ");
-				numberfieldGP.setText(wordSplit[1]);
-			}
-		}
+		/*
+		 * int pos = 0; for (int i = start; (i < lineSplit.length) && (pos<fieldGP.length); i++) { if (lineSplit[i].contains("Gesamtpotential: ")) { String[] wordSplit = lineSplit[i].split(" "); //if(horseNamesAndRaces[i].getName().equals("Unbekannt) fieldGP[pos].setGP(Integer.valueOf(wordSplit[1].split("\t")[0])); pos++; } }
+		 */
 	}
 
 	public int findNext(String[] words, int start) {
@@ -354,6 +354,9 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			}
 			String currentRace = horseNamesAndRaces[i].getSelectedItem();
 			horses[i] = new RelativeHorse(currentName, father, mother, currentRace, null, i % 2 == 1, -1);
+			if (i < fieldGP.length) {
+				horses[i].setCompletePotential(fieldGP[i].getGP());
+			}
 			horses[i] = DatabaseManager.addHorse(horses[i]);
 		}
 		name = horseNamesAndRaces[0].getName();
@@ -369,7 +372,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 				}
 			}
 			String race = horseNamesAndRaces[0].getRace();
-			int GP = Integer.valueOf(numberfieldGP.getText());
+			int GP = fieldGP[0].getGP();
 			RelativeHorse newHorse = new RelativeHorse(name, father, mother, race, favourites, radioButtonIsMale.isSelected(), GP);
 			DatabaseManager.addHorse(newHorse);
 

@@ -94,9 +94,9 @@ public class HorseChoiceGUI extends MDRDialog {
 				filterVisible();
 			}
 		});
-		//set color of raceFilter
+		// set color of raceFilter
 		Object child = raceFilter.getAccessibleContext().getAccessibleChild(0);
-		BasicComboPopup popup = (BasicComboPopup)child;
+		BasicComboPopup popup = (BasicComboPopup) child;
 		@SuppressWarnings("unchecked")
 		JList<String> list = popup.getList();
 		list.setSelectionBackground(MDRFrame.LIGHT_BROWN);
@@ -322,7 +322,7 @@ public class HorseChoiceGUI extends MDRDialog {
 			RelativeHorse current = horseList.get(i);
 			boolean delete = current.getName().equals("Unbekannt") || !current.getRace().contains(selectedRace) || !current.getName().toLowerCase().contains(searched);
 			if (!nameSelectedFavList.equals("Alle")) {
-				delete = delete || current.getFavourites()==null || !(current.getFavourites().contains(nameSelectedFavList));
+				delete = delete || current.getFavourites() == null || !(current.getFavourites().contains(nameSelectedFavList));
 			}
 			if (delete) {
 				horseList.remove(i);
@@ -408,9 +408,9 @@ public class HorseChoiceGUI extends MDRDialog {
 					}
 				}
 			}
-			if(col==0){
+			if (col == 0) {
 				setHorizontalAlignment(JLabel.LEFT);
-			} else{
+			} else {
 				setHorizontalAlignment(JLabel.RIGHT);
 			}
 
@@ -424,29 +424,31 @@ public class HorseChoiceGUI extends MDRDialog {
 		if (owner instanceof RelativeCheckGUI) {
 			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
 			subject = ownerRC.getSubject(Math.abs(1 - position));
-			HorseAndRaceField[] horseNamesAndRaces = new HorseAndRaceField[15];
-			for (int i = 0; i < horseNamesAndRaces.length; i++) {
-				horseNamesAndRaces[i] = new HorseAndRaceField();
-			}
-			HorseLoader.assignNamesAndRaces(subject.getName(), horseNamesAndRaces);
+			RelativeHorse[] horses = HorseLoader.load(subject.getName());
 			String[][] relatives = new String[2][15];
 			String[][] racesOfRelatives = new String[2][15];
 			for (int i = 0; i < relatives[0].length; i++) {
-				relatives[0][i] = horseNamesAndRaces[i].getName();
-				racesOfRelatives[0][i] = horseNamesAndRaces[i].getRace();
+				if (horses[i] != null) {
+					relatives[0][i] = horses[i].getName();
+					racesOfRelatives[0][i] = horses[i].getRace();
+				} else {
+					relatives[0][i] = "nicht in DB";
+					racesOfRelatives[0][i] = " Unbekannt";
+				}
 			}
 
 			boolean[] isMale = { true, false };
 
-			HorseAndRaceField[] tempField = new HorseAndRaceField[15];
-			for (int j = 0; j < horseNamesAndRaces.length; j++) {
-				tempField[j] = new HorseAndRaceField();
-			}
-			HorseLoader.assignNamesAndRaces(rh.getName(), tempField);
+			RelativeHorse[] tempHorses = HorseLoader.load(rh.getName());
 
 			for (int j = 0; j < relatives[1].length; j++) {
-				relatives[1][j] = tempField[j].getName();
-				racesOfRelatives[1][j] = tempField[j].getRace();
+				if (tempHorses[j] != null) {
+					relatives[1][j] = tempHorses[j].getName();
+					racesOfRelatives[1][j] = tempHorses[j].getRace();
+				} else {
+					relatives[1][j] = "nicht in DB";
+					racesOfRelatives[1][j] = " Unbekannt";
+				}
 			}
 			return new RelativeCheckResult(relatives, racesOfRelatives, isMale).getResult();
 		}
