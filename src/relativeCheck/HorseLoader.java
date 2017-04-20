@@ -44,6 +44,11 @@ public class HorseLoader {
 			if (population[i] != null) {
 				horseNamesAndRaces[i].setName(population[i].getName());
 				horseNamesAndRaces[i].setCaretPosition(0);
+				// correct wrong database entries
+				if(population[i].getName().equals("Unbekannt") && !population[i].getRace().equals(" Unbekannt")){
+					population[i].setRace(" Unbekannt");
+				}
+				
 				horseNamesAndRaces[i].setSelectedItem(population[i].getRace());
 				if(fieldGP!=null && i<fieldGP.length){
 					fieldGP[i].setGP(population[i].getCompletePotential());

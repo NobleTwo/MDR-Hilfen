@@ -83,6 +83,9 @@ public class HorseAndRaceField extends Container {
 
 	public void setName(String name) {
 		textfieldName.setText(name);
+		if(name.equals("Unbekannt")){
+			setSelectedItem(" Unbekannt");
+		}
 	}
 
 	public void setCaretPosition(int position) {

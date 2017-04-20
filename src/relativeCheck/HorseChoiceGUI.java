@@ -44,14 +44,13 @@ public class HorseChoiceGUI extends MDRDialog {
 	private JComboBox<String> raceFilter = new JComboBox<String>();
 	private JTextField textfieldSearchKey = new JTextField();
 	private JRadioButton[] radioButtonsSelectFavs;
-	private JTextField search = new JTextField();
 	private boolean isMaleSelected = false;
 
 	private MDRTable tableMale;
 	private MDRTable tableFemale;
 
 	// needed for RelativeCheckGUI
-	private int position;
+	private int position = -1;
 	private RelativeHorse subject;
 
 	//
@@ -71,6 +70,13 @@ public class HorseChoiceGUI extends MDRDialog {
 	public void initiate() {
 		DatabaseManager.load();
 		final Vector<String> favList = DatabaseManager.getFavourites();
+		
+		Window owner = this.getOwner();
+		if (owner instanceof RelativeCheckGUI) {
+			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
+			subject = ownerRC.getSubject(Math.abs(1 - position));
+
+		}
 
 		int frameWidth = 3 * (columnWidth + gridButtonGap) + gridButtonGap * 3 / 2;
 		int frameHeight = yTop + heightLabel + columnWidth + gridButtonGap * 4; // is changed by favList if too small
@@ -133,7 +139,7 @@ public class HorseChoiceGUI extends MDRDialog {
 			if (i != 0) {
 				radioButtonsSelectFavs[i].setSelected(ShortTimeMemory.getNameFavListShown().equals(radioButtonsSelectFavs[i].getText()));
 			}
-			radioButtonsSelectFavs[i].setBounds(gridButtonGap, yRadioButtons + i * heightLabel, widthLabel, heightLabel);
+			radioButtonsSelectFavs[i].setBounds(gridButtonGap, yRadioButtons + i * heightLabel, columnWidth, heightLabel);
 			radioButtonsSelectFavs[i].setOpaque(false);
 			radioButtonsSelectFavs[i].addActionListener(new ActionListener() {
 				@Override
@@ -145,7 +151,10 @@ public class HorseChoiceGUI extends MDRDialog {
 			cp.add(radioButtonsSelectFavs[i]);
 		}
 
-		int frameHeightFavs = ySearch + (3 + favList.size()) * (heightLabel + gridButtonGap) + buttonHeight;
+		int frameHeightFavs = ySearch + (3 + favList.size()) * (heightLabel + gridButtonGap) *7/8 + buttonHeight + 2*gridButtonGap;
+		if(subject != null){
+			frameHeightFavs += buttonHeight + gridButtonGap;
+		}
 		if (frameHeight < frameHeightFavs) {
 			frameHeight = frameHeightFavs;
 		}
@@ -157,7 +166,10 @@ public class HorseChoiceGUI extends MDRDialog {
 		Vector<Vector<String>> rowDataFemale = new Vector<Vector<String>>();
 		Vector<String> columnNames = new Vector<String>();
 		columnNames.add("Name");
-		columnNames.add("GP");
+		columnNames.add("GP");		
+		if(subject != null){
+			columnNames.add("Color");
+		}
 
 		JLabel labelMale = new JLabel("Hengste");
 		labelMale.setBounds(gridButtonGap * 2 + columnWidth, yTop, widthLabel, heightLabel);
@@ -219,13 +231,11 @@ public class HorseChoiceGUI extends MDRDialog {
 		tableFemale.getRowSorter().toggleSortOrder(0);
 
 		// set renderers for cell colors
-		Window owner = this.getOwner();
 		if (owner instanceof RelativeCheckGUI) {
-			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
-			subject = ownerRC.getSubject(Math.abs(1 - position));
 			if (subject != null) {
 				tableMale.getColumnModel().getColumn(0).setCellRenderer(new StatusColumnCellRenderer());
 				tableMale.getColumnModel().getColumn(1).setCellRenderer(new StatusColumnCellRenderer());
+				
 				tableFemale.getColumnModel().getColumn(0).setCellRenderer(new StatusColumnCellRenderer());
 				tableFemale.getColumnModel().getColumn(1).setCellRenderer(new StatusColumnCellRenderer());
 
@@ -236,6 +246,18 @@ public class HorseChoiceGUI extends MDRDialog {
 		// End tables
 		//
 
+		if(subject != null){
+			MDRButton buttonSortByColor = new MDRButton("nach Farbe sortieren");
+			buttonSortByColor.setBounds(gridButtonGap, frameHeight - 40 - 2*buttonHeight - gridButtonGap, columnWidth, buttonHeight);
+			buttonSortByColor.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent evt) {
+					sortByColor();
+				}
+			});
+			cp.add(buttonSortByColor);
+		}
+		
 		MDRButton buttonAccept = new MDRButton("OK");
 		buttonAccept.setBounds(gridButtonGap, frameHeight - 40 - buttonHeight, columnWidth, buttonHeight);
 		buttonAccept.addActionListener(new ActionListener() {
@@ -248,7 +270,17 @@ public class HorseChoiceGUI extends MDRDialog {
 
 		filterVisible();
 		setSize(frameWidth, frameHeight);
+		
+		//needed for setting focus
+		this.setModal(false);
+		
 		super2();
+		
+		//needed for setting focus
+		textfieldSearchKey.requestFocusInWindow();
+		this.setModal(true);
+		this.setVisible(false);
+		this.setVisible(true);
 	}
 
 	//
@@ -279,8 +311,46 @@ public class HorseChoiceGUI extends MDRDialog {
 			temp.add(rh.getName());
 			temp.add(((Integer) (rh.getCompletePotential())).toString());
 			if (rh.isMale()) {
+				if (subject != null) {
+					if (position == 1) {
+						temp.add("red");
+					} else {
+						switch (doSingleRelativeCheck(rh)) {
+						case ERROR:
+							temp.addElement("red");
+							break;
+						case WARNING:
+							temp.addElement("orange");
+							break;
+						case MATCH:
+							temp.addElement("green");
+							break;
+						default:
+							break;
+						}
+					}
+				}
 				rowDataMale.add(temp);
 			} else {
+				if (subject != null) {
+					if (position == 0) {
+						temp.add("red");
+					} else {
+						switch (doSingleRelativeCheck(rh)) {
+						case ERROR:
+							temp.addElement("red");
+							break;
+						case WARNING:
+							temp.addElement("orange");
+							break;
+						case MATCH:
+							temp.addElement("green");
+							break;
+						default:
+							break;
+						}
+					}
+				}
 				rowDataFemale.add(temp);
 			}
 		}
@@ -344,7 +414,7 @@ public class HorseChoiceGUI extends MDRDialog {
 	public void choose() {
 		// save options
 		ShortTimeMemory.setSelectedRace(raceFilter.getSelectedItem().toString());
-		ShortTimeMemory.setSearchedString(search.getText());
+		ShortTimeMemory.setSearchedString(textfieldSearchKey.getText());
 		ShortTimeMemory.setNameFavListShown(getSelectedFavList());
 
 		// insert into other frame
@@ -385,22 +455,15 @@ public class HorseChoiceGUI extends MDRDialog {
 					label.setBackground(MDRFrame.RED2);
 				} else {
 					// else: set background to fitting color
-					int rowSorted = table.getRowSorter().convertRowIndexToModel(row);
-					String name;
-					if (col == 0) {
-						name = (String) table.getModel().getValueAt(rowSorted, col);
-					} else {
-						name = (String) table.getModel().getValueAt(rowSorted, 0);
-					}
-					RelativeHorse rh = DatabaseManager.findHorse(name);
-					switch (doSingleRelativeCheck(rh)) {
-					case ERROR:
+					//int rowSorted = table.getRowSorter().convertRowIndexToModel(row);
+					switch((String)table.getValueAt(row, 2)){
+					case "red":
 						label.setBackground(MDRFrame.RED2);
 						break;
-					case WARNING:
+					case "orange":
 						label.setBackground(MDRFrame.ORANGE);
 						break;
-					case MATCH:
+					case "green":
 						label.setBackground(MDRFrame.GREEN2);
 						break;
 					default:
@@ -453,6 +516,14 @@ public class HorseChoiceGUI extends MDRDialog {
 			return new RelativeCheckResult(relatives, racesOfRelatives, isMale).getResult();
 		}
 		return ResultType.NEUTRAL;
+	}
+	
+	private void sortByColor(){
+		if(position == 0){
+			tableMale.getRowSorter().toggleSortOrder(2);
+		} else{
+			tableFemale.getRowSorter().toggleSortOrder(2);
+		}
 	}
 
 	public static void main(String[] args) {

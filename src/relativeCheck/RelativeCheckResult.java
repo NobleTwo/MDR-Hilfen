@@ -15,14 +15,16 @@ public class RelativeCheckResult {
 	private boolean mismatchedSexes = false;
 
 	public RelativeCheckResult(String[][] horseNames, String[][] horseRaces, boolean[] isMale) {
+		//if not 2 horses compared
 		if (horseNames.length != 2 || horseRaces.length != 2 || isMale.length != 2) {
 			return;
 		}
 
+		//compare names
 		for (int i = 0; i < horseNames.length; i++) {
 			for (int j = 0; j < horseNames[i].length; j++) {
 				String horse1 = horseNames[i][j];
-				if (horse1.equals("nicht in DB")) {
+				if (horse1.equals("nicht in DB") || horse1.equals("Unbekannt")) {
 					continue;
 				}
 
@@ -33,7 +35,7 @@ public class RelativeCheckResult {
 					}
 					for (int l = start; l < horseNames[k].length; l++) {
 						String horse2 = horseNames[k][l];
-						if (horse2.equals("nicht in DB")) {
+						if (horse2.equals("nicht in DB") || horse2.equals("Unbekannt")) {
 							continue;
 						}
 						if (horse1.equals(horse2)) {
@@ -49,6 +51,7 @@ public class RelativeCheckResult {
 			}
 		}
 
+		//compare races
 		for (int i = 0; i < horseRaces.length; i++) {
 			for (int j = 0; j < horseRaces[i].length; j++) {
 				String race1 = horseRaces[i][j];
@@ -76,8 +79,10 @@ public class RelativeCheckResult {
 			}
 		}
 
+		//compare sex
 		mismatchedSexes = (isMale[0] == isMale[1]);
 
+		//if no error search for missing information
 		if (!containsError()) {
 
 			for (int i = 0; i < horseNames.length; i++) {
@@ -90,7 +95,7 @@ public class RelativeCheckResult {
 
 			for (int i = 0; i < horseRaces.length; i++) {
 				for (int j = 0; j < horseRaces[i].length; j++) {
-					if (horseRaces[i][j].equals(" Unbekannt")) {
+					if (horseRaces[i][j].equals(" Unbekannt") && !horseNames[i][j].equals("Unbekannt")) {
 						unknownRaces.add(new Point(i, j));
 					}
 				}

@@ -130,7 +130,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			frameHeight = frameHeightFavs;
 		}
 
-		int yBot = frameHeight - 20 - buttonHeight - 2 * gridButtonGap;// yTop + (gridButtonGap + HorseAndRaceField.HEIGHT)*8;
+		int yBot = frameHeight - 20 - buttonHeight - 2 * gridButtonGap;
 		buttonAddOrSaveHorse.setBounds(x2row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
 		buttonAddOrSaveHorse.addActionListener(new ActionListener() {
 			@Override
@@ -346,7 +346,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		RelativeHorse[] horses = new RelativeHorse[horseNamesAndRaces.length];
 		for (int i = horseNamesAndRaces.length - 1; i > 0; i--) {
 			String currentName = horseNamesAndRaces[i].getName();
-			if (currentName.equals("") || currentName.equals("nicht in DB"))
+			if (currentName.equals("") || currentName.equals("nicht in DB") || currentName.equals("Unbekannt"))
 				continue;
 			if ((2 * i + 1) < horseNamesAndRaces.length) {
 				father = horses[2 * i + 1];

@@ -34,8 +34,7 @@ public class EditHorseGUI extends ManageHorseGUI {
 
 		MDRButton buttonNewHorse = new MDRButton("Neues Pferd");
 		int x4row = 4 * gridButtonGap + 3 * horseNamesAndRaces[0].getWidth();
-		int yTop = 3 * gridButtonGap + 20;
-		int yBot = yTop + (gridButtonGap + HorseAndRaceField.HEIGHT) * 8;
+		int yBot = this.getHeight() - 20 - buttonHeight - 2 * gridButtonGap;// yTop + (gridButtonGap + HorseAndRaceField.HEIGHT) * 8;
 		buttonNewHorse.setBounds(x4row, yBot, HorseAndRaceField.WIDTH, buttonHeight);
 		buttonNewHorse.addActionListener(new ActionListener() {
 			@Override
