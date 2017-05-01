@@ -1,6 +1,5 @@
 package relativeCheck;
 
-import java.awt.Component;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,12 +19,10 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicComboPopup;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import general.MDRButton;
@@ -41,46 +38,30 @@ public class HorseChoiceGUI extends MDRDialog {
 
 	public static final int columnWidth = 200;
 
-	private JComboBox<String> raceFilter = new JComboBox<String>();
-	private JTextField textfieldSearchKey = new JTextField();
+	protected JComboBox<String> raceFilter = new JComboBox<String>();
+	protected JTextField textfieldSearchKey = new JTextField();
 	private JRadioButton[] radioButtonsSelectFavs;
 	private boolean isMaleSelected = false;
 
-	private MDRTable tableMale;
-	private MDRTable tableFemale;
-
-	// needed for RelativeCheckGUI
-	private int position = -1;
-	private RelativeHorse subject;
+	protected MDRTable tableMale;
+	protected MDRTable tableFemale;
+	protected JScrollPane scrollPaneTableMale;
+	protected JScrollPane scrollPaneTableFemale;
+	protected MDRButton buttonAccept;
 
 	//
-	// ============== Constructors ===============
+	// ============== Constructor ===============
 	//
-	public HorseChoiceGUI(ManageHorseGUI frameOwner) {
+	public HorseChoiceGUI(MDRFrame frameOwner) {
 		super(frameOwner, "Pferd auswählen");
 		initiate();
 	}
 
-	public HorseChoiceGUI(RelativeCheckGUI frameOwner, int pos) {
-		super(frameOwner, "Pferd auswählen");
-		this.position = pos;
-		initiate();
-	}
-
-	public void initiate() {
+	protected void initiate() {
 		DatabaseManager.load();
 		final Vector<String> favList = DatabaseManager.getFavourites();
-		
-		Window owner = this.getOwner();
-		if (owner instanceof RelativeCheckGUI) {
-			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
-			subject = ownerRC.getSubject(Math.abs(1 - position));
-
-		}
-
 		int frameWidth = 3 * (columnWidth + gridButtonGap) + gridButtonGap * 3 / 2;
-		int frameHeight = yTop + heightLabel + columnWidth + gridButtonGap * 4; // is changed by favList if too small
-
+		
 		JLabel labelRaceFilter = new JLabel("Rassefilter:");
 		labelRaceFilter.setBounds(gridButtonGap, yTop, columnWidth, heightLabel);
 		cp.add(labelRaceFilter);
@@ -151,31 +132,20 @@ public class HorseChoiceGUI extends MDRDialog {
 			cp.add(radioButtonsSelectFavs[i]);
 		}
 
-		int frameHeightFavs = ySearch + (3 + favList.size()) * (heightLabel + gridButtonGap) *7/8 + buttonHeight + 2*gridButtonGap;
-		if(subject != null){
-			frameHeightFavs += buttonHeight + gridButtonGap;
-		}
-		if (frameHeight < frameHeightFavs) {
-			frameHeight = frameHeightFavs;
-		}
+		int frameHeight = getFrameHeight(ySearch, favList.size());
 
-		//
+		// =====================================================
 		// Start tables
-		//
+		// =====================================================
 		Vector<Vector<String>> rowDataMale = new Vector<Vector<String>>();
 		Vector<Vector<String>> rowDataFemale = new Vector<Vector<String>>();
-		Vector<String> columnNames = new Vector<String>();
-		columnNames.add("Name");
-		columnNames.add("GP");		
-		if(subject != null){
-			columnNames.add("Color");
-		}
+		Vector<String> columnNames = getColumnNames();
 
 		JLabel labelMale = new JLabel("Hengste");
 		labelMale.setBounds(gridButtonGap * 2 + columnWidth, yTop, widthLabel, heightLabel);
 		cp.add(labelMale);
 		tableMale = new MDRTable(rowDataMale, columnNames);
-		JScrollPane scrollPaneTableMale = new JScrollPane(tableMale);
+		scrollPaneTableMale = new JScrollPane(tableMale);
 		scrollPaneTableMale.setBounds(2 * gridButtonGap + columnWidth, yTop + heightLabel, columnWidth, frameHeight - yTop - heightLabel - 40);
 		scrollPaneTableMale.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		cp.add(scrollPaneTableMale);
@@ -184,7 +154,7 @@ public class HorseChoiceGUI extends MDRDialog {
 		labelFemale.setBounds(gridButtonGap * 3 + 2 * columnWidth, yTop, widthLabel, heightLabel);
 		cp.add(labelFemale);
 		tableFemale = new MDRTable(rowDataFemale, columnNames);
-		JScrollPane scrollPaneTableFemale = new JScrollPane(tableFemale);
+		scrollPaneTableFemale = new JScrollPane(tableFemale);
 		scrollPaneTableFemale.setBounds(3 * gridButtonGap + 2 * columnWidth, yTop + heightLabel, columnWidth, frameHeight - yTop - heightLabel - 40);
 		scrollPaneTableFemale.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		cp.add(scrollPaneTableFemale);
@@ -230,35 +200,11 @@ public class HorseChoiceGUI extends MDRDialog {
 		tableMale.getRowSorter().toggleSortOrder(0);
 		tableFemale.getRowSorter().toggleSortOrder(0);
 
-		// set renderers for cell colors
-		if (owner instanceof RelativeCheckGUI) {
-			if (subject != null) {
-				tableMale.getColumnModel().getColumn(0).setCellRenderer(new StatusColumnCellRenderer());
-				tableMale.getColumnModel().getColumn(1).setCellRenderer(new StatusColumnCellRenderer());
-				
-				tableFemale.getColumnModel().getColumn(0).setCellRenderer(new StatusColumnCellRenderer());
-				tableFemale.getColumnModel().getColumn(1).setCellRenderer(new StatusColumnCellRenderer());
-
-				setTitle("Partner für " + subject.getName() + " auswählen");
-			}
-		}
-		//
+		// =====================================================
 		// End tables
-		//
-
-		if(subject != null){
-			MDRButton buttonSortByColor = new MDRButton("nach Farbe sortieren");
-			buttonSortByColor.setBounds(gridButtonGap, frameHeight - 40 - 2*buttonHeight - gridButtonGap, columnWidth, buttonHeight);
-			buttonSortByColor.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent evt) {
-					sortByColor();
-				}
-			});
-			cp.add(buttonSortByColor);
-		}
+		// =====================================================
 		
-		MDRButton buttonAccept = new MDRButton("OK");
+		buttonAccept = new MDRButton("OK");
 		buttonAccept.setBounds(gridButtonGap, frameHeight - 40 - buttonHeight, columnWidth, buttonHeight);
 		buttonAccept.addActionListener(new ActionListener() {
 			@Override
@@ -268,19 +214,9 @@ public class HorseChoiceGUI extends MDRDialog {
 		});
 		cp.add(buttonAccept);
 
-		filterVisible();
+
 		setSize(frameWidth, frameHeight);
-		
-		//needed for setting focus
-		this.setModal(false);
-		
-		super2();
-		
-		//needed for setting focus
-		textfieldSearchKey.requestFocusInWindow();
-		this.setModal(true);
-		this.setVisible(false);
-		this.setVisible(true);
+		finish();
 	}
 
 	//
@@ -288,7 +224,7 @@ public class HorseChoiceGUI extends MDRDialog {
 	//
 
 	// filters which horses are visible
-	private void filterVisible() {
+	protected void filterVisible() {
 		String selectedRace = raceFilter.getSelectedItem().toString();
 		if (selectedRace.equals("----------")) {
 			raceFilter.setSelectedIndex(0);
@@ -311,46 +247,8 @@ public class HorseChoiceGUI extends MDRDialog {
 			temp.add(rh.getName());
 			temp.add(((Integer) (rh.getCompletePotential())).toString());
 			if (rh.isMale()) {
-				if (subject != null) {
-					if (position == 1) {
-						temp.add("red");
-					} else {
-						switch (doSingleRelativeCheck(rh)) {
-						case ERROR:
-							temp.addElement("red");
-							break;
-						case WARNING:
-							temp.addElement("orange");
-							break;
-						case MATCH:
-							temp.addElement("green");
-							break;
-						default:
-							break;
-						}
-					}
-				}
 				rowDataMale.add(temp);
 			} else {
-				if (subject != null) {
-					if (position == 0) {
-						temp.add("red");
-					} else {
-						switch (doSingleRelativeCheck(rh)) {
-						case ERROR:
-							temp.addElement("red");
-							break;
-						case WARNING:
-							temp.addElement("orange");
-							break;
-						case MATCH:
-							temp.addElement("green");
-							break;
-						default:
-							break;
-						}
-					}
-				}
 				rowDataFemale.add(temp);
 			}
 		}
@@ -365,19 +263,9 @@ public class HorseChoiceGUI extends MDRDialog {
 
 		tableMale.getRowSorter().setSortKeys(tableMale.getRowSorter().getSortKeys());
 		tableFemale.getRowSorter().setSortKeys(tableFemale.getRowSorter().getSortKeys());
-
-		/*
-		 * //create a TreeSet for each list of favourites
-		 * 
-		 * @SuppressWarnings("unchecked") Collection<String>[] horseNames = new TreeSet[favourites.size()+1]; for(int i=0; i<horseNames.length; i++){ horseNames[i] = new TreeSet<String>(Collator.getInstance()); }
-		 * 
-		 * //move through all horses and insert into appropriate favourite-TreeSet //they are automatically sorted alphabetically for(RelativeHorse horse: horseList){ horseNames[0].add(horse.getName()); for(int i=0; i<horse.getFavourites().size(); i++){ for(int j=0; j<favourites.size(); j++){ if(horse.getFavourites().get(i).equals(favourites.get(j))){ horseNames[j+1].add(horse.getName()); break; } } } }
-		 * 
-		 * //insert into ListModels /*for(int i=0; i<listsOfHorses.length; i++){ DefaultListModel<String> listModel = (DefaultListModel<String>)(listsOfHorses[i].getModel()); Iterator<String> iterator = horseNames[i].iterator(); while(iterator.hasNext()){ listModel.addElement(iterator.next()); } }
-		 */
 	}
 
-	private void updateTable(DefaultTableModel tableModel, Vector<Vector<String>> rowData) {
+	protected void updateTable(DefaultTableModel tableModel, Vector<Vector<String>> rowData) {
 		while (tableModel.getRowCount() > 0) {
 			tableModel.removeRow(0);
 		}
@@ -386,7 +274,7 @@ public class HorseChoiceGUI extends MDRDialog {
 		}
 	}
 
-	private Vector<RelativeHorse> filterAll(String searched, String selectedRace, String nameSelectedFavList) {
+	protected Vector<RelativeHorse> filterAll(String searched, String selectedRace, String nameSelectedFavList) {
 		Vector<RelativeHorse> horseList = DatabaseManager.getPopulation();
 		for (int i = 0; i < horseList.size(); i++) {
 			RelativeHorse current = horseList.get(i);
@@ -402,7 +290,7 @@ public class HorseChoiceGUI extends MDRDialog {
 		return horseList;
 	}
 
-	private String getSelectedFavList() {
+	protected String getSelectedFavList() {
 		for (int i = 0; i < radioButtonsSelectFavs.length; i++) {
 			if (radioButtonsSelectFavs[i].isSelected()) {
 				return radioButtonsSelectFavs[i].getText();
@@ -411,7 +299,7 @@ public class HorseChoiceGUI extends MDRDialog {
 		return "Alle";
 	}
 
-	public void choose() {
+	protected void choose() {
 		// save options
 		ShortTimeMemory.setSelectedRace(raceFilter.getSelectedItem().toString());
 		ShortTimeMemory.setSearchedString(textfieldSearchKey.getText());
@@ -427,103 +315,39 @@ public class HorseChoiceGUI extends MDRDialog {
 		Window owner = this.getOwner();
 		if (owner instanceof ManageHorseGUI) {
 			((ManageHorseGUI) owner).setSubject(name);
-		} else if (owner instanceof RelativeCheckGUI) {
-			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
-			ownerRC.setSubject(position, name);
 		}
 		this.dispose();
 	}
-
-	// for coloring cells
-	private class StatusColumnCellRenderer extends DefaultTableCellRenderer {
-		/**
-		* 
-		*/
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-			// Cells are by default rendered as a JLabel.
-			JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-
-			// Get the status for the current row.
-			if (subject != null) {
-				// if table is for wrong sex: set color to red
-				if (table.equals(tableMale) && subject.isMale()) {
-					label.setBackground(MDRFrame.RED2);
-				} else if (table.equals(tableFemale) && !subject.isMale()) {
-					label.setBackground(MDRFrame.RED2);
-				} else {
-					// else: set background to fitting color
-					//int rowSorted = table.getRowSorter().convertRowIndexToModel(row);
-					switch((String)table.getValueAt(row, 2)){
-					case "red":
-						label.setBackground(MDRFrame.RED2);
-						break;
-					case "orange":
-						label.setBackground(MDRFrame.ORANGE);
-						break;
-					case "green":
-						label.setBackground(MDRFrame.GREEN2);
-						break;
-					default:
-						break;
-					}
-				}
-			}
-			if (col == 0) {
-				setHorizontalAlignment(JLabel.LEFT);
-			} else {
-				setHorizontalAlignment(JLabel.RIGHT);
-			}
-
-			// Return the JLabel which renders the cell.
-			return label;
+	
+	private int getFrameHeight(int ySearch, int favListSize){
+		int frameHeight = yTop + heightLabel + columnWidth + gridButtonGap * 4; // is changed by favList if too small
+		int frameHeightFavs = ySearch + (3 + favListSize) * (heightLabel + gridButtonGap) *7/8 + buttonHeight + 2*gridButtonGap;
+		if (frameHeight < frameHeightFavs) {
+			frameHeight = frameHeightFavs;
 		}
-	}
-
-	private ResultType doSingleRelativeCheck(RelativeHorse rh) {
-		Window owner = this.getOwner();
-		if (owner instanceof RelativeCheckGUI) {
-			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
-			subject = ownerRC.getSubject(Math.abs(1 - position));
-			RelativeHorse[] horses = HorseLoader.load(subject.getName());
-			String[][] relatives = new String[2][15];
-			String[][] racesOfRelatives = new String[2][15];
-			for (int i = 0; i < relatives[0].length; i++) {
-				if (horses[i] != null) {
-					relatives[0][i] = horses[i].getName();
-					racesOfRelatives[0][i] = horses[i].getRace();
-				} else {
-					relatives[0][i] = "nicht in DB";
-					racesOfRelatives[0][i] = " Unbekannt";
-				}
-			}
-
-			boolean[] isMale = { true, false };
-
-			RelativeHorse[] tempHorses = HorseLoader.load(rh.getName());
-
-			for (int j = 0; j < relatives[1].length; j++) {
-				if (tempHorses[j] != null) {
-					relatives[1][j] = tempHorses[j].getName();
-					racesOfRelatives[1][j] = tempHorses[j].getRace();
-				} else {
-					relatives[1][j] = "nicht in DB";
-					racesOfRelatives[1][j] = " Unbekannt";
-				}
-			}
-			return new RelativeCheckResult(relatives, racesOfRelatives, isMale).getResult();
-		}
-		return ResultType.NEUTRAL;
+		return frameHeight;
 	}
 	
-	private void sortByColor(){
-		if(position == 0){
-			tableMale.getRowSorter().toggleSortOrder(2);
-		} else{
-			tableFemale.getRowSorter().toggleSortOrder(2);
-		}
+	protected Vector<String> getColumnNames(){
+		Vector<String> columnNames = new Vector<String>();
+		columnNames.add("Name");
+		columnNames.add("GP");		
+		return columnNames;
+	}
+	
+	protected void finish(){
+		filterVisible();
+		
+		//needed for setting focus
+		this.setModal(false);
+		
+		super2();
+		
+		//needed for setting focus
+		textfieldSearchKey.requestFocusInWindow();
+		this.setModal(true);
+		this.setVisible(false);
+		this.setVisible(true);
 	}
 
 	public static void main(String[] args) {

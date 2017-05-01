@@ -113,7 +113,7 @@ public class RelativeCheckGUI extends MDRFrame {
 			buttonChooseHorse[i].addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent evt) {
-					new HorseChoiceGUI(temp, pos);
+					new RelativeChoiceGUI(temp, pos);
 				}
 			});
 			buttonChooseHorse[i].setBounds(gridButtonGap + i * x2ndColumn, y0ChooseHorse, HorseAndRaceField.WIDTH, buttonHeight);
@@ -277,11 +277,13 @@ public class RelativeCheckGUI extends MDRFrame {
 	}
 
 	public RelativeHorse getSubject(int position) {
-		return subject[position];
+		if(position<subject.length){
+			return subject[position];
+		}
+		return null;
 	}
 
 	public static void main(String[] args) {
 		new RelativeCheckGUI();
 	}
-
 }
