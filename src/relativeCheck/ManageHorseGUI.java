@@ -346,7 +346,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		RelativeHorse[] horses = new RelativeHorse[horseNamesAndRaces.length];
 		for (int i = horseNamesAndRaces.length - 1; i > 0; i--) {
 			String currentName = horseNamesAndRaces[i].getName();
-			if (currentName.equals("") || currentName.equals("nicht in DB") || currentName.equals("Unbekannt"))
+			if (currentName.equals("") || currentName.equals("nicht in DB"))
 				continue;
 			if ((2 * i + 1) < horseNamesAndRaces.length) {
 				father = horses[2 * i + 1];

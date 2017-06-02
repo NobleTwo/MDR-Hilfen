@@ -135,7 +135,7 @@ public class RelativeCheckResult {
 		return tooOldToMatter;
 	}
 
-	public ResultType getResult() {
+	public ResultType getResultType() {
 		if (containsError()) {
 			return ResultType.ERROR;
 		} else if (containsWarning()) {

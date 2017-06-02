@@ -209,6 +209,8 @@ public class RelativeChoiceGUI extends HorseChoiceGUI {
 		Window owner = this.getOwner();
 		if (owner instanceof RelativeCheckGUI) {
 			RelativeCheckGUI ownerRC = (RelativeCheckGUI) owner;
+			
+			//for subject
 			subject = ownerRC.getSubject(Math.abs(1 - position));
 			RelativeHorse[] horses = HorseLoader.load(subject.getName());
 			String[][] relatives = new String[2][15];
@@ -225,8 +227,8 @@ public class RelativeChoiceGUI extends HorseChoiceGUI {
 
 			boolean[] isMale = { true, false };
 
+			//for rh
 			RelativeHorse[] tempHorses = HorseLoader.load(rh.getName());
-
 			for (int j = 0; j < relatives[1].length; j++) {
 				if (tempHorses[j] != null) {
 					relatives[1][j] = tempHorses[j].getName();
@@ -236,7 +238,7 @@ public class RelativeChoiceGUI extends HorseChoiceGUI {
 					racesOfRelatives[1][j] = " Unbekannt";
 				}
 			}
-			return new RelativeCheckResult(relatives, racesOfRelatives, isMale).getResult();
+			return new RelativeCheckResult(relatives, racesOfRelatives, isMale).getResultType();
 		}
 		return ResultType.NEUTRAL;
 	}

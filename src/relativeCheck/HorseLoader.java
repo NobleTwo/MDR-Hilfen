@@ -9,6 +9,12 @@ public class HorseLoader {
 		horseArray[0] = find(name);
 		for (int i = 1; i < horseArray.length; i++) {
 			load(i);
+			// correct wrong database entries
+			if(horseArray[i] != null){
+				if(horseArray[i].getName().equals("Unbekannt") && !horseArray[i].getRace().equals(" Unbekannt")){
+					horseArray[i].setRace(" Unbekannt");
+				}
+			}
 		}
 		return horseArray;
 	}
@@ -44,16 +50,11 @@ public class HorseLoader {
 			if (population[i] != null) {
 				horseNamesAndRaces[i].setName(population[i].getName());
 				horseNamesAndRaces[i].setCaretPosition(0);
-				// correct wrong database entries
-				if(population[i].getName().equals("Unbekannt") && !population[i].getRace().equals(" Unbekannt")){
-					population[i].setRace(" Unbekannt");
-				}
 				
 				horseNamesAndRaces[i].setSelectedItem(population[i].getRace());
 				if(fieldGP!=null && i<fieldGP.length){
 					fieldGP[i].setGP(population[i].getCompletePotential());
 				}
-				
 			} else {
 				horseNamesAndRaces[i].setName("nicht in DB");
 				horseNamesAndRaces[i].setSelectedItem(" Unbekannt");

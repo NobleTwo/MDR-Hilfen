@@ -181,7 +181,7 @@ public class RelativeCheckGUI extends MDRFrame {
 
 	private void check() {
 		resetColors();
-		RelativeCheckResult result = getResult();
+		RelativeCheckResult result = getRelativeCheckResult();
 
 		if (result.containsError()) {
 			Vector<Point[]> identicalHorses = result.getIdenticalHorses();
@@ -254,7 +254,7 @@ public class RelativeCheckGUI extends MDRFrame {
 
 	}
 
-	private RelativeCheckResult getResult() {
+	private RelativeCheckResult getRelativeCheckResult() {
 		String[][] horseNames = new String[2][15];
 		for (int i = 0; i < horseNames.length; i++) {
 			for (int j = 0; j < horseNames[i].length; j++) {
