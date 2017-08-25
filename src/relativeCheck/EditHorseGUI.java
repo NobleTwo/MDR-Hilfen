@@ -22,7 +22,7 @@ public class EditHorseGUI extends ManageHorseGUI {
 		setSubject(subject);
 		HorseLoader.assignNamesAndRaces(subject.getName(), horseNamesAndRaces, fieldGP);
 		for (JCheckBox checkbox : checkboxFavourites) {
-			if (subject.getFavourites() != null && subject.getFavourites().contains(checkbox.getText())) {
+			if (subject.getFavourites() != null && subject.getFavourites().contains(ManageFavouritesGUI.getNameWithoutSize(checkbox.getText()))) {
 				checkbox.setSelected(true);
 			}
 		}

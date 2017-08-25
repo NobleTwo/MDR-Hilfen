@@ -111,14 +111,14 @@ public class HorseChoiceGUI extends MDRDialog {
 		ButtonGroup buttonGroupSelectFav = new ButtonGroup();
 		for (int i = 0; i < radioButtonsSelectFavs.length; i++) {
 			if (i == 0) {
-				radioButtonsSelectFavs[i] = new JRadioButton("Alle");
+				radioButtonsSelectFavs[i] = new JRadioButton("Alle ("+DatabaseManager.getPopulation().size()+")");
 				radioButtonsSelectFavs[i].setSelected(true);
 			} else {
-				radioButtonsSelectFavs[i] = new JRadioButton(favList.get(i - 1));
+				radioButtonsSelectFavs[i] = new JRadioButton(ManageFavouritesGUI.getNameWithSize(favList.get(i - 1)));
 			}
 			buttonGroupSelectFav.add(radioButtonsSelectFavs[i]);
 			if (i != 0) {
-				radioButtonsSelectFavs[i].setSelected(ShortTimeMemory.getNameFavListShown().equals(radioButtonsSelectFavs[i].getText()));
+				radioButtonsSelectFavs[i].setSelected(ShortTimeMemory.getNameFavListShown().equals(ManageFavouritesGUI.getNameWithoutSize(radioButtonsSelectFavs[i].getText())));
 			}
 			radioButtonsSelectFavs[i].setBounds(gridButtonGap, yRadioButtons + i * heightLabel, columnWidth, heightLabel);
 			radioButtonsSelectFavs[i].setOpaque(false);
@@ -293,7 +293,8 @@ public class HorseChoiceGUI extends MDRDialog {
 	protected String getSelectedFavList() {
 		for (int i = 0; i < radioButtonsSelectFavs.length; i++) {
 			if (radioButtonsSelectFavs[i].isSelected()) {
-				return radioButtonsSelectFavs[i].getText();
+				String favName = radioButtonsSelectFavs[i].getText();
+				return ManageFavouritesGUI.getNameWithoutSize(favName);
 			}
 		}
 		return "Alle";

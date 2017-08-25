@@ -59,6 +59,7 @@ public class ManageFavouritesGUI extends MDRFrame {
 				editFav();
 			}
 		});
+		buttonEdit.setEnabled(false);
 		cp.add(buttonEdit);
 
 		buttonDelete.setBounds(gridButtonGap + 2 * widthLabel + gridButtonGap, yTop + buttonHeight * 2 + 2 * gridButtonGap, widthLabel, buttonHeight);
@@ -101,7 +102,7 @@ public class ManageFavouritesGUI extends MDRFrame {
 		Vector<String> vecFavs = DatabaseManager.getFavourites();
 		Iterator<String> it = vecFavs.iterator();
 		while (it.hasNext()) {
-			listModelFavs.addElement(it.next());
+			listModelFavs.addElement(getNameWithSize(it.next()));
 		}
 		listOfFavs.setModel(listModelFavs);
 
@@ -129,18 +130,40 @@ public class ManageFavouritesGUI extends MDRFrame {
 
 	private void editFav() {
 		if (listOfFavs.getSelectedValue() != null) {
-			new PopUpEditFav(this, listOfFavs.getSelectedValue());
+			new PopUpEditFav(this, getNameWithoutSize(listOfFavs.getSelectedValue()));
 			updateFavs();
+			buttonEdit.setEnabled(false);
+			buttonDelete.setEnabled(false);
 		}
 	}
 
 	private void deleteFav() {
 		if (listOfFavs.getSelectedValue() != null) {
-			new PopUpDeleteFav(this, listOfFavs.getSelectedValue());
+			new PopUpDeleteFav(this, getNameWithoutSize(listOfFavs.getSelectedValue()));
 			updateFavs();
+			buttonEdit.setEnabled(false);
+			buttonDelete.setEnabled(false);
 		}
 	}
 
+	public static String getNameWithSize(String name){
+		int count = 0;
+		for (RelativeHorse current: DatabaseManager.getPopulation()) {
+			if(current.getFavourites()!=null && current.getFavourites().contains(name)){
+				count++;
+			}
+		}
+		return name+" ("+count+")";
+	}
+	
+	public static String getNameWithoutSize(String name){
+		while(name.charAt(name.length()-1)!='('){
+			name = name.substring(0, name.length()-1);
+		}
+		name = name.substring(0, name.length()-2);
+		return name;
+	}
+	
 	public static void main(String[] args) {
 		new ManageFavouritesGUI();
 	}

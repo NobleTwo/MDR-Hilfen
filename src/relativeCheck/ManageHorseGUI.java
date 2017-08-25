@@ -35,14 +35,14 @@ public abstract class ManageHorseGUI extends MDRFrame {
 	protected GPField[] fieldGP = new GPField[7];
 	protected Vector<JCheckBox> checkboxFavourites = new Vector<JCheckBox>();
 	private RelativeHorse subject;
+	
+	private final Vector<String> vectorFavourites = DatabaseManager.getFavourites();
 
 	public ManageHorseGUI(String title) {
 		super(title);
 		int eastButtonWidth = 210;
 		int frameWidth = (int) (7.5 * gridButtonGap + 4 * HorseAndRaceField.WIDTH + 2 * eastButtonWidth);
 		int frameHeight = 11 * gridButtonGap + 9 * HorseAndRaceField.HEIGHT + buttonHeight + 20; // if too many favs changed in favs-section
-
-		final Vector<String> vectorFavourites = DatabaseManager.getFavourites();
 
 		// Komponenten
 		for (int i = 0; i < horseNamesAndRaces.length; i++) {
@@ -118,7 +118,7 @@ public abstract class ManageHorseGUI extends MDRFrame {
 		int y0Favs = y0GP + 6 * gridButtonGap;
 		for (int i = 0; i < vectorFavourites.size(); i++) {
 			String name = vectorFavourites.get(i);
-			JCheckBox temp = new JCheckBox(name);
+			JCheckBox temp = new JCheckBox(ManageFavouritesGUI.getNameWithSize(name));
 			temp.setBounds(gridButtonGap, y0Favs + 2 * i * gridButtonGap, HorseAndRaceField.WIDTH, 2 * gridButtonGap);
 			temp.setOpaque(false);
 			temp.setFocusPainted(false);
@@ -368,7 +368,8 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			while (it.hasNext()) {
 				JCheckBox currentCheckbox = it.next();
 				if (currentCheckbox.isSelected()) {
-					favourites.add(currentCheckbox.getText());
+					String favourite = currentCheckbox.getText();
+					favourites.add(ManageFavouritesGUI.getNameWithoutSize(favourite));
 				}
 			}
 			String race = horseNamesAndRaces[0].getRace();
@@ -379,6 +380,14 @@ public abstract class ManageHorseGUI extends MDRFrame {
 			if (subject != null && !subject.getName().equals(name)) {
 				DatabaseManager.removeHorse(subject.getName());
 			}
+			setTextFavourites();
+		}
+	}
+	
+	private void setTextFavourites(){
+		for (int i = 0; i < vectorFavourites.size(); i++) {
+			String name = vectorFavourites.get(i);
+			checkboxFavourites.get(i).setText(ManageFavouritesGUI.getNameWithSize(name));
 		}
 	}
 
