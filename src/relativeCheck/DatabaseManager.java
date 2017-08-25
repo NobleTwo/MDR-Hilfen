@@ -188,7 +188,7 @@ public abstract class DatabaseManager {
 			Iterator<RelativeHorse> it = population.iterator();
 			while (it.hasNext()) {
 				Vector<String> favTemp = it.next().getFavourites();
-				if (favTemp.contains(oldName)) {
+				if (favTemp!=null && favTemp.contains(oldName)) {
 					favTemp.remove(oldName);
 					favTemp.add(newName);
 				}

@@ -90,7 +90,6 @@ public class PopUpEditFav extends MDRDialog {
 			return;
 		}
 
-		//TODO
 		int result = DatabaseManager.editFavourite(name, favName.getText());
 		switch (result) {
 		case -2:
