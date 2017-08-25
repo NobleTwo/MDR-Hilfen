@@ -2,6 +2,8 @@ package relativeCheck;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,13 +18,17 @@ public class PopUpEditFav extends MDRDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	private final String errorMessageAlreadyKnown = "   --- Name bereits vorhanden!";
+	private final String errorMessageNotKnown = "   --- Alter Name nicht vorhanden! Bitte abbrechen.";
+	private JTextField favName;
+	private String name;
 
 	public PopUpEditFav(ManageFavouritesGUI manageFavsFrame, String name) {
 		super(manageFavsFrame, "Name der Favoriten-Liste '" + name + "' ändern");
 
-		final String errorMessageAlreadyKnown = "   --- Name bereits vorhanden!";
-		final String errorMessageNotKnown = "   --- Alter Name nicht vorhanden! Bitte abbrechen.";
-		JTextField favName = new JTextField(name);
+		this.name = name;
+		favName = new JTextField(name);
 		favName.setBounds(gridButtonGap, yTop, widthLabel * 2, heightLabel);
 		favName.addMouseListener(new MouseAdapter() {
 			@Override
@@ -34,30 +40,29 @@ public class PopUpEditFav extends MDRDialog {
 			}
 		});
 		cp.add(favName);
+		favName.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyPressed(KeyEvent kev) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent kev) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent kev) {
+				if(kev.getKeyChar()==KeyEvent.VK_ENTER){
+					accept();
+				}
+			}
+		});
 		MDRButton buttonAccept = new MDRButton("OK");
 		buttonAccept.setBounds(gridButtonGap, yTop + heightLabel + gridButtonGap, (2 * widthLabel - gridButtonGap) / 2, buttonHeight);
 		buttonAccept.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				String s = favName.getText();
-				if (s.equals(name)) {
-					dispose();
-				}
-				if (s.contains(errorMessageAlreadyKnown)) {
-					return;
-				}
-
-				int result = DatabaseManager.editFavourite(name, favName.getText());
-				switch (result) {
-				case -2:
-					favName.setText(favName.getText() + errorMessageAlreadyKnown);
-					break;
-				case -1:
-					favName.setText(favName.getText() + errorMessageNotKnown);
-					break;
-				case 0:
-					dispose();
-				}
+				accept();
 			}
 		});
 		cp.add(buttonAccept);
@@ -74,6 +79,29 @@ public class PopUpEditFav extends MDRDialog {
 
 		setSize(gridButtonGap * 5 / 2 + 2 * widthLabel, yTop + heightLabel + gridButtonGap * 9 / 2 + buttonHeight);
 		super2();
+	}
+	
+	private void accept(){
+		String s = favName.getText();
+		if (s.equals(name)) {
+			dispose();
+		}
+		if (s.contains(errorMessageAlreadyKnown)) {
+			return;
+		}
+
+		//TODO
+		int result = DatabaseManager.editFavourite(name, favName.getText());
+		switch (result) {
+		case -2:
+			favName.setText(favName.getText() + errorMessageAlreadyKnown);
+			break;
+		case -1:
+			favName.setText(favName.getText() + errorMessageNotKnown);
+			break;
+		case 0:
+			dispose();
+		}
 	}
 
 }

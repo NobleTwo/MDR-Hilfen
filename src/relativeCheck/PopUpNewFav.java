@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
 
@@ -16,12 +18,14 @@ public class PopUpNewFav extends MDRDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	
+	private final String errorMessage = "   --- Name bereits vorhanden!";
+	private JTextField favName = new JTextField();
 
 	public PopUpNewFav(ManageFavouritesGUI manageFavsFrame) {
 		super(manageFavsFrame, "Neue Favoriten-Liste erstellen");
 
-		final String errorMessage = "   --- Name bereits vorhanden!";
-		JTextField favName = new JTextField();
 		favName.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent fe) {
@@ -35,22 +39,30 @@ public class PopUpNewFav extends MDRDialog {
 			}
 		});
 		favName.setBounds(gridButtonGap, yTop, widthLabel * 2, heightLabel);
+		favName.addKeyListener(new KeyListener(){
+
+			@Override
+			public void keyPressed(KeyEvent kev) {
+			}
+
+			@Override
+			public void keyReleased(KeyEvent kev) {
+			}
+
+			@Override
+			public void keyTyped(KeyEvent kev) {
+				if(kev.getKeyChar()==KeyEvent.VK_ENTER){
+					accept();
+				}
+			}
+		});
 		cp.add(favName);
 		MDRButton buttonAccept = new MDRButton("OK");
 		buttonAccept.setBounds(gridButtonGap, yTop + heightLabel + gridButtonGap, (2 * widthLabel - gridButtonGap) / 2, buttonHeight);
 		buttonAccept.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (favName.getText().contains(errorMessage)) {
-					String s = favName.getText();
-					favName.setText(s.substring(0, s.indexOf(errorMessage)));
-				}
-
-				if (DatabaseManager.addFavourite(favName.getText())) {
-					dispose();
-				} else {
-					favName.setText(favName.getText() + errorMessage);
-				}
+				accept();
 			}
 		});
 		cp.add(buttonAccept);
@@ -67,6 +79,19 @@ public class PopUpNewFav extends MDRDialog {
 
 		setSize(gridButtonGap * 5 / 2 + 2 * widthLabel, yTop + heightLabel + gridButtonGap * 9 / 2 + buttonHeight);
 		super2();
+	}
+	
+	private void accept(){
+		if (favName.getText().contains(errorMessage)) {
+			String s = favName.getText();
+			favName.setText(s.substring(0, s.indexOf(errorMessage)));
+		}
+
+		if (DatabaseManager.addFavourite(favName.getText())) {
+			dispose();
+		} else {
+			favName.setText(favName.getText() + errorMessage);
+		}
 	}
 
 }
